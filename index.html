@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#2563eb">
 <title>StudyHub</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f7fb;color:#172033}
@@ -52,6 +55,61 @@ nav{display:flex;gap:8px;overflow:auto;margin-bottom:16px}
 nav button{background:#fff;border:1px solid #e3e7ee;color:#667085;padding:9px 14px;border-radius:10px;white-space:nowrap}
 nav button.active{background:#2563eb;color:#fff;border-color:#2563eb}
 footer{text-align:center;color:#98a2b3;font-size:12px;padding:25px 0}
+
+.auth-screen{
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+}
+.auth-card{
+ width:100%;
+ max-width:420px;
+}
+.auth-logo{
+ text-align:center;
+ font-size:30px;
+ font-weight:800;
+ color:#2563eb;
+ margin-bottom:8px;
+}
+.auth-subtitle{
+ text-align:center;
+ color:#667085;
+ margin:0 0 22px;
+}
+.auth-form{
+ display:flex;
+ flex-direction:column;
+ gap:12px;
+}
+.auth-form label{
+ font-size:13px;
+ font-weight:650;
+}
+.auth-form input{
+ margin-top:5px;
+}
+.auth-message{
+ min-height:20px;
+ font-size:13px;
+ text-align:center;
+ margin-top:12px;
+}
+.auth-switch{
+ text-align:center;
+ margin-top:18px;
+ font-size:14px;
+ color:#667085;
+}
+.link-btn{
+ background:none;
+ color:#2563eb;
+ font-weight:700;
+ padding:0;
+}
+
 @media(max-width:700px){
  .app{padding:12px}
  .stats{grid-template-columns:repeat(2,1fr)}
@@ -61,11 +119,88 @@ footer{text-align:center;color:#98a2b3;font-size:12px;padding:25px 0}
 }
 </style>
 </head>
+
 <body>
-<div class="app">
+
+<!-- LOGIN / SIGNUP -->
+<div id="authScreen" class="auth-screen">
+  <div class="card auth-card">
+
+    <div class="auth-logo">StudyHub</div>
+    <p class="auth-subtitle">Your personal study space</p>
+
+    <!-- LOGIN -->
+    <div id="loginBox">
+      <h2 style="margin-bottom:15px">Welcome back 👋</h2>
+
+      <div class="auth-form">
+        <label>
+          Username
+          <input id="loginUsername" autocomplete="username" placeholder="Enter username">
+        </label>
+
+        <label>
+          Password
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter password">
+        </label>
+
+        <button class="btn" onclick="login()">Login</button>
+      </div>
+
+      <div id="loginMessage" class="auth-message"></div>
+
+      <div class="auth-switch">
+        Don't have an account?
+        <button class="link-btn" onclick="showSignup()">Create account</button>
+      </div>
+    </div>
+
+    <!-- SIGNUP -->
+    <div id="signupBox" style="display:none">
+      <h2 style="margin-bottom:15px">Create account 📝</h2>
+
+      <div class="auth-form">
+        <label>
+          Username
+          <input id="signupUsername" autocomplete="username" placeholder="Choose a username">
+        </label>
+
+        <label>
+          Password
+          <input id="signupPassword" type="password" autocomplete="new-password" placeholder="Choose a password">
+        </label>
+
+        <label>
+          Confirm password
+          <input id="signupConfirm" type="password" autocomplete="new-password" placeholder="Enter password again">
+        </label>
+
+        <button class="btn" onclick="signup()">Create account</button>
+      </div>
+
+      <div id="signupMessage" class="auth-message"></div>
+
+      <div class="auth-switch">
+        Already have an account?
+        <button class="link-btn" onclick="showLogin()">Login</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- STUDYHUB APP -->
+<div id="studyApp" class="app" style="display:none">
+
 <header>
   <div class="logo">Study<span>Hub</span></div>
-  <button class="btn secondary smallbtn" onclick="resetData()">Reset data</button>
+
+  <div class="actions">
+    <span id="userDisplay" class="small"></span>
+    <button class="btn secondary smallbtn" onclick="logout()">Logout</button>
+    <button class="btn danger smallbtn" onclick="resetData()">Reset data</button>
+  </div>
 </header>
 
 <nav>
@@ -76,206 +211,1115 @@ footer{text-align:center;color:#98a2b3;font-size:12px;padding:25px 0}
 </nav>
 
 <main id="dashboard">
+
   <div class="hero">
     <h1>Welcome to StudyHub 👋</h1>
     <p>Stay organized, study consistently, and see your progress.</p>
   </div>
 
   <div class="stats">
-    <div class="card stat"><span class="label">Overall progress</span><b id="overall">0%</b></div>
-    <div class="card stat"><span class="label">Topics done</span><b id="topicsDone">0</b></div>
-    <div class="card stat"><span class="label">Tasks done</span><b id="tasksDone">0</b></div>
-    <div class="card stat"><span class="label">Study time</span><b id="studyTime">0m</b></div>
+    <div class="card stat">
+      <span class="label">Overall progress</span>
+      <b id="overall">0%</b>
+    </div>
+
+    <div class="card stat">
+      <span class="label">Topics done</span>
+      <b id="topicsDone">0</b>
+    </div>
+
+    <div class="card stat">
+      <span class="label">Tasks done</span>
+      <b id="tasksDone">0</b>
+    </div>
+
+    <div class="card stat">
+      <span class="label">Study time</span>
+      <b id="studyTime">0m</b>
+    </div>
   </div>
 
   <div class="grid">
+
     <section class="card">
-      <div class="section-title"><h2>Subject progress</h2><button class="btn smallbtn" onclick="showSection('subjects')">Manage</button></div>
+      <div class="section-title">
+        <h2>Subject progress</h2>
+        <button class="btn smallbtn" onclick="showSection('subjects')">Manage</button>
+      </div>
+
       <div id="dashboardSubjects"></div>
     </section>
 
     <section class="card">
-      <div class="section-title"><h2>Today's goal</h2></div>
-      <div class="small">Daily study target: <b id="goalText">60 min</b></div>
-      <div class="goal progress"><div id="goalBar" style="width:0%"></div></div>
-      <p class="small" id="goalStatus">0 / 60 minutes completed</p>
+
+      <div class="section-title">
+        <h2>Today's goal</h2>
+      </div>
+
+      <div class="small">
+        Daily study target:
+        <b id="goalText">60 min</b>
+      </div>
+
+      <div class="goal progress">
+        <div id="goalBar" style="width:0%"></div>
+      </div>
+
+      <p class="small" id="goalStatus">
+        0 / 60 minutes completed
+      </p>
+
       <div class="form">
         <input id="goalInput" type="number" min="1" placeholder="Set minutes">
         <button class="btn" onclick="setGoal()">Save</button>
       </div>
+
     </section>
+
   </div>
 </main>
 
+
 <section id="subjects" style="display:none">
+
   <div class="card">
-    <div class="section-title"><h2>Subjects & topics</h2></div>
+
+    <div class="section-title">
+      <h2>Subjects & topics</h2>
+    </div>
+
     <div class="form">
       <input id="subjectInput" placeholder="e.g. Mathematics">
       <button class="btn" onclick="addSubject()">Add</button>
     </div>
+
     <div id="subjectList"></div>
+
   </div>
+
 </section>
 
+
 <section id="tasks" style="display:none">
+
   <div class="card">
-    <div class="section-title"><h2>Tasks & homework</h2></div>
+
+    <div class="section-title">
+      <h2>Tasks & homework</h2>
+    </div>
+
     <div class="form">
       <input id="taskInput" placeholder="e.g. Finish science assignment">
       <button class="btn" onclick="addTask()">Add</button>
     </div>
+
     <div id="taskList"></div>
+
   </div>
+
 </section>
+
 
 <section id="timer" style="display:none">
+
   <div class="card timer">
+
     <h2>Study Timer</h2>
+
     <div class="timer-display" id="timerDisplay">25:00</div>
+
     <div class="actions" style="justify-content:center">
+
       <button class="btn" onclick="startTimer()">Start</button>
+
       <button class="btn secondary" onclick="pauseTimer()">Pause</button>
+
       <button class="btn danger" onclick="resetTimer()">Reset</button>
+
     </div>
-    <p class="small">When you complete a timer session, the study time is added to your total.</p>
+
+    <p class="small">
+      When you complete a timer session, the study time is added to your total.
+    </p>
+
   </div>
+
 </section>
 
-<footer>StudyHub V1 • Your data is stored locally on this device.</footer>
-</div> 
-<script
-src="https://cdn.jsdelivr.net/npm/@supabase /supabase-js@2"></script>
+
+<footer>
+StudyHub V2 • Account login enabled
+</footer>
+
+</div>
+
+
 <script>
+
+/* =========================
+   SUPABASE CONNECTION
+========================= */
+
+const SUPABASE_URL =
+"https://qpqkpmckvugrrooknzzn.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_yjQXPL_Ye6TBz0NnvsvCfw_zJGDKqVy";
+
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* =========================
+   LOCAL STUDY DATA
+   (Cloud data comes in Stage 2)
+========================= */
+
 const KEY="studyhub_v1";
-let data=JSON.parse(localStorage.getItem(KEY)||"null")||{
+
+let data=JSON.parse(
+ localStorage.getItem(KEY)||"null"
+)||{
  subjects:[
-   {id:1,name:"Mathematics",topics:[{id:11,name:"Algebra",done:false},{id:12,name:"Geometry",done:false}]},
-   {id:2,name:"Science",topics:[{id:21,name:"Physics",done:false}]}
+   {
+     id:1,
+     name:"Mathematics",
+     topics:[
+       {id:11,name:"Algebra",done:false},
+       {id:12,name:"Geometry",done:false}
+     ]
+   },
+   {
+     id:2,
+     name:"Science",
+     topics:[
+       {id:21,name:"Physics",done:false}
+     ]
+   }
  ],
  tasks:[],
  studyMinutes:0,
  dailyGoal:60
 };
-let timerSeconds=1500,timerInterval=null;
 
-function save(){localStorage.setItem(KEY,JSON.stringify(data));render();}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
-function totals(){
- let topics=data.subjects.flatMap(s=>s.topics), done=topics.filter(t=>t.done).length;
- let tasksDone=data.tasks.filter(t=>t.done).length;
- let total=topics.length?Math.round(done/topics.length*100):0;
- return {topics,done,tasksDone,total};
+let timerSeconds=1500;
+let timerInterval=null;
+
+
+/* =========================
+   AUTH UI
+========================= */
+
+function showSignup(){
+
+ document.getElementById("loginBox").style.display="none";
+
+ document.getElementById("signupBox").style.display="block";
+
+ clearMessages();
 }
-function render(){
- const t=totals();
- document.getElementById("overall").textContent=t.total+"%";
- document.getElementById("topicsDone").textContent=t.done;
- document.getElementById("tasksDone").textContent=t.tasksDone;
- document.getElementById("studyTime").textContent=formatMinutes(data.studyMinutes);
- document.getElementById("goalText").textContent=data.dailyGoal+" min";
- const pct=Math.min(100,Math.round(data.studyMinutes/data.dailyGoal*100));
- document.getElementById("goalBar").style.width=pct+"%";
- document.getElementById("goalStatus").textContent=Math.min(data.studyMinutes,data.dailyGoal)+" / "+data.dailyGoal+" minutes completed";
- renderSubjects();
- renderDashboardSubjects();
- renderTasks();
+
+
+function showLogin(){
+
+ document.getElementById("signupBox").style.display="none";
+
+ document.getElementById("loginBox").style.display="block";
+
+ clearMessages();
 }
-function formatMinutes(m){
- const h=Math.floor(m/60), min=m%60;
- return h?h+"h "+min+"m":min+"m";
+
+
+function clearMessages(){
+
+ document.getElementById("loginMessage").textContent="";
+
+ document.getElementById("signupMessage").textContent="";
 }
-function renderDashboardSubjects(){
- const el=document.getElementById("dashboardSubjects");
- if(!data.subjects.length){el.innerHTML='<div class="empty">No subjects yet.</div>';return}
- el.innerHTML=data.subjects.map(s=>{
-  const done=s.topics.filter(t=>t.done).length, total=s.topics.length, pct=total?Math.round(done/total*100):0;
-  return `<div class="subject"><div class="row"><b>${esc(s.name)}</b><span class="small">${done}/${total} • ${pct}%</span></div><div class="progress" style="margin-top:8px"><div style="width:${pct}%"></div></div></div>`
- }).join("");
+
+
+/* =========================
+   USERNAME → INTERNAL EMAIL
+========================= */
+
+function usernameToEmail(username){
+
+ return username
+   .trim()
+   .toLowerCase()
+   .replace(/\s+/g,"")
+   +"@studyhub.local";
 }
-function renderSubjects(){
- const el=document.getElementById("subjectList");
- if(!data.subjects.length){el.innerHTML='<div class="empty">Add your first subject above.</div>';return}
- el.innerHTML=data.subjects.map(s=>{
-   const done=s.topics.filter(t=>t.done).length,total=s.topics.length,pct=total?Math.round(done/total*100):0;
-   return `<div class="subject">
-    <div class="row"><div><b>${esc(s.name)}</b><div class="small">${done}/${total} topics completed</div></div>
-    <button class="btn danger smallbtn" onclick="deleteSubject(${s.id})">Delete</button></div>
-    <div class="progress" style="margin:9px 0"><div style="width:${pct}%"></div></div>
-    ${s.topics.map(t=>`<div class="task ${t.done?'done':''}">
-      <input type="checkbox" ${t.done?'checked':''} onchange="toggleTopic(${s.id},${t.id})">
-      <span style="flex:1">${esc(t.name)}</span>
-      <button class="btn danger smallbtn" onclick="deleteTopic(${s.id},${t.id})">×</button>
-    </div>`).join("")}
-    <div class="form"><input id="topic-${s.id}" placeholder="Add a chapter/topic"><button class="btn smallbtn" onclick="addTopic(${s.id})">Add topic</button></div>
-   </div>`
- }).join("");
-}
-function addSubject(){
- const input=document.getElementById("subjectInput"),name=input.value.trim();
- if(!name)return;
- data.subjects.push({id:Date.now(),name,topics:[]});input.value="";save();
-}
-function deleteSubject(id){if(confirm("Delete this subject and its topics?")){data.subjects=data.subjects.filter(s=>s.id!==id);save();}}
-function addTopic(id){
- const input=document.getElementById("topic-"+id),name=input.value.trim();
- if(!name)return;
- const s=data.subjects.find(x=>x.id===id);s.topics.push({id:Date.now(),name,done:false});input.value="";save();
-}
-function toggleTopic(sid,tid){
- const s=data.subjects.find(x=>x.id===sid),t=s.topics.find(x=>x.id===tid);t.done=!t.done;save();
-}
-function deleteTopic(sid,tid){
- const s=data.subjects.find(x=>x.id===sid);s.topics=s.topics.filter(t=>t.id!==tid);save();
-}
-function renderTasks(){
- const el=document.getElementById("taskList");
- if(!data.tasks.length){el.innerHTML='<div class="empty">No tasks yet. Add homework or revision above.</div>';return}
- el.innerHTML=data.tasks.map(t=>`<div class="task ${t.done?'done':''}">
-   <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})">
-   <span style="flex:1">${esc(t.name)}</span>
-   <button class="btn danger smallbtn" onclick="deleteTask(${t.id})">Delete</button>
- </div>`).join("");
-}
-function addTask(){
- const input=document.getElementById("taskInput"),name=input.value.trim();
- if(!name)return;
- data.tasks.push({id:Date.now(),name,done:false});input.value="";save();
-}
-function toggleTask(id){const t=data.tasks.find(x=>x.id===id);t.done=!t.done;save();}
-function deleteTask(id){data.tasks=data.tasks.filter(t=>t.id!==id);save();}
-function setGoal(){
- const v=parseInt(document.getElementById("goalInput").value);
- if(v>0){data.dailyGoal=v;document.getElementById("goalInput").value="";save();}
-}
-function showSection(id,btn){
- ["dashboard","subjects","tasks","timer"].forEach(x=>document.getElementById(x).style.display=x===id?"block":"none");
- document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
- if(btn)btn.classList.add("active");
-}
-function updateTimer(){
- const m=Math.floor(timerSeconds/60),s=timerSeconds%60;
- document.getElementById("timerDisplay").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
-}
-function startTimer(){
- if(timerInterval)return;
- timerInterval=setInterval(()=>{
-   if(timerSeconds<=0){
-     clearInterval(timerInterval);timerInterval=null;
-     data.studyMinutes+=25;save();alert("Study session complete! 25 minutes added.");
-     resetTimer();return;
-   }
-   timerSeconds--;updateTimer();
- },1000);
-}
-function pauseTimer(){clearInterval(timerInterval);timerInterval=null;}
-function resetTimer(){pauseTimer();timerSeconds=1500;updateTimer();}
-function resetData(){
- if(confirm("This will delete all StudyHub data on this device. Continue?")){
-   localStorage.removeItem(KEY);location.reload();
+
+
+/* =========================
+   SIGN UP
+========================= */
+
+async function signup(){
+
+ const username=
+   document.getElementById("signupUsername")
+   .value.trim();
+
+ const password=
+   document.getElementById("signupPassword")
+   .value;
+
+ const confirm=
+   document.getElementById("signupConfirm")
+   .value;
+
+ const message=
+   document.getElementById("signupMessage");
+
+
+ if(username.length<3){
+
+   message.textContent=
+   "Username must be at least 3 characters.";
+
+   return;
  }
+
+
+ if(!/^[a-zA-Z0-9_]+$/.test(username)){
+
+   message.textContent=
+   "Use only letters, numbers and _";
+
+   return;
+ }
+
+
+ if(password.length<6){
+
+   message.textContent=
+   "Password must be at least 6 characters.";
+
+   return;
+ }
+
+
+ if(password!==confirm){
+
+   message.textContent=
+   "Passwords do not match.";
+
+   return;
+ }
+
+
+ message.textContent="Creating account...";
+
+
+ const email=usernameToEmail(username);
+
+
+ const {data:result,error}=
+
+   await supabaseClient.auth.signUp({
+
+     email:email,
+
+     password:password,
+
+     options:{
+       data:{
+         username:username
+       }
+     }
+
+   });
+
+
+ if(error){
+
+   message.textContent=
+   error.message;
+
+   return;
+ }
+
+
+ if(result.user){
+
+   message.textContent=
+   "Account created! Logging you in...";
+
+   setTimeout(()=>{
+
+     enterApp(username);
+
+   },700);
+
+ }
+
 }
-render();updateTimer();
+
+
+/* =========================
+   LOGIN
+========================= */
+
+async function login(){
+
+ const username=
+   document.getElementById("loginUsername")
+   .value.trim();
+
+ const password=
+   document.getElementById("loginPassword")
+   .value;
+
+ const message=
+   document.getElementById("loginMessage");
+
+
+ if(!username||!password){
+
+   message.textContent=
+   "Enter username and password.";
+
+   return;
+ }
+
+
+ message.textContent="Logging in...";
+
+
+ const email=usernameToEmail(username);
+
+
+ const {data:result,error}=
+
+   await supabaseClient.auth.signInWithPassword({
+
+     email:email,
+
+     password:password
+
+   });
+
+
+ if(error){
+
+   message.textContent=
+   "Incorrect username or password.";
+
+   return;
+ }
+
+
+ if(result.user){
+
+   enterApp(username);
+
+ }
+
+}
+
+
+/* =========================
+   ENTER STUDYHUB
+========================= */
+
+function enterApp(username){
+
+ document.getElementById("authScreen").style.display="none";
+
+ document.getElementById("studyApp").style.display="block";
+
+ document.getElementById("userDisplay").textContent=
+ "@"+username;
+
+ render();
+
+ updateTimer();
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+async function logout(){
+
+ await supabaseClient.auth.signOut();
+
+ document.getElementById("studyApp").style.display="none";
+
+ document.getElementById("authScreen").style.display="flex";
+
+ document.getElementById("loginUsername").value="";
+
+ document.getElementById("loginPassword").value="";
+
+ showLogin();
+
+}
+
+
+/* =========================
+   CHECK EXISTING LOGIN
+========================= */
+
+async function checkSession(){
+
+ const {data:sessionData}=
+
+   await supabaseClient.auth.getSession();
+
+
+ if(sessionData.session){
+
+   const username=
+     sessionData.session.user.user_metadata?.username
+     ||sessionData.session.user.email.split("@")[0];
+
+   enterApp(username);
+
+ }else{
+
+   document.getElementById("authScreen").style.display="flex";
+
+   document.getElementById("studyApp").style.display="none";
+
+ }
+
+}
+
+
+/* =========================
+   STUDYHUB FUNCTIONS
+========================= */
+
+function save(){
+
+ localStorage.setItem(
+   KEY,
+   JSON.stringify(data)
+ );
+
+ render();
+
+}
+
+
+function esc(s){
+
+ return String(s).replace(
+   /[&<>"']/g,
+   m=>({
+     "&":"&amp;",
+     "<":"&lt;",
+     ">":"&gt;",
+     '"':"&quot;",
+     "'":"&#039;"
+   }[m])
+ );
+
+}
+
+
+function totals(){
+
+ let topics=
+   data.subjects.flatMap(s=>s.topics);
+
+ let done=
+   topics.filter(t=>t.done).length;
+
+ let tasksDone=
+   data.tasks.filter(t=>t.done).length;
+
+ let total=
+   topics.length
+   ?Math.round(done/topics.length*100)
+   :0;
+
+ return {
+   topics,
+   done,
+   tasksDone,
+   total
+ };
+
+}
+
+
+function render(){
+
+ const t=totals();
+
+ document.getElementById("overall").textContent=
+   t.total+"%";
+
+ document.getElementById("topicsDone").textContent=
+   t.done;
+
+ document.getElementById("tasksDone").textContent=
+   t.tasksDone;
+
+ document.getElementById("studyTime").textContent=
+   formatMinutes(data.studyMinutes);
+
+ document.getElementById("goalText").textContent=
+   data.dailyGoal+" min";
+
+ const pct=
+   Math.min(
+     100,
+     Math.round(
+       data.studyMinutes/data.dailyGoal*100
+     )
+   );
+
+ document.getElementById("goalBar").style.width=
+   pct+"%";
+
+ document.getElementById("goalStatus").textContent=
+   Math.min(
+     data.studyMinutes,
+     data.dailyGoal
+   )+" / "+
+   data.dailyGoal+
+   " minutes completed";
+
+ renderSubjects();
+
+ renderDashboardSubjects();
+
+ renderTasks();
+
+}
+
+
+function formatMinutes(m){
+
+ const h=Math.floor(m/60);
+
+ const min=m%60;
+
+ return h
+   ?h+"h "+min+"m"
+   :min+"m";
+
+}
+
+
+function renderDashboardSubjects(){
+
+ const el=
+   document.getElementById(
+     "dashboardSubjects"
+   );
+
+ if(!data.subjects.length){
+
+   el.innerHTML=
+   '<div class="empty">No subjects yet.</div>';
+
+   return;
+ }
+
+
+ el.innerHTML=
+ data.subjects.map(s=>{
+
+   const done=
+     s.topics.filter(t=>t.done).length;
+
+   const total=
+     s.topics.length;
+
+   const pct=
+     total
+     ?Math.round(done/total*100)
+     :0;
+
+   return `
+   <div class="subject">
+
+     <div class="row">
+
+       <b>${esc(s.name)}</b>
+
+       <span class="small">
+         ${done}/${total} • ${pct}%
+       </span>
+
+     </div>
+
+     <div class="progress" style="margin-top:8px">
+
+       <div style="width:${pct}%"></div>
+
+     </div>
+
+   </div>`;
+
+ }).join("");
+
+}
+
+
+function renderSubjects(){
+
+ const el=
+   document.getElementById("subjectList");
+
+ if(!data.subjects.length){
+
+   el.innerHTML=
+   '<div class="empty">Add your first subject above.</div>';
+
+   return;
+ }
+
+
+ el.innerHTML=
+ data.subjects.map(s=>{
+
+   const done=
+     s.topics.filter(t=>t.done).length;
+
+   const total=
+     s.topics.length;
+
+   const pct=
+     total
+     ?Math.round(done/total*100)
+     :0;
+
+   return `
+   <div class="subject">
+
+     <div class="row">
+
+       <div>
+
+         <b>${esc(s.name)}</b>
+
+         <div class="small">
+           ${done}/${total} topics completed
+         </div>
+
+       </div>
+
+       <button
+         class="btn danger smallbtn"
+         onclick="deleteSubject(${s.id})">
+         Delete
+       </button>
+
+     </div>
+
+     <div
+       class="progress"
+       style="margin:9px 0">
+
+       <div style="width:${pct}%"></div>
+
+     </div>
+
+     ${s.topics.map(t=>`
+
+       <div class="task ${t.done?'done':''}">
+
+         <input
+           type="checkbox"
+           ${t.done?'checked':''}
+           onchange="toggleTopic(${s.id},${t.id})">
+
+         <span style="flex:1">
+           ${esc(t.name)}
+         </span>
+
+         <button
+           class="btn danger smallbtn"
+           onclick="deleteTopic(${s.id},${t.id})">
+           ×
+         </button>
+
+       </div>
+
+     `).join("")}
+
+     <div class="form">
+
+       <input
+         id="topic-${s.id}"
+         placeholder="Add a chapter/topic">
+
+       <button
+         class="btn smallbtn"
+         onclick="addTopic(${s.id})">
+         Add topic
+       </button>
+
+     </div>
+
+   </div>`;
+
+ }).join("");
+
+}
+
+
+function addSubject(){
+
+ const input=
+   document.getElementById("subjectInput");
+
+ const name=input.value.trim();
+
+ if(!name)return;
+
+ data.subjects.push({
+
+   id:Date.now(),
+
+   name:name,
+
+   topics:[]
+
+ });
+
+ input.value="";
+
+ save();
+
+}
+
+
+function deleteSubject(id){
+
+ if(confirm(
+   "Delete this subject and its topics?"
+ )){
+
+   data.subjects=
+     data.subjects.filter(
+       s=>s.id!==id
+     );
+
+   save();
+
+ }
+
+}
+
+
+function addTopic(id){
+
+ const input=
+   document.getElementById(
+     "topic-"+id
+   );
+
+ const name=
+   input.value.trim();
+
+ if(!name)return;
+
+ const s=
+   data.subjects.find(
+     x=>x.id===id
+   );
+
+ s.topics.push({
+
+   id:Date.now(),
+
+   name:name,
+
+   done:false
+
+ });
+
+ input.value="";
+
+ save();
+
+}
+
+
+function toggleTopic(sid,tid){
+
+ const s=
+   data.subjects.find(
+     x=>x.id===sid
+   );
+
+ const t=
+   s.topics.find(
+     x=>x.id===tid
+   );
+
+ t.done=!t.done;
+
+ save();
+
+}
+
+
+function deleteTopic(sid,tid){
+
+ const s=
+   data.subjects.find(
+     x=>x.id===sid
+   );
+
+ s.topics=
+   s.topics.filter(
+     t=>t.id!==tid
+   );
+
+ save();
+
+}
+
+
+function renderTasks(){
+
+ const el=
+   document.getElementById("taskList");
+
+ if(!data.tasks.length){
+
+   el.innerHTML=
+   '<div class="empty">No tasks yet. Add homework or revision above.</div>';
+
+   return;
+
+ }
+
+
+ el.innerHTML=
+ data.tasks.map(t=>`
+
+   <div class="task ${t.done?'done':''}">
+
+     <input
+       type="checkbox"
+       ${t.done?'checked':''}
+       onchange="toggleTask(${t.id})">
+
+     <span style="flex:1">
+       ${esc(t.name)}
+     </span>
+
+     <button
+       class="btn danger smallbtn"
+       onclick="deleteTask(${t.id})">
+       Delete
+     </button>
+
+   </div>
+
+ `).join("");
+
+}
+
+
+function addTask(){
+
+ const input=
+   document.getElementById("taskInput");
+
+ const name=
+   input.value.trim();
+
+ if(!name)return;
+
+ data.tasks.push({
+
+   id:Date.now(),
+
+   name:name,
+
+   done:false
+
+ });
+
+ input.value="";
+
+ save();
+
+}
+
+
+function toggleTask(id){
+
+ const t=
+   data.tasks.find(
+     x=>x.id===id
+   );
+
+ t.done=!t.done;
+
+ save();
+
+}
+
+
+function deleteTask(id){
+
+ data.tasks=
+   data.tasks.filter(
+     t=>t.id!==id
+   );
+
+ save();
+
+}
+
+
+function setGoal(){
+
+ const v=
+   parseInt(
+     document.getElementById(
+       "goalInput"
+     ).value
+   );
+
+ if(v>0){
+
+   data.dailyGoal=v;
+
+   document.getElementById(
+     "goalInput"
+   ).value="";
+
+   save();
+
+ }
+
+}
+
+
+function showSection(id,btn){
+
+ ["dashboard","subjects","tasks","timer"]
+ .forEach(
+   x=>
+   document.getElementById(x).style.display=
+   x===id?"block":"none"
+ );
+
+ document
+ .querySelectorAll("nav button")
+ .forEach(
+   b=>b.classList.remove("active")
+ );
+
+ if(btn)btn.classList.add("active");
+
+}
+
+
+function updateTimer(){
+
+ const m=
+   Math.floor(timerSeconds/60);
+
+ const s=
+   timerSeconds%60;
+
+ document.getElementById(
+   "timerDisplay"
+ ).textContent=
+   String(m).padStart(2,"0")
+   +":"
+   +String(s).padStart(2,"0");
+
+}
+
+
+function startTimer(){
+
+ if(timerInterval)return;
+
+ timerInterval=
+   setInterval(()=>{
+
+     if(timerSeconds<=0){
+
+       clearInterval(timerInterval);
+
+       timerInterval=null;
+
+       data.studyMinutes+=25;
+
+       save();
+
+       alert(
+         "Study session complete! 25 minutes added."
+       );
+
+       resetTimer();
+
+       return;
+
+     }
+
+     timerSeconds--;
+
+     updateTimer();
+
+   },1000);
+
+}
+
+
+function pauseTimer(){
+
+ clearInterval(timerInterval);
+
+ timerInterval=null;
+
+}
+
+
+function resetTimer(){
+
+ pauseTimer();
+
+ timerSeconds=1500;
+
+ updateTimer();
+
+}
+
+
+function resetData(){
+
+ if(confirm(
+   "This will delete all StudyHub data on this device. Continue?"
+ )){
+
+   localStorage.removeItem(KEY);
+
+   location.reload();
+
+ }
+
+}
+
+
+/* START */
+
+checkSession();
+
+updateTimer();
+
 </script>
+
 </body>
 </html>
