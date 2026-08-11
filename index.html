@@ -10,54 +10,60 @@
 
 <style>
 :root{
- --bg:#f5f7fb;
- --text:#172033;
- --card-bg:#fff;
- --card-border:#e7eaf0;
- --card-shadow:rgba(20,35,60,.05);
- --accent:#2563eb;
- --accent-soft:#eef4ff;
- --danger-bg:#fff0f0;
- --danger-text:#c62828;
- --muted:#667085;
- --track:#e9edf4;
- --border:#edf0f4;
- --input-border:#d9dee8;
+ --bg:#faf9f7;
+ --text:#1c1917;
+ --card-bg:#ffffff;
+ --card-border:#ece9e4;
+ --card-shadow:rgba(28,25,23,.05);
+ --ink:#1c1917;
+ --ink-text:#faf9f7;
+ --accent:#a9784f;
+ --accent-soft:#f3ece3;
+ --danger-bg:#fdf2f1;
+ --danger-text:#b3402f;
+ --muted:#78716c;
+ --track:#ece9e4;
+ --border:#ece9e4;
+ --input-border:#ddd8d1;
  --input-bg:#fff;
- --nav-border:#e3e7ee;
- --done-text:#98a2b3;
+ --nav-border:#ece9e4;
+ --done-text:#a8a29b;
 }
 
 [data-theme="dark"]{
- --bg:#0f1420;
- --text:#e6e9f0;
- --card-bg:#171d2b;
- --card-border:#262e42;
+ --bg:#121110;
+ --text:#e9e6e1;
+ --card-bg:#1b1a18;
+ --card-border:#2c2a27;
  --card-shadow:rgba(0,0,0,.35);
- --accent:#4f8bff;
- --accent-soft:#1b2740;
- --danger-bg:#3a1c1c;
- --danger-text:#ff8080;
- --muted:#9aa4b7;
- --track:#232b3d;
- --border:#232b3d;
- --input-border:#2c3548;
- --input-bg:#111726;
- --nav-border:#262e42;
- --done-text:#5c6479;
+ --ink:#e9e6e1;
+ --ink-text:#171614;
+ --accent:#c9a06b;
+ --accent-soft:#2a231b;
+ --danger-bg:#2c1a17;
+ --danger-text:#e2887a;
+ --muted:#9a948c;
+ --track:#26241f;
+ --border:#26241f;
+ --input-border:#302d28;
+ --input-bg:#181715;
+ --nav-border:#2c2a27;
+ --done-text:#5d574f;
 }
 
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
  margin:0;
  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
  background:var(--bg);
  color:var(--text);
- transition:background .2s ease,color .2s ease
+ transition:background .25s ease,color .25s ease
 }
 button,input{font:inherit}
-button{cursor:pointer;border:0}
-.app{max-width:1100px;margin:auto;padding:18px}
+button{cursor:pointer;border:0;transition:background .18s ease,color .18s ease,transform .12s ease,opacity .18s ease}
+button:active{transform:scale(.96)}
+.app{max-width:1100px;margin:auto;padding:18px 18px calc(96px + env(safe-area-inset-bottom));animation:fadeIn .4s ease}
 header{
  display:flex;
  justify-content:space-between;
@@ -65,25 +71,37 @@ header{
  margin-bottom:18px;
  gap:10px
 }
-.logo{font-size:24px;font-weight:800;color:var(--accent)}
-.logo span{color:var(--text)}
+.logo{font-size:24px;font-weight:800;color:var(--ink);transition:color .25s ease;letter-spacing:-.02em}
+.logo span{color:var(--accent);transition:color .25s ease}
 .card{
  background:var(--card-bg);
  border:1px solid var(--card-border);
- border-radius:18px;
- padding:18px;
- box-shadow:0 5px 20px var(--card-shadow);
- transition:background .2s ease,border-color .2s ease
-}
-.hero{
- background:var(--accent);
- color:#fff;
  border-radius:20px;
  padding:22px;
- margin-bottom:16px
+ box-shadow:0 1px 2px var(--card-shadow);
+ transition:background .25s ease,border-color .25s ease,box-shadow .18s ease,transform .18s ease
+}
+.card:hover{box-shadow:0 4px 16px var(--card-shadow)}
+
+@keyframes fadeIn{
+ from{opacity:0;transform:translateY(6px)}
+ to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes spin{
+ from{transform:rotate(0deg)}
+ to{transform:rotate(360deg)}
+}
+.hero{
+ background:var(--ink);
+ color:var(--ink-text);
+ border-radius:20px;
+ padding:22px;
+ margin-bottom:16px;
+ transition:background .25s ease,color .25s ease
 }
 .hero h1{margin:0 0 6px;font-size:27px}
-.hero p{margin:0;opacity:.9}
+.hero p{margin:0;opacity:.75}
 .stats{
  display:grid;
  grid-template-columns:repeat(4,1fr);
@@ -105,19 +123,23 @@ h2{font-size:18px;margin:0}
  gap:16px
 }
 .progress{
- height:9px;
+ height:8px;
  background:var(--track);
  border-radius:20px;
- overflow:hidden
+ overflow:hidden;
+ transition:background .25s ease
 }
 .progress div{
  height:100%;
  background:var(--accent);
- border-radius:20px
+ border-radius:20px;
+ transition:width .5s cubic-bezier(.4,0,.2,1),background .25s ease
 }
 .subject{
  padding:13px 0;
- border-bottom:1px solid var(--border)
+ border-bottom:1px solid var(--border);
+ animation:fadeIn .3s ease;
+ transition:border-color .25s ease
 }
 .subject:last-child{border-bottom:0}
 .row{
@@ -129,56 +151,71 @@ h2{font-size:18px;margin:0}
 .small{font-size:13px;color:var(--muted)}
 .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .btn{
- padding:10px 14px;
- border-radius:10px;
- background:var(--accent);
- color:#fff;
- font-weight:650
+ padding:13px 18px;
+ border-radius:12px;
+ background:var(--ink);
+ color:var(--ink-text);
+ font-weight:650;
+ font-size:15px;
+ min-height:48px
 }
+.btn:hover{opacity:.85}
 .btn.secondary{background:var(--accent-soft);color:var(--accent)}
 .btn.danger{background:var(--danger-bg);color:var(--danger-text)}
-.btn.smallbtn{padding:7px 10px;font-size:13px}
+.btn.smallbtn{padding:10px 14px;font-size:14px;min-height:44px}
 .theme-toggle{
- width:38px;
- height:38px;
- border-radius:10px;
+ width:48px;
+ height:48px;
+ border-radius:14px;
  background:var(--accent-soft);
  color:var(--accent);
  display:flex;
  align-items:center;
  justify-content:center;
- font-size:17px;
+ font-size:20px;
  padding:0;
- flex-shrink:0
+ flex-shrink:0;
+ transition:background .18s ease,transform .3s ease
 }
+.theme-toggle:hover{transform:rotate(15deg)}
 input{
  width:100%;
- padding:11px 12px;
+ padding:13px 14px;
  border:1px solid var(--input-border);
- border-radius:10px;
+ border-radius:12px;
  outline:none;
  background:var(--input-bg);
- color:var(--text)
+ color:var(--text);
+ font-size:16px;
+ min-height:48px;
+ transition:border-color .18s ease,background .25s ease,box-shadow .18s ease
 }
-input:focus{border-color:var(--accent)}
-.form{display:flex;gap:8px;margin-top:12px}
-.form input{flex:1}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.form{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.form input{flex:1;min-width:160px}
+.form .btn{flex-shrink:0}
 .task{
  display:flex;
  align-items:center;
- gap:10px;
- padding:12px 0;
- border-bottom:1px solid var(--border)
+ gap:12px;
+ padding:16px 4px;
+ border-bottom:1px solid var(--border);
+ animation:fadeIn .3s ease;
+ transition:border-color .25s ease
 }
 .task:last-child{border-bottom:0}
-.task input[type=checkbox]{width:18px;height:18px}
+.task input[type=checkbox]{width:24px;height:24px;cursor:pointer;transition:transform .15s ease;flex-shrink:0;accent-color:var(--accent)}
+.task input[type=checkbox]:active{transform:scale(1.15)}
+.task span{transition:color .25s ease;font-size:15px}
 .task.done span{text-decoration:line-through;color:var(--done-text)}
 .timer{text-align:center}
 .timer-display{
  font-size:48px;
  font-weight:800;
  letter-spacing:2px;
- margin:14px 0
+ margin:14px 0;
+ font-variant-numeric:tabular-nums;
+ transition:color .25s ease
 }
 .goal{margin-top:14px}
 .empty{
@@ -188,23 +225,43 @@ input:focus{border-color:var(--accent)}
  font-size:14px
 }
 nav{
+ position:fixed;
+ left:0;
+ right:0;
+ bottom:0;
  display:flex;
- gap:8px;
- overflow:auto;
- margin-bottom:16px
+ justify-content:space-around;
+ align-items:stretch;
+ background:var(--card-bg);
+ border-top:1px solid var(--nav-border);
+ padding:6px 6px calc(6px + env(safe-area-inset-bottom));
+ z-index:50;
+ backdrop-filter:blur(10px);
+ transition:background .25s ease,border-color .25s ease
 }
 nav button{
- background:var(--card-bg);
- border:1px solid var(--nav-border);
+ flex:1;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:3px;
+ background:transparent;
+ border:0;
  color:var(--muted);
- padding:9px 14px;
- border-radius:10px;
- white-space:nowrap
+ padding:8px 4px 6px;
+ border-radius:14px;
+ min-height:56px;
+ font-size:11px;
+ font-weight:600;
+ white-space:nowrap;
+ transition:background .18s ease,color .18s ease
 }
+nav button .nav-icon{font-size:21px;line-height:1}
+nav button:hover{color:var(--text)}
 nav button.active{
- background:var(--accent);
- color:#fff;
- border-color:var(--accent)
+ background:var(--accent-soft);
+ color:var(--accent)
 }
 
 .auth-screen{
@@ -268,13 +325,35 @@ nav button.active{
 .message-success{color:#16803c}
 [data-theme="dark"] .message-success{color:#4ade80}
 
+main,
+section#subjects,
+section#tasks,
+section#timer{
+ animation:fadeIn .35s ease
+}
+
+.stat{
+ transition:transform .18s ease
+}
+.stat:hover{transform:translateY(-2px)}
+
+.auth-card{
+ animation:fadeIn .4s ease
+}
+
 @media(max-width:700px){
- .app{padding:12px}
+ .app{padding:14px 14px calc(96px + env(safe-area-inset-bottom))}
  .stats{grid-template-columns:repeat(2,1fr)}
  .grid{grid-template-columns:1fr}
  .hero h1{font-size:23px}
- .card{padding:15px}
+ .card{padding:18px}
  header{align-items:flex-start}
+ .actions{gap:8px}
+ #userDisplay{display:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+ *{animation-duration:.001ms !important;transition-duration:.001ms !important}
 }
 </style>
 </head>
@@ -443,22 +522,26 @@ Reset data
 <button
  class="active"
  onclick="showSection('dashboard',this)">
+<span class="nav-icon">🏠</span>
 Dashboard
 </button>
 
 <button
  onclick="showSection('subjects',this)">
+<span class="nav-icon">📚</span>
 Subjects
 </button>
 
 <button
  onclick="showSection('tasks',this)">
+<span class="nav-icon">✅</span>
 Tasks
 </button>
 
 <button
  onclick="showSection('timer',this)">
-Study Timer
+<span class="nav-icon">⏱️</span>
+Timer
 </button>
 
 </nav>
@@ -2029,12 +2112,24 @@ function showSection(id,btn){
  ].forEach(
   function(section){
 
-   document.getElementById(
-    section
-   ).style.display=
-    section===id
-    ?"block"
-    :"none";
+   const el=
+    document.getElementById(section);
+
+   if(section===id){
+
+    el.style.display="block";
+
+    el.style.animation="none";
+
+    void el.offsetWidth;
+
+    el.style.animation="";
+
+   }else{
+
+    el.style.display="none";
+
+   }
 
   }
  );
