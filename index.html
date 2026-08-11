@@ -683,15 +683,66 @@ async function checkSession(){
    STUDYHUB FUNCTIONS
 ========================= */
 
-function save(){
+async function save(){
 
- localStorage.setItem(
-   KEY,
-   JSON.stringify(data)
- );
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
 
- render();
+  if(!user) return;
 
+  const { error } = await supabaseClient
+    .from("studyhub_data")
+    .upsert({
+      id:user.id,
+      data:data,
+      updated_at:new Date().toISOString()
+    });
+
+  if(error){
+    console.error("Cloud save error:",error);
+    alert("Could not save your StudyHub data.");
+    return;
+  }
+
+  cloudLoaded=true;
+  render();
+}
+
+
+async function loadCloudData(){
+
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  if(!user) return;
+
+  const { data:cloudData, error } = await supabaseClient
+    .from("studyhub_data")
+    .select("data")
+    .eq("id",user.id)
+    .maybeSingle();
+
+  if(error){
+
+    console.error("Cloud load error:",error);
+    alert("Could not load your StudyHub data.");
+    return;
+  }
+
+  if(cloudData && cloudData.data){
+
+    data=cloudData.data;
+
+  }else{
+
+    await save();
+
+  }
+
+  cloudLoaded=true;
+  render();
 }
 
 
