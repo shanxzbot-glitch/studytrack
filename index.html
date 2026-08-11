@@ -3,52 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#2563eb">
+<meta name="theme-color" content="#2c365a">
 <title>StudyHub</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
- --bg:#faf9f7;
- --text:#1c1917;
- --card-bg:#ffffff;
- --card-border:#ece9e4;
- --card-shadow:rgba(28,25,23,.05);
- --ink:#1c1917;
- --ink-text:#faf9f7;
- --accent:#a9784f;
- --accent-soft:#f3ece3;
- --danger-bg:#fdf2f1;
- --danger-text:#b3402f;
- --muted:#78716c;
- --track:#ece9e4;
- --border:#ece9e4;
- --input-border:#ddd8d1;
- --input-bg:#fff;
- --nav-border:#ece9e4;
- --done-text:#a8a29b;
+ --bg:#f4f1ea;
+ --text:#1b2438;
+ --card-bg:#eee8df;
+ --card-border:#e0d8cc;
+ --card-shadow:rgba(44, 54, 90, 0.06);
+ --ink:#2c365a;
+ --ink-text:#f4f1ea;
+ --accent:#2c365a;
+ --accent-soft:#e2dad0;
+ --danger-bg:#f5e6e4;
+ --danger-text:#a33b2c;
+ --muted:#716b62;
+ --track:#dcd4c7;
+ --border:#e2dad0;
+ --input-border:#c4bcb0;
+ --input-bg:#faf8f5;
+ --nav-border:#e2dad0;
+ --done-text:#968f84;
 }
 
 [data-theme="dark"]{
- --bg:#121110;
- --text:#e9e6e1;
- --card-bg:#1b1a18;
- --card-border:#2c2a27;
- --card-shadow:rgba(0,0,0,.35);
- --ink:#e9e6e1;
- --ink-text:#171614;
- --accent:#c9a06b;
- --accent-soft:#2a231b;
- --danger-bg:#2c1a17;
+ --bg:#0f1420;
+ --text:#eee8df;
+ --card-bg:#171e2e;
+ --card-border:#232d42;
+ --card-shadow:rgba(0,0,0,.4);
+ --ink:#eee8df;
+ --ink-text:#0f1420;
+ --accent:#c4bcb0;
+ --accent-soft:#1f283c;
+ --danger-bg:#321917;
  --danger-text:#e2887a;
- --muted:#9a948c;
- --track:#26241f;
- --border:#26241f;
- --input-border:#302d28;
- --input-bg:#181715;
- --nav-border:#2c2a27;
- --done-text:#5d574f;
+ --muted:#9e978c;
+ --track:#1f283c;
+ --border:#232d42;
+ --input-border:#2c365a;
+ --input-bg:#121724;
+ --nav-border:#232d42;
+ --done-text:#635d54;
 }
 
 *{box-sizing:border-box}
@@ -78,10 +78,10 @@ header{
  border:1px solid var(--card-border);
  border-radius:20px;
  padding:22px;
- box-shadow:0 1px 2px var(--card-shadow);
+ box-shadow:0 2px 8px var(--card-shadow);
  transition:background .25s ease,border-color .25s ease,box-shadow .18s ease,transform .18s ease
 }
-.card:hover{box-shadow:0 4px 16px var(--card-shadow)}
+.card:hover{box-shadow:0 6px 20px var(--card-shadow)}
 
 @keyframes fadeIn{
  from{opacity:0;transform:translateY(6px)}
@@ -159,8 +159,8 @@ h2{font-size:18px;margin:0}
  font-size:15px;
  min-height:48px
 }
-.btn:hover{opacity:.85}
-.btn.secondary{background:var(--accent-soft);color:var(--accent)}
+.btn:hover{opacity:.9}
+.btn.secondary{background:var(--accent-soft);color:var(--text)}
 .btn.danger{background:var(--danger-bg);color:var(--danger-text)}
 .btn.smallbtn{padding:10px 14px;font-size:14px;min-height:44px}
 .theme-toggle{
@@ -168,7 +168,7 @@ h2{font-size:18px;margin:0}
  height:48px;
  border-radius:14px;
  background:var(--accent-soft);
- color:var(--accent);
+ color:var(--text);
  display:flex;
  align-items:center;
  justify-content:center;
@@ -183,7 +183,7 @@ h2{font-size:18px;margin:0}
  align-items:center;
  gap:4px;
  background:var(--accent-soft);
- color:var(--accent);
+ color:var(--text);
  font-weight:700;
  font-size:14px;
  padding:8px 12px;
@@ -223,7 +223,7 @@ h2{font-size:18px;margin:0}
  width:22px;
  height:22px;
  cursor:pointer;
- accent-color:var(--accent);
+ accent-color:var(--ink);
  flex-shrink:0
 }
 .streak-hint{margin:12px 0 0}
@@ -239,7 +239,7 @@ input{
  min-height:48px;
  transition:border-color .18s ease,background .25s ease,box-shadow .18s ease
 }
-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+input:focus{border-color:var(--ink);box-shadow:0 0 0 3px var(--accent-soft)}
 .form{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
 .form input{flex:1;min-width:160px}
 .form .btn{flex-shrink:0}
@@ -253,7 +253,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
  transition:border-color .25s ease
 }
 .task:last-child{border-bottom:0}
-.task input[type=checkbox]{width:24px;height:24px;cursor:pointer;transition:transform .15s ease;flex-shrink:0;accent-color:var(--accent)}
+.task input[type=checkbox]{width:24px;height:24px;cursor:pointer;transition:transform .15s ease;flex-shrink:0;accent-color:var(--ink)}
 .task input[type=checkbox]:active{transform:scale(1.15)}
 .task span{transition:color .25s ease;font-size:15px}
 .task.done span{text-decoration:line-through;color:var(--done-text)}
@@ -310,7 +310,7 @@ nav button .nav-icon{font-size:21px;line-height:1}
 nav button:hover{color:var(--text)}
 nav button.active{
  background:var(--accent-soft);
- color:var(--accent)
+ color:var(--ink)
 }
 
 .auth-screen{
@@ -334,7 +334,7 @@ nav button.active{
  text-align:center;
  font-size:30px;
  font-weight:800;
- color:var(--accent);
+ color:var(--ink);
  margin-bottom:8px
 }
 .auth-subtitle{
@@ -366,7 +366,7 @@ nav button.active{
 }
 .link-btn{
  background:none;
- color:var(--accent);
+ color:var(--ink);
  font-weight:700;
  padding:0
 }
@@ -382,8 +382,8 @@ nav button.active{
  font-weight:600
 }
 .message-error{color:var(--danger-text)}
-.message-success{color:#16803c}
-[data-theme="dark"] .message-success{color:#4ade80}
+.message-success{color:#1e6b37}
+[data-theme="dark"] .message-success{color:#52d67a}
 
 main,
 section#subjects,
