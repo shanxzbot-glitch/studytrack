@@ -513,99 +513,159 @@ async function signup(){
 
      options:{
        data:{
-         username:username
-       }
-     }
+async function signup(){
 
-   });
+  const username =
+    document.getElementById("signupUsername").value.trim();
 
+  const password =
+    document.getElementById("signupPassword").value;
 
- if(error){
+  const confirm =
+    document.getElementById("signupConfirm").value;
 
-   message.textContent=
-   error.message;
+  const message =
+    document.getElementById("signupMessage");
 
-   return;
- }
+  if(username.length < 3){
+    message.textContent =
+      "Username must be at least 3 characters.";
+    return;
+  }
 
+  if(!/^[a-zA-Z0-9_]+$/.test(username)){
+    message.textContent =
+      "Use only letters, numbers and _";
+    return;
+  }
 
- if(result.user){
+  if(password.length < 6){
+    message.textContent =
+      "Password must be at least 6 characters.";
+    return;
+  }
 
-   message.textContent=
-   "Account created! Logging you in...";
+  if(password !== confirm){
+    message.textContent =
+      "Passwords do not match.";
+    return;
+  }
 
-   setTimeout(()=>{
+  message.textContent = "Creating account...";
 
-     enterApp(username);
+  const email = usernameToEmail(username);
 
-   },700);
+  try{
 
- }
+    const { data: result, error } =
+      await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+        options:{
+          data:{
+            username: username
+          }
+        }
+      });
+
+    if(error){
+      console.error(error);
+      message.textContent = error.message;
+      return;
+    }
+
+    if(result.user){
+
+      message.textContent =
+        "Account created! Opening StudyHub...";
+
+      data = {
+        subjects:[],
+        tasks:[],
+        studyMinutes:0,
+        dailyGoal:60
+      };
+
+      await save();
+
+      setTimeout(() => {
+        enterApp(username);
+      }, 500);
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    message.textContent =
+      "Something went wrong. Please try again.";
+
+  }
 
 }
-
 
 /* =========================
    LOGIN
 ========================= */
 
 async function login(){
+async function login(){
 
- const username=
-   document.getElementById("loginUsername")
-   .value.trim();
+  const username =
+    document.getElementById("loginUsername").value.trim();
 
- const password=
-   document.getElementById("loginPassword")
-   .value;
+  const password =
+    document.getElementById("loginPassword").value;
 
- const message=
-   document.getElementById("loginMessage");
+  const message =
+    document.getElementById("loginMessage");
 
+  if(!username || !password){
+    message.textContent =
+      "Enter username and password.";
+    return;
+  }
 
- if(!username||!password){
+  message.textContent = "Logging in...";
 
-   message.textContent=
-   "Enter username and password.";
+  const email = usernameToEmail(username);
 
-   return;
- }
+  try{
 
+    const { data: result, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
 
- message.textContent="Logging in...";
+    if(error){
+      console.error(error);
+      message.textContent = error.message;
+      return;
+    }
 
+    if(result.user){
 
- const email=usernameToEmail(username);
+      message.textContent =
+        "Login successful! Loading your data...";
 
+      await loadCloudData();
 
- const {data:result,error}=
+      enterApp(username);
 
-   await supabaseClient.auth.signInWithPassword({
+    }
 
-     email:email,
+  }catch(error){
 
-     password:password
+    console.error(error);
 
-   });
+    message.textContent =
+      "Something went wrong. Please try again.";
 
-
- if(error){
-
-   message.textContent=
-   "Incorrect username or password.";
-
-   return;
- }
-
-
- if(result.user){
-
-   enterApp(username);
-
- }
+  }
 
 }
-
 
 /* =========================
    ENTER STUDYHUB
