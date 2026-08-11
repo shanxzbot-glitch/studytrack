@@ -9,12 +9,51 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+:root{
+ --bg:#f5f7fb;
+ --text:#172033;
+ --card-bg:#fff;
+ --card-border:#e7eaf0;
+ --card-shadow:rgba(20,35,60,.05);
+ --accent:#2563eb;
+ --accent-soft:#eef4ff;
+ --danger-bg:#fff0f0;
+ --danger-text:#c62828;
+ --muted:#667085;
+ --track:#e9edf4;
+ --border:#edf0f4;
+ --input-border:#d9dee8;
+ --input-bg:#fff;
+ --nav-border:#e3e7ee;
+ --done-text:#98a2b3;
+}
+
+[data-theme="dark"]{
+ --bg:#0f1420;
+ --text:#e6e9f0;
+ --card-bg:#171d2b;
+ --card-border:#262e42;
+ --card-shadow:rgba(0,0,0,.35);
+ --accent:#4f8bff;
+ --accent-soft:#1b2740;
+ --danger-bg:#3a1c1c;
+ --danger-text:#ff8080;
+ --muted:#9aa4b7;
+ --track:#232b3d;
+ --border:#232b3d;
+ --input-border:#2c3548;
+ --input-bg:#111726;
+ --nav-border:#262e42;
+ --done-text:#5c6479;
+}
+
 *{box-sizing:border-box}
 body{
  margin:0;
  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
- background:#f5f7fb;
- color:#172033
+ background:var(--bg);
+ color:var(--text);
+ transition:background .2s ease,color .2s ease
 }
 button,input{font:inherit}
 button{cursor:pointer;border:0}
@@ -26,17 +65,18 @@ header{
  margin-bottom:18px;
  gap:10px
 }
-.logo{font-size:24px;font-weight:800;color:#2563eb}
-.logo span{color:#172033}
+.logo{font-size:24px;font-weight:800;color:var(--accent)}
+.logo span{color:var(--text)}
 .card{
- background:#fff;
- border:1px solid #e7eaf0;
+ background:var(--card-bg);
+ border:1px solid var(--card-border);
  border-radius:18px;
  padding:18px;
- box-shadow:0 5px 20px rgba(20,35,60,.05)
+ box-shadow:0 5px 20px var(--card-shadow);
+ transition:background .2s ease,border-color .2s ease
 }
 .hero{
- background:#2563eb;
+ background:var(--accent);
  color:#fff;
  border-radius:20px;
  padding:22px;
@@ -51,7 +91,7 @@ header{
  margin-bottom:16px
 }
 .stat b{display:block;font-size:26px;margin-top:5px}
-.label{font-size:13px;color:#667085}
+.label{font-size:13px;color:var(--muted)}
 .section-title{
  display:flex;
  justify-content:space-between;
@@ -66,18 +106,18 @@ h2{font-size:18px;margin:0}
 }
 .progress{
  height:9px;
- background:#e9edf4;
+ background:var(--track);
  border-radius:20px;
  overflow:hidden
 }
 .progress div{
  height:100%;
- background:#2563eb;
+ background:var(--accent);
  border-radius:20px
 }
 .subject{
  padding:13px 0;
- border-bottom:1px solid #edf0f4
+ border-bottom:1px solid var(--border)
 }
 .subject:last-child{border-bottom:0}
 .row{
@@ -86,27 +126,41 @@ h2{font-size:18px;margin:0}
  align-items:center;
  gap:10px
 }
-.small{font-size:13px;color:#667085}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
+.small{font-size:13px;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .btn{
  padding:10px 14px;
  border-radius:10px;
- background:#2563eb;
+ background:var(--accent);
  color:#fff;
  font-weight:650
 }
-.btn.secondary{background:#eef4ff;color:#2563eb}
-.btn.danger{background:#fff0f0;color:#c62828}
+.btn.secondary{background:var(--accent-soft);color:var(--accent)}
+.btn.danger{background:var(--danger-bg);color:var(--danger-text)}
 .btn.smallbtn{padding:7px 10px;font-size:13px}
+.theme-toggle{
+ width:38px;
+ height:38px;
+ border-radius:10px;
+ background:var(--accent-soft);
+ color:var(--accent);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:17px;
+ padding:0;
+ flex-shrink:0
+}
 input{
  width:100%;
  padding:11px 12px;
- border:1px solid #d9dee8;
+ border:1px solid var(--input-border);
  border-radius:10px;
  outline:none;
- background:#fff
+ background:var(--input-bg);
+ color:var(--text)
 }
-input:focus{border-color:#2563eb}
+input:focus{border-color:var(--accent)}
 .form{display:flex;gap:8px;margin-top:12px}
 .form input{flex:1}
 .task{
@@ -114,11 +168,11 @@ input:focus{border-color:#2563eb}
  align-items:center;
  gap:10px;
  padding:12px 0;
- border-bottom:1px solid #edf0f4
+ border-bottom:1px solid var(--border)
 }
 .task:last-child{border-bottom:0}
 .task input[type=checkbox]{width:18px;height:18px}
-.task.done span{text-decoration:line-through;color:#98a2b3}
+.task.done span{text-decoration:line-through;color:var(--done-text)}
 .timer{text-align:center}
 .timer-display{
  font-size:48px;
@@ -130,7 +184,7 @@ input:focus{border-color:#2563eb}
 .empty{
  padding:18px 0;
  text-align:center;
- color:#98a2b3;
+ color:var(--muted);
  font-size:14px
 }
 nav{
@@ -140,17 +194,17 @@ nav{
  margin-bottom:16px
 }
 nav button{
- background:#fff;
- border:1px solid #e3e7ee;
- color:#667085;
+ background:var(--card-bg);
+ border:1px solid var(--nav-border);
+ color:var(--muted);
  padding:9px 14px;
  border-radius:10px;
  white-space:nowrap
 }
 nav button.active{
- background:#2563eb;
+ background:var(--accent);
  color:#fff;
- border-color:#2563eb
+ border-color:var(--accent)
 }
 
 .auth-screen{
@@ -158,7 +212,13 @@ nav button.active{
  display:flex;
  align-items:center;
  justify-content:center;
- padding:20px
+ padding:20px;
+ position:relative
+}
+.auth-theme-toggle{
+ position:absolute;
+ top:18px;
+ right:18px
 }
 .auth-card{
  width:100%;
@@ -168,12 +228,12 @@ nav button.active{
  text-align:center;
  font-size:30px;
  font-weight:800;
- color:#2563eb;
+ color:var(--accent);
  margin-bottom:8px
 }
 .auth-subtitle{
  text-align:center;
- color:#667085;
+ color:var(--muted);
  margin:0 0 22px
 }
 .auth-form{
@@ -196,16 +256,17 @@ nav button.active{
  text-align:center;
  margin-top:18px;
  font-size:14px;
- color:#667085
+ color:var(--muted)
 }
 .link-btn{
  background:none;
- color:#2563eb;
+ color:var(--accent);
  font-weight:700;
  padding:0
 }
-.message-error{color:#c62828}
+.message-error{color:var(--danger-text)}
 .message-success{color:#16803c}
+[data-theme="dark"] .message-success{color:#4ade80}
 
 @media(max-width:700px){
  .app{padding:12px}
@@ -225,6 +286,15 @@ nav button.active{
 ========================= -->
 
 <div id="authScreen" class="auth-screen">
+
+<button
+ class="theme-toggle auth-theme-toggle"
+ id="authThemeToggleBtn"
+ onclick="toggleTheme()"
+ title="Toggle dark mode"
+ aria-label="Toggle dark mode">
+🌙
+</button>
 
 <div class="card auth-card">
 
@@ -342,6 +412,15 @@ Study<span>Hub</span>
 <div class="actions">
 
 <span id="userDisplay" class="small"></span>
+
+<button
+ class="theme-toggle"
+ id="themeToggleBtn"
+ onclick="toggleTheme()"
+ title="Toggle dark mode"
+ aria-label="Toggle dark mode">
+🌙
+</button>
 
 <button
  class="btn secondary smallbtn"
@@ -623,6 +702,99 @@ let data = {
 
 let timerSeconds = 1500;
 let timerInterval = null;
+
+
+/* =========================
+   THEME (DARK MODE)
+========================= */
+
+function applyTheme(theme){
+
+ if(theme==="dark"){
+
+  document.documentElement.setAttribute(
+   "data-theme","dark"
+  );
+
+ }else{
+
+  document.documentElement.removeAttribute(
+   "data-theme"
+  );
+
+ }
+
+
+ const icon =
+  theme==="dark" ? "☀️" : "🌙";
+
+ const mainBtn=
+  document.getElementById("themeToggleBtn");
+
+ const authBtn=
+  document.getElementById("authThemeToggleBtn");
+
+ if(mainBtn) mainBtn.textContent=icon;
+
+ if(authBtn) authBtn.textContent=icon;
+
+}
+
+
+function toggleTheme(){
+
+ const current =
+  document.documentElement.getAttribute("data-theme")==="dark"
+   ? "dark"
+   : "light";
+
+ const next =
+  current==="dark" ? "light" : "dark";
+
+ applyTheme(next);
+
+ try{
+
+  localStorage.setItem("studyhub_theme",next);
+
+ }catch(e){
+
+  console.warn("Could not persist theme preference.");
+
+ }
+
+}
+
+
+function initTheme(){
+
+ let saved=null;
+
+ try{
+
+  saved=localStorage.getItem("studyhub_theme");
+
+ }catch(e){
+
+  saved=null;
+
+ }
+
+
+ if(!saved){
+
+  saved=
+   (window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches)
+   ? "dark"
+   : "light";
+
+ }
+
+
+ applyTheme(saved);
+
+}
 
 
 /* =========================
@@ -1995,6 +2167,8 @@ async function resetData(){
 /* =========================
    START APP
 ========================= */
+
+initTheme();
 
 updateTimer();
 
