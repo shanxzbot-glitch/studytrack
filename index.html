@@ -178,6 +178,55 @@ h2{font-size:18px;margin:0}
  transition:background .18s ease,transform .3s ease
 }
 .theme-toggle:hover{transform:rotate(15deg)}
+.streak-badge{
+ display:flex;
+ align-items:center;
+ gap:4px;
+ background:var(--accent-soft);
+ color:var(--accent);
+ font-weight:700;
+ font-size:14px;
+ padding:8px 12px;
+ border-radius:12px;
+ min-height:38px;
+ white-space:nowrap;
+ transition:background .18s ease,color .18s ease,transform .15s ease
+}
+.streak-badge:not(:empty):hover{transform:scale(1.04)}
+.streak-card{margin-bottom:16px}
+.streak-row{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ flex-wrap:wrap;
+ gap:14px;
+ margin-top:6px
+}
+.streak-count{display:flex;align-items:baseline;gap:8px}
+#streakNumber{font-size:36px;font-weight:800;line-height:1;transition:color .25s ease}
+.streak-count-label{font-size:14px;color:var(--muted);font-weight:600}
+.streak-check{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ background:var(--accent-soft);
+ padding:12px 16px;
+ border-radius:14px;
+ cursor:pointer;
+ font-weight:650;
+ font-size:15px;
+ color:var(--text);
+ min-height:48px;
+ transition:background .18s ease
+}
+.streak-check input[type=checkbox]{
+ width:22px;
+ height:22px;
+ cursor:pointer;
+ accent-color:var(--accent);
+ flex-shrink:0
+}
+.streak-hint{margin:12px 0 0}
 input{
  width:100%;
  padding:13px 14px;
@@ -320,6 +369,17 @@ nav button.active{
  color:var(--accent);
  font-weight:700;
  padding:0
+}
+.auth-preview{
+ text-align:center;
+ margin-top:16px;
+ padding-top:16px;
+ border-top:1px solid var(--card-border)
+}
+.auth-preview .link-btn{
+ font-size:13px;
+ color:var(--muted);
+ font-weight:600
 }
 .message-error{color:var(--danger-text)}
 .message-success{color:#16803c}
@@ -472,6 +532,12 @@ Login
 
 </div>
 
+<div class="auth-preview">
+<button class="link-btn" onclick="enterGuestPreview()">
+Preview without an account
+</button>
+</div>
+
 </div>
 </div>
 
@@ -492,6 +558,10 @@ Study<span>Hub</span>
 
 <span id="userDisplay" class="small"></span>
 
+<div class="streak-badge" id="streakBadge" title="Current study streak">
+🔥 0
+</div>
+
 <button
  class="theme-toggle"
  id="themeToggleBtn"
@@ -502,15 +572,25 @@ Study<span>Hub</span>
 </button>
 
 <button
+ id="logoutBtn"
  class="btn secondary smallbtn"
  onclick="logout()">
 Logout
 </button>
 
 <button
+ id="resetDataBtn"
  class="btn danger smallbtn"
  onclick="resetData()">
 Reset data
+</button>
+
+<button
+ id="exitPreviewBtn"
+ class="btn secondary smallbtn"
+ style="display:none"
+ onclick="exitGuestPreview()">
+Exit preview
 </button>
 
 </div>
@@ -557,6 +637,36 @@ Timer
 
 <p>
 Stay organized, study consistently, and see your progress.
+</p>
+
+</div>
+
+
+<div class="card streak-card">
+
+<div class="section-title">
+<h2>Study Streak</h2>
+</div>
+
+<div class="streak-row">
+
+<div class="streak-count">
+<span id="streakNumber">0</span>
+<span class="streak-count-label">day streak 🔥</span>
+</div>
+
+<label class="streak-check">
+<input
+ type="checkbox"
+ id="streakCheckbox"
+ onchange="toggleStreak()">
+<span>I studied today</span>
+</label>
+
+</div>
+
+<p class="small streak-hint">
+Check this once a day after you study to keep your streak going.
 </p>
 
 </div>
@@ -780,7 +890,9 @@ let data = {
  subjects: [],
  tasks: [],
  studyMinutes: 0,
- dailyGoal: 60
+ dailyGoal: 60,
+ streak: 0,
+ lastStudyDate: null
 };
 
 let timerSeconds = 1500;
@@ -1081,7 +1193,9 @@ async function signup(){
    subjects:[],
    tasks:[],
    studyMinutes:0,
-   dailyGoal:60
+   dailyGoal:60,
+   streak:0,
+   lastStudyDate:null
   };
 
 
@@ -1228,6 +1342,87 @@ function enterApp(username){
 
 
 /* =========================
+   GUEST PREVIEW
+   (local only — no Supabase
+   account required, no cloud
+   data is read or written)
+========================= */
+
+let isGuest=false;
+
+
+function enterGuestPreview(){
+
+ isGuest=true;
+
+ data={
+  subjects:[],
+  tasks:[],
+  studyMinutes:0,
+  dailyGoal:60,
+  streak:0,
+  lastStudyDate:null
+ };
+
+ document.getElementById("authScreen")
+  .style.display="none";
+
+ document.getElementById("studyApp")
+  .style.display="block";
+
+ document.getElementById("userDisplay")
+  .textContent="Preview mode (not saved)";
+
+ document.getElementById("logoutBtn")
+  .style.display="none";
+
+ document.getElementById("resetDataBtn")
+  .style.display="none";
+
+ document.getElementById("exitPreviewBtn")
+  .style.display="inline-flex";
+
+ render();
+
+ updateTimer();
+
+}
+
+
+function exitGuestPreview(){
+
+ isGuest=false;
+
+ data={
+  subjects:[],
+  tasks:[],
+  studyMinutes:0,
+  dailyGoal:60,
+  streak:0,
+  lastStudyDate:null
+ };
+
+ document.getElementById("studyApp")
+  .style.display="none";
+
+ document.getElementById("authScreen")
+  .style.display="flex";
+
+ document.getElementById("logoutBtn")
+  .style.display="inline-flex";
+
+ document.getElementById("resetDataBtn")
+  .style.display="inline-flex";
+
+ document.getElementById("exitPreviewBtn")
+  .style.display="none";
+
+ showLogin();
+
+}
+
+
+/* =========================
    LOGOUT
 ========================= */
 
@@ -1239,7 +1434,9 @@ async function logout(){
   subjects:[],
   tasks:[],
   studyMinutes:0,
-  dailyGoal:60
+  dailyGoal:60,
+  streak:0,
+  lastStudyDate:null
  };
 
  document.getElementById("studyApp")
@@ -1395,13 +1592,19 @@ async function loadCloudData(){
 
   data=response.data.data;
 
+  if(typeof data.streak!=="number") data.streak=0;
+
+  if(!("lastStudyDate" in data)) data.lastStudyDate=null;
+
  }else{
 
   data={
    subjects:[],
    tasks:[],
    studyMinutes:0,
-   dailyGoal:60
+   dailyGoal:60,
+   streak:0,
+   lastStudyDate:null
   };
 
   await saveCloudData();
@@ -1553,6 +1756,103 @@ function render(){
  renderSubjects();
 
  renderTasks();
+
+ renderStreak();
+
+}
+
+
+/* =========================
+   STREAK
+========================= */
+
+function todayStr(){
+
+ return new Date().toISOString().slice(0,10);
+
+}
+
+
+function yesterdayStr(){
+
+ const d=new Date();
+
+ d.setDate(d.getDate()-1);
+
+ return d.toISOString().slice(0,10);
+
+}
+
+
+function renderStreak(){
+
+ const streak=data.streak || 0;
+
+ const badge=
+  document.getElementById("streakBadge");
+
+ if(badge)
+  badge.textContent="🔥 "+streak;
+
+
+ const numEl=
+  document.getElementById("streakNumber");
+
+ if(numEl)
+  numEl.textContent=streak;
+
+
+ const box=
+  document.getElementById("streakCheckbox");
+
+ if(box)
+  box.checked=
+   data.lastStudyDate===todayStr();
+
+}
+
+
+async function toggleStreak(){
+
+ const box=
+  document.getElementById("streakCheckbox");
+
+ const today=todayStr();
+
+
+ if(box.checked){
+
+  if(data.lastStudyDate!==today){
+
+   if(data.lastStudyDate===yesterdayStr()){
+
+    data.streak=(data.streak || 0)+1;
+
+   }else{
+
+    data.streak=1;
+
+   }
+
+   data.lastStudyDate=today;
+
+  }
+
+ }else{
+
+  if(data.lastStudyDate===today){
+
+   data.streak=
+    Math.max(0,(data.streak || 0)-1);
+
+   data.lastStudyDate=null;
+
+  }
+
+ }
+
+
+ await save();
 
 }
 
@@ -2250,7 +2550,9 @@ async function resetData(){
   subjects:[],
   tasks:[],
   studyMinutes:0,
-  dailyGoal:60
+  dailyGoal:60,
+  streak:0,
+  lastStudyDate:null
  };
 
 
