@@ -1,11 +1,4188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>index — cleared</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#26345c">
+<title>Padikya</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+ --bg:#f5f3ee;
+ --text:#1d263b;
+ --card:#fff;
+ --soft:#eeeae2;
+ --border:#e4dfd5;
+ --accent:#29365f;
+ --accent2:#dfe4f2;
+ --muted:#77736b;
+ --danger:#a33b2c;
+ --dangerbg:#f8e9e6;
+ --success:#28734b;
+ --shadow:0 8px 28px rgba(35,45,75,.07);
+}
+
+[data-theme="dark"]{
+ --bg:#0e1421;
+ --text:#f0eee8;
+ --card:#171e2c;
+ --soft:#222b3e;
+ --border:#283248;
+ --accent:#e6e1d7;
+ --accent2:#293247;
+ --muted:#a49f95;
+ --danger:#e58a7d;
+ --dangerbg:#351b19;
+ --success:#65d39a;
+ --shadow:0 8px 28px rgba(0,0,0,.3);
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+ margin:0;
+ background:var(--bg);
+ color:var(--text);
+ font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ transition:.25s;
+}
+
+button,input,textarea,select{font:inherit}
+
+button{
+ border:0;
+ cursor:pointer;
+ transition:transform .15s ease,opacity .2s ease,background .2s ease;
+}
+
+button:active{transform:scale(.94)}
+
+.app{
+ max-width:1100px;
+ margin:auto;
+ padding:18px 18px 105px;
+ animation:pageIn .4s ease;
+}
+
+@keyframes pageIn{
+ from{opacity:0;transform:translateY(10px)}
+ to{opacity:1;transform:none}
+}
+
+@keyframes pop{
+ 0%{transform:scale(.96);opacity:.5}
+ 100%{transform:scale(1);opacity:1}
+}
+
+@keyframes slide{
+ from{opacity:0;transform:translateY(12px)}
+ to{opacity:1;transform:none}
+}
+
+header{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ margin-bottom:18px;
+}
+
+.logo{
+ font-size:26px;
+ font-weight:850;
+ letter-spacing:-.04em;
+ color:var(--accent);
+ transition:transform .3s cubic-bezier(.2,.8,.2,1);
+}
+
+.logo:hover{transform:translateX(3px)}
+
+.actions{
+ display:flex;
+ align-items:center;
+ gap:8px;
+ flex-wrap:wrap;
+}
+
+.card{
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:22px;
+ padding:21px;
+ box-shadow:var(--shadow);
+ transition:
+  transform .28s cubic-bezier(.2,.8,.2,1),
+  box-shadow .28s ease,
+  border-color .25s ease;
+ will-change:transform;
+}
+
+.card:hover{
+ transform:translateY(-4px);
+}
+
+.card:active{
+ transform:translateY(-1px) scale(.985);
+}
+
+.hero{
+ background:var(--accent);
+ color:#fff;
+ border-radius:24px;
+ padding:25px;
+ margin-bottom:16px;
+ animation:slide .45s ease;
+ transition:
+  transform .3s cubic-bezier(.2,.8,.2,1),
+  box-shadow .3s ease;
+}
+
+.hero:hover{transform:translateY(-3px)}
+
+[data-theme="dark"] .hero{color:#111827}
+
+.hero h1{
+ margin:0 0 7px;
+ font-size:28px;
+ letter-spacing:-.03em;
+}
+
+.hero p{
+ margin:0;
+ opacity:.75;
+}
+
+.section-title{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ margin-bottom:14px;
+}
+
+h2{margin:0;font-size:18px}
+h3{margin:0}
+
+.small{
+ font-size:13px;
+ color:var(--muted);
+}
+
+.label{
+ font-size:13px;
+ color:var(--muted);
+}
+
+.stats-grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:12px;
+ margin-bottom:16px;
+}
+
+.stat{
+ animation:pop .35s ease;
+ will-change:transform;
+}
+
+.stat b{
+ display:block;
+ margin-top:5px;
+ font-size:25px;
+ animation:padikyaNumber .4s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes padikyaNumber{
+ 0%{
+  opacity:0;
+  transform:scale(.75) translateY(5px);
+ }
+ 70%{transform:scale(1.08)}
+ 100%{
+  opacity:1;
+  transform:scale(1);
+ }
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:1.1fr .9fr;
+ gap:16px;
+}
+
+.btn{
+ min-height:46px;
+ padding:11px 17px;
+ border-radius:13px;
+ background:var(--accent);
+ color:#fff;
+ font-weight:700;
+ position:relative;
+ overflow:hidden;
+ transform-origin:center;
+ transition:
+  transform .18s cubic-bezier(.2,.8,.2,1),
+  opacity .2s ease,
+  background .25s ease,
+  box-shadow .25s ease;
+}
+
+[data-theme="dark"] .btn{color:#101827}
+
+.btn:hover{
+ opacity:.88;
+ transform:translateY(-2px);
+}
+
+.btn:active{
+ transform:scale(.92);
+}
+
+.btn.secondary{
+ background:var(--soft);
+ color:var(--text);
+}
+
+.btn.danger{
+ background:var(--dangerbg);
+ color:var(--danger);
+}
+
+.smallbtn{
+ min-height:40px;
+ padding:8px 12px;
+ font-size:13px;
+}
+
+.theme-toggle{
+ width:45px;
+ height:45px;
+ border-radius:13px;
+ background:var(--soft);
+ color:var(--text);
+ font-size:19px;
+ position:relative;
+ overflow:hidden;
+ transform-origin:center;
+ transition:
+  transform .18s cubic-bezier(.2,.8,.2,1),
+  opacity .2s ease,
+  background .25s ease,
+  box-shadow .25s ease;
+}
+
+.theme-toggle:hover{
+ transform:translateY(-2px);
+}
+
+.theme-toggle:active{
+ transform:scale(.92);
+}
+
+.streak-card{
+ margin-bottom:16px;
+ will-change:transform;
+}
+
+.streak-row{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
+ flex-wrap:wrap;
+}
+
+.streak-number{
+ font-size:38px;
+ font-weight:850;
+}
+
+.streak-check{
+ display:flex;
+ align-items:center;
+ gap:9px;
+ padding:12px 15px;
+ border-radius:14px;
+ background:var(--soft);
+ font-weight:650;
+ will-change:transform;
+}
+
+.streak-check input{
+ width:21px;
+ height:21px;
+ accent-color:var(--accent);
+ transition:transform .2s ease;
+}
+
+input[type="checkbox"]:checked{
+ animation:padikyaCheck .3s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes padikyaCheck{
+ 0%{transform:scale(.7)}
+ 65%{transform:scale(1.2)}
+ 100%{transform:scale(1)}
+}
+
+.exam-card{
+ margin-bottom:16px;
+}
+
+.exam-form{
+ display:grid;
+ grid-template-columns:1fr 170px auto;
+ gap:9px;
+}
+
+.exam-item{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ padding:14px 0;
+ border-bottom:1px solid var(--border);
+ animation:padikyaItemIn .35s cubic-bezier(.2,.8,.2,1);
+ will-change:transform;
+}
+
+.exam-item:last-child{border-bottom:0}
+
+.exam-days{
+ font-size:13px;
+ font-weight:750;
+ color:var(--accent);
+}
+
+input,textarea,select{
+ width:100%;
+ padding:12px 13px;
+ min-height:46px;
+ border:1px solid var(--border);
+ border-radius:13px;
+ outline:none;
+ background:var(--bg);
+ color:var(--text);
+ transition:
+  border-color .2s ease,
+  box-shadow .25s ease,
+  transform .2s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+ border-color:var(--accent);
+ box-shadow:0 0 0 3px var(--accent2);
+ transform:translateY(-1px);
+}
+
+textarea{
+ min-height:90px;
+ resize:vertical;
+}
+
+.form{
+ display:flex;
+ gap:9px;
+ flex-wrap:wrap;
+ margin-top:13px;
+}
+
+.form input,
+.form textarea,
+.form select{
+ flex:1;
+ min-width:150px;
+}
+
+.progress{
+ height:8px;
+ background:var(--soft);
+ border-radius:20px;
+ overflow:hidden;
+}
+
+.progress div{
+ height:100%;
+ width:0;
+ background:var(--accent);
+ border-radius:20px;
+ transition:width .5s ease;
+ animation:padikyaProgress .8s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes padikyaProgress{
+ from{width:0!important}
+}
+
+.subject{
+ padding:16px 0;
+ border-bottom:1px solid var(--border);
+ animation:padikyaItemIn .35s cubic-bezier(.2,.8,.2,1);
+ will-change:transform;
+}
+
+.subject:last-child{border-bottom:0}
+
+.row{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+}
+
+.subject-name{
+ font-weight:750;
+ font-size:16px;
+}
+
+.chapter{
+ margin-top:12px;
+ padding:15px;
+ border:1px solid var(--border);
+ border-radius:16px;
+ background:var(--bg);
+ animation:padikyaItemIn .35s cubic-bezier(.2,.8,.2,1);
+ will-change:transform;
+}
+
+.chapter-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:flex-start;
+ gap:10px;
+}
+
+.chapter-title{font-weight:750}
+
+.topic{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ padding:9px 0;
+ border-bottom:1px solid var(--border);
+}
+
+.topic:last-child{border-bottom:0}
+
+.topic input{
+ width:20px;
+ height:20px;
+ min-height:20px;
+ accent-color:var(--accent);
+}
+
+.topic.done span{
+ text-decoration:line-through;
+ color:var(--muted);
+}
+
+.chapter-meta{
+ display:flex;
+ gap:7px;
+ flex-wrap:wrap;
+ margin-top:8px;
+}
+
+.pill{
+ display:inline-flex;
+ align-items:center;
+ padding:5px 9px;
+ border-radius:9px;
+ background:var(--soft);
+ color:var(--muted);
+ font-size:11px;
+ font-weight:700;
+}
+
+.notes{margin-top:10px}
+
+.session{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ padding:13px 0;
+ border-bottom:1px solid var(--border);
+ animation:padikyaItemIn .35s cubic-bezier(.2,.8,.2,1);
+ will-change:transform;
+}
+
+.session:last-child{border-bottom:0}
+
+.session-time{font-weight:750}
+
+.session-subject{
+ color:var(--muted);
+ font-size:13px;
+}
+
+.empty{
+ text-align:center;
+ padding:25px 10px;
+ color:var(--muted);
+ font-size:14px;
+}
+
+/* =========================
+   RIPPLE
+========================= */
+
+.padikya-ripple{
+ position:absolute;
+ border-radius:50%;
+ pointer-events:none;
+ transform:scale(0);
+ opacity:.35;
+ background:currentColor;
+ animation:padikyaRipple .55s ease-out forwards;
+}
+
+@keyframes padikyaRipple{
+ 0%{
+  transform:scale(0);
+  opacity:.35;
+ }
+ 100%{
+  transform:scale(4);
+  opacity:0;
+ }
+}
+
+/* =========================
+   CLICK BOUNCE
+========================= */
+
+.padikya-click{
+ animation:padikyaClick .28s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes padikyaClick{
+ 0%{transform:scale(1)}
+ 45%{transform:scale(.94)}
+ 75%{transform:scale(1.025)}
+ 100%{transform:scale(1)}
+}
+
+/* =========================
+   PARTICLES
+========================= */
+
+.padikya-particle{
+ position:fixed;
+ width:6px;
+ height:6px;
+ border-radius:50%;
+ pointer-events:none;
+ z-index:9999;
+ background:currentColor;
+ animation:padikyaParticle .55s ease-out forwards;
+}
+
+@keyframes padikyaParticle{
+ 0%{
+  opacity:.8;
+  transform:translate(0,0) scale(1);
+ }
+ 100%{
+  opacity:0;
+  transform:
+   translate(var(--px),var(--py))
+   scale(0);
+ }
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+nav{
+ position:fixed;
+ z-index:50;
+ left:0;
+ right:0;
+ bottom:0;
+ display:flex;
+ justify-content:center;
+ background:color-mix(in srgb,var(--card) 92%,transparent);
+ border-top:1px solid var(--border);
+ backdrop-filter:blur(15px);
+ padding:7px 7px calc(7px + env(safe-area-inset-bottom));
+}
+
+nav button{
+ flex:1;
+ max-width:150px;
+ min-height:58px;
+ background:transparent;
+ color:var(--muted);
+ border-radius:15px;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:3px;
+ font-size:11px;
+ font-weight:700;
+ transition:
+  transform .25s cubic-bezier(.2,.8,.2,1),
+  background .25s ease,
+  color .25s ease;
+}
+
+nav button:hover{
+ color:var(--text);
+ transform:translateY(-3px);
+}
+
+nav button:active{
+ transform:scale(.9);
+}
+
+nav button.active{
+ background:var(--soft);
+ color:var(--accent);
+ animation:navActive .35s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes navActive{
+ 0%{transform:scale(.9)}
+ 60%{transform:scale(1.06)}
+ 100%{transform:scale(1)}
+}
+
+.nav-icon{
+ font-size:20px;
+}
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile-head{
+ display:flex;
+ align-items:center;
+ gap:15px;
+ margin-bottom:20px;
+}
+
+.profile-avatar{
+ width:64px;
+ height:64px;
+ border-radius:20px;
+ background:var(--accent);
+ color:#fff;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:26px;
+ font-weight:850;
+}
+
+[data-theme="dark"] .profile-avatar{
+ color:#111827;
+}
+
+.profile-name{
+ font-size:22px;
+ font-weight:800;
+}
+
+.profile-username{
+ color:var(--muted);
+ margin-top:3px;
+}
+
+.profile-option{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
+ padding:16px 0;
+ border-bottom:1px solid var(--border);
+ animation:padikyaItemIn .35s cubic-bezier(.2,.8,.2,1);
+}
+
+.profile-option:last-child{
+ border-bottom:0;
+}
+
+.profile-option-title{
+ font-weight:700;
+}
+
+.profile-option-desc{
+ font-size:12px;
+ color:var(--muted);
+ margin-top:3px;
+}
+
+/* =========================
+   AUTH
+========================= */
+
+.auth-screen{
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+}
+
+.auth-card{
+ width:100%;
+ max-width:420px;
+}
+
+.auth-logo{
+ text-align:center;
+ font-size:32px;
+ font-weight:850;
+ color:var(--accent);
+ margin-bottom:7px;
+}
+
+.auth-subtitle{
+ text-align:center;
+ color:var(--muted);
+ margin:0 0 22px;
+}
+
+.auth-form{
+ display:flex;
+ flex-direction:column;
+ gap:12px;
+}
+
+.auth-form label{
+ font-size:13px;
+ font-weight:700;
+}
+
+.auth-form input{
+ margin-top:5px;
+}
+
+.auth-message{
+ min-height:20px;
+ text-align:center;
+ font-size:13px;
+ margin-top:12px;
+}
+
+.message-error{color:var(--danger)}
+.message-success{color:var(--success)}
+
+.auth-switch{
+ text-align:center;
+ margin-top:18px;
+ color:var(--muted);
+ font-size:14px;
+}
+
+.link-btn{
+ background:none;
+ color:var(--accent);
+ font-weight:750;
+ padding:0;
+}
+
+.auth-theme{
+ position:absolute;
+ top:18px;
+ right:18px;
+}
+
+footer{
+ text-align:center;
+ margin-top:25px;
+ color:var(--muted);
+ font-size:12px;
+}
+
+.hidden{display:none!important}
+
+/* =========================
+   SECTION ANIMATION
+========================= */
+
+.padikya-section-enter{
+ animation:padikyaSectionEnter .38s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes padikyaSectionEnter{
+ from{
+  opacity:0;
+  transform:translateY(14px) scale(.985);
+ }
+ to{
+  opacity:1;
+  transform:translateY(0) scale(1);
+ }
+}
+
+@keyframes padikyaItemIn{
+ from{
+  opacity:0;
+  transform:translateY(8px);
+ }
+ to{
+  opacity:1;
+  transform:translateY(0);
+ }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:720px){
+
+ .app{
+  padding:14px 14px 100px;
+ }
+
+ header{align-items:flex-start}
+
+ .logo{font-size:23px}
+
+ #userDisplay{display:none}
+
+ .grid{grid-template-columns:1fr}
+
+ .stats-grid{
+  grid-template-columns:repeat(2,1fr);
+ }
+
+ .hero h1{font-size:23px}
+
+ .exam-form{
+  grid-template-columns:1fr;
+ }
+
+ .card{padding:18px}
+
+ .actions{justify-content:flex-end}
+
+ .profile-option{
+  align-items:flex-start;
+ }
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+ *{
+  animation-duration:.001ms!important;
+  transition-duration:.001ms!important;
+ }
+}
+</style>
 </head>
+
 <body>
-  <!-- index.html cleared: original content removed -->
+
+<!-- ================= AUTH ================= -->
+
+<div id="authScreen" class="auth-screen">
+
+<button
+ class="theme-toggle auth-theme"
+ id="authThemeToggleBtn"
+ onclick="toggleTheme()">🌙</button>
+
+<div class="card auth-card">
+
+<div class="auth-logo">Padikya</div>
+
+<p class="auth-subtitle">
+Your personal study space
+</p>
+
+<div id="loginBox">
+
+<h2 style="margin-bottom:15px">
+Welcome back 👋
+</h2>
+
+<div class="auth-form">
+
+<label>
+Username
+<input
+ id="loginUsername"
+ autocomplete="username"
+ placeholder="Enter username">
+</label>
+
+<label>
+Password
+<input
+ id="loginPassword"
+ type="password"
+ autocomplete="current-password"
+ placeholder="Enter password">
+</label>
+
+<button class="btn" onclick="login()">
+Login
+</button>
+
+</div>
+
+<div id="loginMessage" class="auth-message"></div>
+
+<div class="auth-switch">
+Don't have an account?
+<button class="link-btn" onclick="showSignup()">
+Create account
+</button>
+</div>
+
+</div>
+
+
+<div id="signupBox" style="display:none">
+
+<h2 style="margin-bottom:15px">
+Create account 📝
+</h2>
+
+<div class="auth-form">
+
+<label>
+Username
+<input
+ id="signupUsername"
+ autocomplete="username"
+ placeholder="Choose a username">
+</label>
+
+<label>
+Password
+<input
+ id="signupPassword"
+ type="password"
+ autocomplete="new-password"
+ placeholder="Choose a password">
+</label>
+
+<label>
+Confirm password
+<input
+ id="signupConfirm"
+ type="password"
+ autocomplete="new-password"
+ placeholder="Enter password again">
+</label>
+
+<button class="btn" onclick="signup()">
+Create account
+</button>
+
+</div>
+
+<div id="signupMessage" class="auth-message"></div>
+
+<div class="auth-switch">
+Already have an account?
+<button class="link-btn" onclick="showLogin()">
+Login
+</button>
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- ================= APP ================= -->
+
+<div id="studyApp" class="app" style="display:none">
+
+<header>
+
+<div class="logo">Padikya</div>
+
+<div class="actions">
+
+<span id="userDisplay" class="small"></span>
+
+<div
+ class="streak-badge"
+ id="streakBadge"
+ style="
+ background:var(--soft);
+ padding:9px 12px;
+ border-radius:12px;
+ font-weight:750;">
+Streak 0
+</div>
+
+<button
+ class="theme-toggle"
+ id="themeToggleBtn"
+ onclick="toggleTheme()">🌙</button>
+
+<button
+ id="exitPreviewBtn"
+ class="btn secondary smallbtn"
+ style="display:none"
+ onclick="exitGuestPreview()">
+Exit
+</button>
+
+</div>
+</header>
+
+
+<!-- ================= BOTTOM NAV ================= -->
+
+<nav>
+
+<button
+ class="active"
+ onclick="showSection('dashboard',this)">
+<span class="nav-icon">⌂</span>
+Home
+</button>
+
+<button
+ onclick="showSection('study',this)">
+<span class="nav-icon">▣</span>
+Study
+</button>
+
+<button
+ onclick="showSection('statistics',this)">
+<span class="nav-icon">◌</span>
+Statistics
+</button>
+
+<button
+ onclick="showSection('profile',this)">
+<span class="nav-icon">♙</span>
+Profile
+</button>
+
+</nav>
+
+
+<!-- ================= HOME ================= -->
+
+<main id="dashboard">
+
+<div class="hero">
+
+<h1 id="greetingText">
+Good morning 👋
+</h1>
+
+<p>
+Stay organized, study consistently, and keep improving.
+</p>
+
+</div>
+
+
+<!-- UPCOMING EXAMS -->
+
+<section class="card exam-card">
+
+<div class="section-title">
+
+<h2>Upcoming Exams</h2>
+
+<span class="small">
+Plan ahead
+</span>
+
+</div>
+
+<div class="exam-form">
+
+<input
+ id="examName"
+ placeholder="Exam name">
+
+<input
+ id="examDate"
+ type="date">
+
+<button
+ class="btn"
+ onclick="addExam()">
+Add
+</button>
+
+</div>
+
+<div id="examList"></div>
+
+</section>
+
+
+<!-- STREAK -->
+
+<div class="card streak-card">
+
+<div class="section-title">
+<h2>Study Streak</h2>
+</div>
+
+<div class="streak-row">
+
+<div>
+
+<div class="streak-number" id="streakNumber">
+0
+</div>
+
+<div class="small">
+day streak
+</div>
+
+</div>
+
+<label class="streak-check">
+
+<input
+ type="checkbox"
+ id="streakCheckbox"
+ onchange="toggleStreak()">
+
+<span>
+I studied today
+</span>
+
+</label>
+
+</div>
+
+</div>
+
+
+<!-- QUICK STATS -->
+
+<div class="stats-grid">
+
+<div class="card stat">
+
+<span class="label">
+Overall progress
+</span>
+
+<b id="overall">0%</b>
+
+</div>
+
+<div class="card stat">
+
+<span class="label">
+Topics completed
+</span>
+
+<b id="topicsDone">0</b>
+
+</div>
+
+<div class="card stat">
+
+<span class="label">
+Today's study
+</span>
+
+<b id="todayStudy">0m</b>
+
+</div>
+
+<div class="card stat">
+
+<span class="label">
+Tests completed
+</span>
+
+<b id="testsDoneHome">0</b>
+
+</div>
+
+</div>
+
+
+<div class="grid">
+
+<section class="card">
+
+<div class="section-title">
+
+<h2>Subject progress</h2>
+
+<button
+ class="btn smallbtn"
+ onclick="showSection('study')">
+Manage
+</button>
+
+</div>
+
+<div id="dashboardSubjects"></div>
+
+</section>
+
+
+<section class="card">
+
+<div class="section-title">
+<h2>Quick study log</h2>
+</div>
+
+<p class="small">
+Record what you studied today.
+</p>
+
+<div class="form">
+
+<input
+ id="quickSubject"
+ placeholder="Subject">
+
+<input
+ id="quickMinutes"
+ type="number"
+ min="1"
+ placeholder="Minutes">
+
+</div>
+
+<div class="form">
+
+<input
+ id="quickStart"
+ type="time">
+
+<input
+ id="quickEnd"
+ type="time">
+
+</div>
+
+<button
+ class="btn"
+ style="width:100%;margin-top:10px"
+ onclick="addStudySession()">
+Save study session
+</button>
+
+</section>
+
+</div>
+
+</main>
+
+
+<!-- ================= STUDY ================= -->
+
+<section id="study" style="display:none">
+
+<div class="card">
+
+<div class="section-title">
+
+<h2>Subjects & Chapters</h2>
+
+</div>
+
+<div class="form">
+
+<input
+ id="subjectInput"
+ placeholder="Subject name">
+
+<button
+ class="btn"
+ onclick="addSubject()">
+Add subject
+</button>
+
+</div>
+
+<div id="subjectList"></div>
+
+</div>
+
+</section>
+
+
+<!-- ================= STATISTICS ================= -->
+
+<section id="statistics" style="display:none">
+
+<div class="stats-grid">
+
+<div class="card stat">
+
+<span class="label">
+Overall study progress
+</span>
+
+<b id="statOverall">0%</b>
+
+</div>
+
+<div class="card stat">
+
+<span class="label">
+Today's study time
+</span>
+
+<b id="statToday">0m</b>
+
+</div>
+
+<div class="card stat">
+
+<span class="label">
+Weekly study time
+</span>
+
+<b id="statWeek">0m</b>
+
+</div>
+
+<div class="card stat">
+
+<span class="label">
+Tests completed
+</span>
+
+<b id="statTests">0</b>
+
+</div>
+
+<div class="card stat">
+
+<span class="label">
+Average test score
+</span>
+
+<b id="statAverage">0%</b>
+
+</div>
+
+<div class="card stat">
+
+<span class="label">
+Strongest subject
+</span>
+
+<b id="statStrong">—</b>
+
+</div>
+
+<div class="card stat">
+
+<span class="label">
+Weakest subject
+</span>
+
+<b id="statWeak">—</b>
+
+</div>
+
+<div class="card stat">
+
+<span class="label">
+Current streak
+</span>
+
+<b id="statStreak">0 days</b>
+
+</div>
+
+</div>
+
+
+<!-- TEST PERFORMANCE -->
+
+<div class="card">
+
+<div class="section-title">
+
+<h2>Test Performance</h2>
+
+<span class="small">
+Record your marks
+</span>
+
+</div>
+
+<div class="form">
+
+<input
+ id="testSubject"
+ placeholder="Subject">
+
+<input
+ id="testMark"
+ type="number"
+ min="0"
+ placeholder="Mark">
+
+<input
+ id="testFullMark"
+ type="number"
+ min="1"
+ placeholder="Full mark">
+
+<button
+ class="btn"
+ onclick="addTest()">
+Add
+</button>
+
+</div>
+
+<div id="testList"></div>
+
+</div>
+
+</section>
+
+
+<!-- ================= PROFILE ================= -->
+
+<section id="profile" style="display:none">
+
+<div class="card">
+
+<div class="profile-head">
+
+<div
+ id="profileAvatar"
+ class="profile-avatar">
+P
+</div>
+
+<div>
+
+<div
+ id="profileName"
+ class="profile-name">
+Student
+</div>
+
+<div
+ id="profileUsername"
+ class="profile-username">
+@username
+</div>
+
+</div>
+
+</div>
+
+
+<div class="profile-option">
+
+<div>
+
+<div class="profile-option-title">
+Appearance
+</div>
+
+<div class="profile-option-desc">
+Switch between light and dark mode
+</div>
+
+</div>
+
+<button
+ class="theme-toggle"
+ onclick="toggleTheme()"
+ id="profileThemeBtn">
+🌙
+</button>
+
+</div>
+
+
+<div class="profile-option">
+
+<div>
+
+<div class="profile-option-title">
+Account
+</div>
+
+<div class="profile-option-desc">
+Your Padikya account is connected to Supabase
+</div>
+
+</div>
+
+</div>
+
+
+<div
+ style="
+ margin-top:20px;
+ padding-top:4px;">
+
+<button
+ class="btn danger"
+ style="width:100%"
+ onclick="logout()">
+Logout
+</button>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<footer>
+Padikya • Your personal study space
+</footer>
+
+</div>
+
+
+<script>
+
+/* =========================
+   SUPABASE
+   EXISTING SYSTEM
+========================= */
+
+const SUPABASE_URL =
+"https://qpqkpmckvugrrooknzzn.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_yjQXPL_Ye6TBz0NnvsvCfw_zJGDKqVy";
+
+const supabaseClient =
+window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY
+);
+
+
+/* =========================
+   APP DATA
+========================= */
+
+let data={
+
+ subjects:[],
+ tasks:[],
+ studyMinutes:0,
+ dailyGoal:60,
+ streak:0,
+ lastStudyDate:null,
+
+ exams:[],
+ studySessions:[],
+ tests:[]
+
+};
+
+let isGuest=false;
+let currentUsername="";
+
+
+/* =========================================================
+   STREAK CELEBRATION MUSIC
+   Uses Web Audio API.
+   No external MP3/file required.
+========================================================= */
+
+let streakAudioContext=null;
+
+function playStreakMusic(){
+
+ try{
+
+  const AudioContext=
+   window.AudioContext ||
+   window.webkitAudioContext;
+
+  if(!AudioContext)return;
+
+  if(!streakAudioContext){
+
+   streakAudioContext=
+    new AudioContext();
+
+  }
+
+  const ctx=streakAudioContext;
+
+  if(ctx.state==="suspended"){
+   ctx.resume();
+  }
+
+  const now=ctx.currentTime;
+
+  /*
+   Short cheerful celebration melody.
+   It only plays when the streak is increased.
+  */
+
+  const notes=[
+   {f:523.25,t:0,d:.16},
+   {f:659.25,t:.12,d:.16},
+   {f:783.99,t:.24,d:.20},
+   {f:1046.50,t:.40,d:.30}
+  ];
+
+  notes.forEach(note=>{
+
+   const oscillator=
+    ctx.createOscillator();
+
+   const gain=
+    ctx.createGain();
+
+   oscillator.type="sine";
+
+   oscillator.frequency.setValueAtTime(
+    note.f,
+    now+note.t
+   );
+
+   gain.gain.setValueAtTime(
+    0,
+    now+note.t
+   );
+
+   gain.gain.linearRampToValueAtTime(
+    .12,
+    now+note.t+.025
+   );
+
+   gain.gain.exponentialRampToValueAtTime(
+    .001,
+    now+note.t+note.d
+   );
+
+   oscillator.connect(gain);
+   gain.connect(ctx.destination);
+
+   oscillator.start(
+    now+note.t
+   );
+
+   oscillator.stop(
+    now+note.t+note.d+.03
+   );
+
+  });
+
+ }catch(error){
+
+  console.log(
+   "Streak music unavailable:",
+   error
+  );
+
+ }
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function applyTheme(theme){
+
+ if(theme==="dark"){
+
+  document.documentElement
+   .setAttribute("data-theme","dark");
+
+ }else{
+
+  document.documentElement
+   .removeAttribute("data-theme");
+
+ }
+
+ const icon=
+  theme==="dark"?"☀️":"🌙";
+
+ const ids=[
+  "themeToggleBtn",
+  "authThemeToggleBtn",
+  "profileThemeBtn"
+ ];
+
+ ids.forEach(id=>{
+
+  const el=document.getElementById(id);
+
+  if(el)el.textContent=icon;
+
+ });
+
+}
+
+
+function toggleTheme(){
+
+ const current=
+  document.documentElement
+   .getAttribute("data-theme")==="dark"
+   ?"dark":"light";
+
+ const next=
+  current==="dark"?"light":"dark";
+
+ applyTheme(next);
+
+ localStorage.setItem(
+  "studyhub_theme",
+  next
+ );
+
+}
+
+
+function initTheme(){
+
+ let saved=
+  localStorage.getItem(
+   "studyhub_theme"
+  );
+
+ if(!saved){
+
+  saved=
+   window.matchMedia &&
+   window.matchMedia(
+    "(prefers-color-scheme:dark)"
+   ).matches
+   ?"dark":"light";
+
+ }
+
+ applyTheme(saved);
+
+}
+
+
+/* =========================
+   AUTH UI
+========================= */
+
+function showSignup(){
+
+ document.getElementById("loginBox")
+  .style.display="none";
+
+ document.getElementById("signupBox")
+  .style.display="block";
+
+ clearMessages();
+
+}
+
+
+function showLogin(){
+
+ document.getElementById("signupBox")
+  .style.display="none";
+
+ document.getElementById("loginBox")
+  .style.display="block";
+
+ clearMessages();
+
+}
+
+
+function clearMessages(){
+
+ document.getElementById("loginMessage")
+  .textContent="";
+
+ document.getElementById("signupMessage")
+  .textContent="";
+
+}
+
+
+function showError(el,msg){
+
+ el.textContent=msg;
+
+ el.className=
+  "auth-message message-error";
+
+}
+
+
+function showSuccess(el,msg){
+
+ el.textContent=msg;
+
+ el.className=
+  "auth-message message-success";
+
+}
+
+
+/* =========================
+   USERNAME
+========================= */
+
+function usernameToEmail(username){
+
+ return username
+  .trim()
+  .toLowerCase()
+  .replace(/\s+/g,"")
+  +"@studyhub.local";
+
+}
+
+
+/* =========================
+   GREETING
+========================= */
+
+function updateGreeting(username){
+
+ const el=
+  document.getElementById(
+   "greetingText"
+  );
+
+ if(!el)return;
+
+ const hour=
+  new Date().getHours();
+
+ let greeting;
+
+ if(hour>=5 && hour<12){
+
+  greeting="Good morning";
+
+ }else if(hour>=12 && hour<17){
+
+  greeting="Good afternoon";
+
+ }else{
+
+  greeting="Good evening";
+
+ }
+
+ el.textContent=
+  greeting+", "+
+  (username||"Student")+" 👋";
+
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+function updateProfile(username){
+
+ currentUsername=username||"Student";
+
+ const name=
+  document.getElementById(
+   "profileName"
+  );
+
+ const user=
+  document.getElementById(
+   "profileUsername"
+  );
+
+ const avatar=
+  document.getElementById(
+   "profileAvatar"
+  );
+
+ if(name)
+  name.textContent=currentUsername;
+
+ if(user)
+  user.textContent=
+   "@"+currentUsername;
+
+ if(avatar)
+  avatar.textContent=
+   currentUsername
+    .charAt(0)
+    .toUpperCase();
+
+}
+
+
+/* =========================
+   DEFAULT DATA
+========================= */
+
+function defaultData(){
+
+ return{
+
+  subjects:[],
+  tasks:[],
+  studyMinutes:0,
+  dailyGoal:60,
+  streak:0,
+  lastStudyDate:null,
+
+  exams:[],
+  studySessions:[],
+  tests:[]
+
+ };
+
+}
+
+
+function normalizeData(){
+
+ const defaults=
+  defaultData();
+
+ Object.keys(defaults)
+  .forEach(key=>{
+
+   if(!(key in data))
+    data[key]=defaults[key];
+
+  });
+
+}
+
+
+/* =========================
+   SIGNUP
+========================= */
+
+async function signup(){
+
+ const username=
+  document.getElementById(
+   "signupUsername"
+  ).value.trim();
+
+ const password=
+  document.getElementById(
+   "signupPassword"
+  ).value;
+
+ const confirm=
+  document.getElementById(
+   "signupConfirm"
+  ).value;
+
+ const message=
+  document.getElementById(
+   "signupMessage"
+  );
+
+
+ if(username.length<3){
+
+  showError(
+   message,
+   "Username must be at least 3 characters."
+  );
+
+  return;
+
+ }
+
+
+ if(!/^[a-zA-Z0-9_]+$/.test(username)){
+
+  showError(
+   message,
+   "Use only letters, numbers and _"
+  );
+
+  return;
+
+ }
+
+
+ if(password.length<6){
+
+  showError(
+   message,
+   "Password must be at least 6 characters."
+  );
+
+  return;
+
+ }
+
+
+ if(password!==confirm){
+
+  showError(
+   message,
+   "Passwords do not match."
+  );
+
+  return;
+
+ }
+
+
+ message.textContent=
+  "Creating account...";
+
+
+ const email=
+  usernameToEmail(username);
+
+
+ try{
+
+  const result=
+   await supabaseClient.auth.signUp({
+
+    email,
+    password,
+
+    options:{
+     data:{
+      username
+     }
+    }
+
+   });
+
+
+  if(result.error){
+
+   showError(
+    message,
+    result.error.message
+   );
+
+   return;
+
+  }
+
+
+  if(!result.data.user){
+
+   showError(
+    message,
+    "Account could not be created."
+   );
+
+   return;
+
+  }
+
+
+  if(!result.data.session){
+
+   showError(
+    message,
+    "Account created, but email confirmation is enabled in Supabase."
+   );
+
+   return;
+
+  }
+
+
+  data=defaultData();
+
+  normalizeData();
+
+  await saveCloudData();
+
+  showSuccess(
+   message,
+   "Account created!"
+  );
+
+
+  setTimeout(()=>{
+
+   enterApp(username);
+
+  },400);
+
+
+ }catch(error){
+
+  console.error(error);
+
+  showError(
+   message,
+   "Something went wrong."
+  );
+
+ }
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+async function login(){
+
+ const username=
+  document.getElementById(
+   "loginUsername"
+  ).value.trim();
+
+ const password=
+  document.getElementById(
+   "loginPassword"
+  ).value;
+
+ const message=
+  document.getElementById(
+   "loginMessage"
+  );
+
+
+ if(!username||!password){
+
+  showError(
+   message,
+   "Enter username and password."
+  );
+
+  return;
+
+ }
+
+
+ message.textContent=
+  "Logging in...";
+
+
+ const email=
+  usernameToEmail(username);
+
+
+ try{
+
+  const result=
+   await supabaseClient.auth
+    .signInWithPassword({
+
+     email,
+     password
+
+    });
+
+
+  if(result.error){
+
+   showError(
+    message,
+    result.error.message
+   );
+
+   return;
+
+  }
+
+
+  if(result.data.user){
+
+   await loadCloudData();
+
+   enterApp(username);
+
+  }
+
+
+ }catch(error){
+
+  console.error(error);
+
+  showError(
+   message,
+   "Something went wrong."
+  );
+
+ }
+
+}
+
+
+/* =========================
+   ENTER APP
+========================= */
+
+function enterApp(username){
+
+ isGuest=false;
+
+ updateGreeting(username);
+
+ updateProfile(username);
+
+ document.getElementById(
+  "authScreen"
+ ).style.display="none";
+
+ document.getElementById(
+  "studyApp"
+ ).style.display="block";
+
+ document.getElementById(
+  "userDisplay"
+ ).textContent=
+  "@"+username;
+
+ document.getElementById(
+  "exitPreviewBtn"
+ ).style.display="none";
+
+ render();
+
+}
+
+
+/* =========================
+   GUEST PREVIEW
+========================= */
+
+function enterGuestPreview(){
+
+ isGuest=true;
+
+ data=defaultData();
+
+ updateGreeting("Student");
+
+ updateProfile("Student");
+
+ document.getElementById(
+  "authScreen"
+ ).style.display="none";
+
+ document.getElementById(
+  "studyApp"
+ ).style.display="block";
+
+ document.getElementById(
+  "userDisplay"
+ ).textContent=
+  "Preview mode";
+
+ document.getElementById(
+  "exitPreviewBtn"
+ ).style.display=
+  "inline-flex";
+
+ render();
+
+}
+
+
+function exitGuestPreview(){
+
+ isGuest=false;
+
+ data=defaultData();
+
+ document.getElementById(
+  "studyApp"
+ ).style.display="none";
+
+ document.getElementById(
+  "authScreen"
+ ).style.display="flex";
+
+ showLogin();
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+async function logout(){
+
+ await supabaseClient.auth.signOut();
+
+ data=defaultData();
+
+ currentUsername="";
+
+ document.getElementById(
+  "studyApp"
+ ).style.display="none";
+
+ document.getElementById(
+  "authScreen"
+ ).style.display="flex";
+
+ document.getElementById(
+  "loginUsername"
+ ).value="";
+
+ document.getElementById(
+  "loginPassword"
+ ).value="";
+
+ showLogin();
+
+}
+
+
+/* =========================
+   SESSION
+========================= */
+
+async function checkSession(){
+
+ try{
+
+  const result=
+   await supabaseClient.auth
+    .getSession();
+
+  if(result.data.session){
+
+   const user=
+    result.data.session.user;
+
+   const username=
+    user.user_metadata?.username||
+    user.email.split("@")[0];
+
+   await loadCloudData();
+
+   enterApp(username);
+
+  }
+
+ }catch(error){
+
+  console.error(error);
+
+ }
+
+}
+
+
+/* =========================
+   CLOUD SAVE
+========================= */
+
+async function saveCloudData(){
+
+ if(isGuest)return true;
+
+ const result=
+  await supabaseClient.auth
+   .getUser();
+
+ const user=result.data.user;
+
+ if(!user)return false;
+
+ normalizeData();
+
+ const response=
+  await supabaseClient
+   .from("studyhub_data")
+   .upsert({
+
+    id:user.id,
+    data:data,
+    updated_at:
+     new Date().toISOString()
+
+   });
+
+
+ if(response.error){
+
+  console.error(
+   "Cloud save error:",
+   response.error
+  );
+
+  return false;
+
+ }
+
+ return true;
+
+}
+
+
+/* =========================
+   CLOUD LOAD
+========================= */
+
+async function loadCloudData(){
+
+ const result=
+  await supabaseClient.auth
+   .getUser();
+
+ const user=result.data.user;
+
+ if(!user)return;
+
+ const response=
+  await supabaseClient
+   .from("studyhub_data")
+   .select("data")
+   .eq("id",user.id)
+   .maybeSingle();
+
+ if(response.error){
+
+  console.error(
+   "Cloud load error:",
+   response.error
+  );
+
+  return;
+
+ }
+
+ if(
+  response.data&&
+  response.data.data
+ ){
+
+  data=response.data.data;
+
+  normalizeData();
+
+ }else{
+
+  data=defaultData();
+
+  await saveCloudData();
+
+ }
+
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+async function save(){
+
+ await saveCloudData();
+
+ render();
+
+}
+
+
+/* =========================
+   ESCAPE
+========================= */
+
+function esc(s){
+
+ return String(s).replace(
+  /[&<>"']/g,
+  function(m){
+
+   return{
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+   }[m];
+
+  }
+ );
+
+}
+
+
+/* =========================
+   TOTALS
+========================= */
+
+function totals(){
+
+ const topics=
+  data.subjects.flatMap(
+   s=>s.topics||[]
+  );
+
+ const done=
+  topics.filter(
+   t=>t.done
+  ).length;
+
+ const total=
+  topics.length;
+
+ return{
+
+  topics,
+  done,
+
+  total:
+   total
+   ?Math.round(
+    done/total*100
+   )
+   :0
+
+ };
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+ normalizeData();
+
+ const t=totals();
+
+ document.getElementById(
+  "overall"
+ ).textContent=
+  t.total+"%";
+
+ document.getElementById(
+  "topicsDone"
+ ).textContent=
+  t.done;
+
+ document.getElementById(
+  "todayStudy"
+ ).textContent=
+  formatMinutes(
+   getTodayMinutes()
+  );
+
+ document.getElementById(
+  "testsDoneHome"
+ ).textContent=
+  data.tests.length;
+
+ document.getElementById(
+  "statOverall"
+ ).textContent=
+  t.total+"%";
+
+ document.getElementById(
+  "statToday"
+ ).textContent=
+  formatMinutes(
+   getTodayMinutes()
+  );
+
+ document.getElementById(
+  "statWeek"
+ ).textContent=
+  formatMinutes(
+   getWeekMinutes()
+  );
+
+ document.getElementById(
+  "statTests"
+ ).textContent=
+  data.tests.length;
+
+ updateStatistics();
+
+ renderDashboardSubjects();
+
+ renderSubjects();
+
+ renderExams();
+
+ renderTests();
+
+ renderStreak();
+
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+function localDate(){
+
+ const d=new Date();
+
+ return d.getFullYear()+
+  "-"+
+  String(d.getMonth()+1)
+   .padStart(2,"0")+
+  "-"+
+  String(d.getDate())
+   .padStart(2,"0");
+
+}
+
+
+function dateDaysAgo(n){
+
+ const d=new Date();
+
+ d.setHours(0,0,0,0);
+
+ d.setDate(
+  d.getDate()-n
+ );
+
+ return dateKey(d);
+
+}
+
+
+function dateKey(d){
+
+ return d.getFullYear()+
+  "-"+
+  String(d.getMonth()+1)
+   .padStart(2,"0")+
+  "-"+
+  String(d.getDate())
+   .padStart(2,"0");
+
+}
+
+
+/* =========================
+   STREAK
+========================= */
+
+function todayStr(){
+ return localDate();
+}
+
+function yesterdayStr(){
+ return dateDaysAgo(1);
+}
+
+
+function renderStreak(){
+
+ const streak=data.streak||0;
+
+ document.getElementById(
+  "streakNumber"
+ ).textContent=streak;
+
+ document.getElementById(
+  "streakBadge"
+ ).textContent=
+  "Streak "+streak;
+
+ document.getElementById(
+  "statStreak"
+ ).textContent=
+  streak+" days";
+
+ document.getElementById(
+  "streakCheckbox"
+ ).checked=
+  data.lastStudyDate===todayStr();
+
+}
+
+
+async function toggleStreak(){
+
+ const checked=
+  document.getElementById(
+   "streakCheckbox"
+  ).checked;
+
+ const today=todayStr();
+
+ if(checked){
+
+  if(data.lastStudyDate!==today){
+
+   /*
+    Remember the old streak so we know
+    whether this action actually increased it.
+   */
+
+   const oldStreak=
+    data.streak||0;
+
+   if(
+    data.lastStudyDate===
+    yesterdayStr()
+   ){
+
+    data.streak=
+     (data.streak||0)+1;
+
+   }else{
+
+    data.streak=1;
+
+   }
+
+   data.lastStudyDate=today;
+
+   /*
+    PLAY MUSIC ONLY WHEN THE STREAK
+    IS SUCCESSFULLY INCREASED.
+   */
+
+   if(data.streak>oldStreak){
+
+    playStreakMusic();
+
+   }
+
+  }
+
+ }else{
+
+  if(data.lastStudyDate===today){
+
+   data.streak=
+    Math.max(
+     0,
+     (data.streak||0)-1
+    );
+
+   data.lastStudyDate=null;
+
+  }
+
+ }
+
+ await save();
+
+}
+
+
+/* =========================
+   FORMAT
+========================= */
+
+function formatMinutes(m){
+
+ m=Math.max(
+  0,
+  Number(m)||0
+ );
+
+ const h=Math.floor(m/60);
+
+ const min=m%60;
+
+ if(h)return h+"h "+min+"m";
+
+ return min+"m";
+
+}
+
+
+/* =========================
+   DASHBOARD SUBJECTS
+========================= */
+
+function renderDashboardSubjects(){
+
+ const el=
+  document.getElementById(
+   "dashboardSubjects"
+  );
+
+ if(!data.subjects.length){
+
+  el.innerHTML=
+   '<div class="empty">No subjects yet.</div>';
+
+  return;
+
+ }
+
+ el.innerHTML=
+  data.subjects.map(s=>{
+
+   const topics=s.topics||[];
+
+   const done=
+    topics.filter(
+     t=>t.done
+    ).length;
+
+   const pct=
+    topics.length
+    ?Math.round(
+     done/topics.length*100
+    )
+    :0;
+
+   return`
+
+   <div class="subject">
+
+    <div class="row">
+
+     <b>${esc(s.name)}</b>
+
+     <span class="small">
+      ${done}/${topics.length} • ${pct}%
+     </span>
+
+    </div>
+
+    <div
+     class="progress"
+     style="margin-top:9px">
+
+     <div style="width:${pct}%"></div>
+
+    </div>
+
+   </div>
+
+   `;
+
+  }).join("");
+
+}
+
+
+/* =========================
+   SUBJECTS
+========================= */
+
+function renderSubjects(){
+
+ const el=
+  document.getElementById(
+   "subjectList"
+  );
+
+ if(!data.subjects.length){
+
+  el.innerHTML=
+   '<div class="empty">Add your first subject.</div>';
+
+  return;
+
+ }
+
+ el.innerHTML=
+  data.subjects.map(s=>{
+
+   const topics=s.topics||[];
+
+   const done=
+    topics.filter(
+     t=>t.done
+    ).length;
+
+   const pct=
+    topics.length
+    ?Math.round(
+     done/topics.length*100
+    )
+    :0;
+
+   return`
+
+   <div class="subject">
+
+    <div class="row">
+
+     <div>
+
+      <div class="subject-name">
+       ${esc(s.name)}
+      </div>
+
+      <div class="small">
+       ${done}/${topics.length}
+       topics • ${pct}%
+      </div>
+
+     </div>
+
+     <button
+      class="btn danger smallbtn"
+      onclick="deleteSubject(${s.id})">
+      Delete
+     </button>
+
+    </div>
+
+    <div
+     class="progress"
+     style="margin-top:9px">
+
+     <div style="width:${pct}%"></div>
+
+    </div>
+
+    ${(s.chapters||[]).map(
+     c=>renderChapter(s,c)
+    ).join("")}
+
+    <div class="form">
+
+     <input
+      id="chapter-${s.id}"
+      placeholder="Add chapter">
+
+     <button
+      class="btn smallbtn"
+      onclick="addChapter(${s.id})">
+      Add chapter
+     </button>
+
+    </div>
+
+   </div>
+
+   `;
+
+  }).join("");
+
+}
+
+
+/* =========================
+   CHAPTER
+========================= */
+
+function renderChapter(subject,chapter){
+
+ const topics=chapter.topics||[];
+
+ const done=
+  topics.filter(
+   t=>t.done
+  ).length;
+
+ const pct=
+  topics.length
+  ?Math.round(
+   done/topics.length*100
+  )
+  :0;
+
+ const difficulty=
+  chapter.difficulty||"Medium";
+
+ return`
+
+ <div class="chapter">
+
+  <div class="chapter-head">
+
+   <div>
+
+    <div class="chapter-title">
+     ${esc(chapter.name)}
+    </div>
+
+    <div class="chapter-meta">
+
+     <span class="pill">
+      ${difficulty}
+     </span>
+
+     <span class="pill">
+      ${pct}% complete
+     </span>
+
+    </div>
+
+   </div>
+
+   <button
+    class="btn danger smallbtn"
+    onclick="deleteChapter(${subject.id},${chapter.id})">
+    Delete
+   </button>
+
+  </div>
+
+
+  <div
+   class="progress"
+   style="margin-top:12px">
+
+   <div style="width:${pct}%"></div>
+
+  </div>
+
+
+  ${topics.map(t=>`
+
+   <div class="topic ${t.done?"done":""}">
+
+    <input
+     type="checkbox"
+     ${t.done?"checked":""}
+     onchange="toggleChapterTopic(${subject.id},${chapter.id},${t.id})">
+
+    <span style="flex:1">
+     ${esc(t.name)}
+    </span>
+
+    <button
+     class="btn danger smallbtn"
+     onclick="deleteChapterTopic(${subject.id},${chapter.id},${t.id})">
+     ×
+    </button>
+
+   </div>
+
+  `).join("")}
+
+
+  <div class="form">
+
+   <input
+    id="topic-${subject.id}-${chapter.id}"
+    placeholder="Add topic">
+
+   <button
+    class="btn secondary smallbtn"
+    onclick="addChapterTopic(${subject.id},${chapter.id})">
+    Add
+   </button>
+
+  </div>
+
+
+  <div class="form">
+
+   <select
+    id="difficulty-${subject.id}-${chapter.id}"
+    onchange="changeDifficulty(${subject.id},${chapter.id})">
+
+    <option ${difficulty==="Easy"?"selected":""}>
+     Easy
+    </option>
+
+    <option ${difficulty==="Medium"?"selected":""}>
+     Medium
+    </option>
+
+    <option ${difficulty==="Hard"?"selected":""}>
+     Hard
+    </option>
+
+   </select>
+
+  </div>
+
+
+  <textarea
+   class="notes"
+   id="notes-${subject.id}-${chapter.id}"
+   placeholder="Notes for this chapter..."
+   onchange="saveChapterNotes(${subject.id},${chapter.id})">${esc(chapter.notes||"")}</textarea>
+
+ </div>
+
+ `;
+
+}
+
+
+/* =========================
+   ADD SUBJECT
+========================= */
+
+async function addSubject(){
+
+ const input=
+  document.getElementById(
+   "subjectInput"
+  );
+
+ const name=input.value.trim();
+
+ if(!name)return;
+
+ data.subjects.push({
+
+  id:Date.now(),
+  name:name,
+  topics:[],
+  chapters:[]
+
+ });
+
+ input.value="";
+
+ await save();
+
+}
+
+
+/* =========================
+   DELETE SUBJECT
+========================= */
+
+async function deleteSubject(id){
+
+ if(!confirm(
+  "Delete this subject?"
+ ))return;
+
+ data.subjects=
+  data.subjects.filter(
+   s=>s.id!==id
+  );
+
+ await save();
+
+}
+
+
+/* =========================
+   CHAPTERS
+========================= */
+
+async function addChapter(sid){
+
+ const input=
+  document.getElementById(
+   "chapter-"+sid
+  );
+
+ const name=input.value.trim();
+
+ if(!name)return;
+
+ const subject=
+  data.subjects.find(
+   s=>s.id===sid
+  );
+
+ if(!subject)return;
+
+ if(!subject.chapters)
+  subject.chapters=[];
+
+ subject.chapters.push({
+
+  id:Date.now(),
+  name:name,
+  topics:[],
+  notes:"",
+  difficulty:"Medium"
+
+ });
+
+ input.value="";
+
+ await save();
+
+}
+
+
+async function deleteChapter(sid,cid){
+
+ const subject=
+  data.subjects.find(
+   s=>s.id===sid
+  );
+
+ if(!subject)return;
+
+ if(!confirm(
+  "Delete this chapter?"
+ ))return;
+
+ subject.chapters=
+  (subject.chapters||[])
+   .filter(
+    c=>c.id!==cid
+   );
+
+ await save();
+
+}
+
+
+/* =========================
+   TOPICS
+========================= */
+
+async function addChapterTopic(sid,cid){
+
+ const input=
+  document.getElementById(
+   "topic-"+sid+"-"+cid
+  );
+
+ const name=input.value.trim();
+
+ if(!name)return;
+
+ const subject=
+  data.subjects.find(
+   s=>s.id===sid
+  );
+
+ if(!subject)return;
+
+ const chapter=
+  (subject.chapters||[])
+   .find(
+    c=>c.id===cid
+   );
+
+ if(!chapter)return;
+
+ if(!chapter.topics)
+  chapter.topics=[];
+
+ chapter.topics.push({
+
+  id:Date.now(),
+  name:name,
+  done:false
+
+ });
+
+ input.value="";
+
+ await save();
+
+}
+
+
+async function toggleChapterTopic(sid,cid,tid){
+
+ const subject=
+  data.subjects.find(
+   s=>s.id===sid
+  );
+
+ if(!subject)return;
+
+ const chapter=
+  (subject.chapters||[])
+   .find(
+    c=>c.id===cid
+   );
+
+ if(!chapter)return;
+
+ const topic=
+  chapter.topics.find(
+   t=>t.id===tid
+  );
+
+ if(!topic)return;
+
+ topic.done=!topic.done;
+
+ await save();
+
+}
+
+
+async function deleteChapterTopic(sid,cid,tid){
+
+ const subject=
+  data.subjects.find(
+   s=>s.id===sid
+  );
+
+ if(!subject)return;
+
+ const chapter=
+  (subject.chapters||[])
+   .find(
+    c=>c.id===cid
+   );
+
+ if(!chapter)return;
+
+ chapter.topics=
+  chapter.topics.filter(
+   t=>t.id!==tid
+  );
+
+ await save();
+
+}
+
+
+/* =========================
+   DIFFICULTY + NOTES
+========================= */
+
+async function changeDifficulty(sid,cid){
+
+ const subject=
+  data.subjects.find(
+   s=>s.id===sid
+  );
+
+ if(!subject)return;
+
+ const chapter=
+  (subject.chapters||[])
+   .find(
+    c=>c.id===cid
+   );
+
+ if(!chapter)return;
+
+ chapter.difficulty=
+  document.getElementById(
+   "difficulty-"+sid+"-"+cid
+  ).value;
+
+ await save();
+
+}
+
+
+async function saveChapterNotes(sid,cid){
+
+ const subject=
+  data.subjects.find(
+   s=>s.id===sid
+  );
+
+ if(!subject)return;
+
+ const chapter=
+  (subject.chapters||[])
+   .find(
+    c=>c.id===cid
+   );
+
+ if(!chapter)return;
+
+ chapter.notes=
+  document.getElementById(
+   "notes-"+sid+"-"+cid
+  ).value;
+
+ await save();
+
+}
+
+
+/* =========================
+   EXAMS
+========================= */
+
+async function addExam(){
+
+ const name=
+  document.getElementById(
+   "examName"
+  ).value.trim();
+
+ const date=
+  document.getElementById(
+   "examDate"
+  ).value;
+
+ if(!name||!date)return;
+
+ data.exams.push({
+
+  id:Date.now(),
+  name:name,
+  date:date
+
+ });
+
+ document.getElementById(
+  "examName"
+ ).value="";
+
+ document.getElementById(
+  "examDate"
+ ).value="";
+
+ await save();
+
+}
+
+
+function renderExams(){
+
+ const el=
+  document.getElementById(
+   "examList"
+  );
+
+ if(!data.exams.length){
+
+  el.innerHTML=
+   '<div class="empty">No upcoming exams added.</div>';
+
+  return;
+
+ }
+
+ const today=new Date();
+
+ today.setHours(0,0,0,0);
+
+ el.innerHTML=
+  [...data.exams]
+   .sort(
+    (a,b)=>
+     a.date.localeCompare(b.date)
+   )
+   .map(exam=>{
+
+    const d=
+     new Date(
+      exam.date+"T00:00:00"
+     );
+
+    const diff=
+     Math.ceil(
+      (d-today)/86400000
+     );
+
+    let daysText;
+
+    if(diff<0)
+     daysText="Exam passed";
+    else if(diff===0)
+     daysText="Today";
+    else if(diff===1)
+     daysText="1 day left";
+    else
+     daysText=diff+" days left";
+
+    return`
+
+    <div class="exam-item">
+
+     <div>
+
+      <b>${esc(exam.name)}</b>
+
+      <div class="small">
+       ${exam.date}
+      </div>
+
+     </div>
+
+     <div style="text-align:right">
+
+      <div class="exam-days">
+       ${daysText}
+      </div>
+
+      <button
+       class="btn danger smallbtn"
+       onclick="deleteExam(${exam.id})">
+       Delete
+      </button>
+
+     </div>
+
+    </div>
+
+    `;
+
+   }).join("");
+
+}
+
+
+async function deleteExam(id){
+
+ data.exams=
+  data.exams.filter(
+   e=>e.id!==id
+  );
+
+ await save();
+
+}
+
+
+/* =========================
+   STUDY SESSIONS
+========================= */
+
+async function addStudySession(){
+
+ const subject=
+  document.getElementById(
+   "quickSubject"
+  ).value.trim();
+
+ const minutes=
+  parseInt(
+   document.getElementById(
+    "quickMinutes"
+   ).value,
+   10
+  );
+
+ const start=
+  document.getElementById(
+   "quickStart"
+  ).value;
+
+ const end=
+  document.getElementById(
+   "quickEnd"
+  ).value;
+
+ if(!subject||!minutes)return;
+
+ data.studySessions.push({
+
+  id:Date.now(),
+  date:localDate(),
+  subject:subject,
+  minutes:minutes,
+  start:start||"",
+  end:end||""
+
+ });
+
+ data.studyMinutes=
+  (data.studyMinutes||0)+minutes;
+
+ document.getElementById(
+  "quickSubject"
+ ).value="";
+
+ document.getElementById(
+  "quickMinutes"
+ ).value="";
+
+ document.getElementById(
+  "quickStart"
+ ).value="";
+
+ document.getElementById(
+  "quickEnd"
+ ).value="";
+
+ await save();
+
+}
+
+
+function getTodayMinutes(){
+
+ const today=localDate();
+
+ return data.studySessions
+  .filter(
+   s=>s.date===today
+  )
+  .reduce(
+   (sum,s)=>
+    sum+(Number(s.minutes)||0),
+   0
+  );
+
+}
+
+
+function getWeekMinutes(){
+
+ const now=new Date();
+
+ now.setHours(0,0,0,0);
+
+ const day=now.getDay();
+
+ const diff=
+  day===0?6:day-1;
+
+ const monday=new Date(now);
+
+ monday.setDate(
+  now.getDate()-diff
+ );
+
+ return data.studySessions
+  .filter(s=>{
+
+   const d=
+    new Date(
+     s.date+"T00:00:00"
+    );
+
+   return d>=monday;
+
+  })
+  .reduce(
+   (sum,s)=>
+    sum+(Number(s.minutes)||0),
+   0
+  );
+
+}
+
+
+/* =========================
+   TEST PERFORMANCE
+========================= */
+
+async function addTest(){
+
+ const subject=
+  document.getElementById(
+   "testSubject"
+  ).value.trim();
+
+ const mark=
+  Number(
+   document.getElementById(
+    "testMark"
+   ).value
+  );
+
+ const fullMark=
+  Number(
+   document.getElementById(
+    "testFullMark"
+   ).value
+  );
+
+
+ if(
+  !subject||
+  isNaN(mark)||
+  isNaN(fullMark)
+ )return;
+
+
+ if(fullMark<=0)return;
+
+ if(mark<0||mark>fullMark){
+
+  alert(
+   "Mark must be between 0 and the full mark."
+  );
+
+  return;
+
+ }
+
+
+ data.tests.push({
+
+  id:Date.now(),
+  subject:subject,
+  mark:mark,
+  fullMark:fullMark,
+  date:localDate()
+
+ });
+
+
+ document.getElementById(
+  "testSubject"
+ ).value="";
+
+ document.getElementById(
+  "testMark"
+ ).value="";
+
+ document.getElementById(
+  "testFullMark"
+ ).value="";
+
+
+ await save();
+
+}
+
+
+/* =========================
+   RENDER TESTS
+========================= */
+
+function renderTests(){
+
+ const el=
+  document.getElementById(
+   "testList"
+  );
+
+ if(!data.tests.length){
+
+  el.innerHTML=
+   '<div class="empty">No tests recorded yet.</div>';
+
+  return;
+
+ }
+
+
+ el.innerHTML=
+  [...data.tests]
+   .reverse()
+   .map(t=>`
+
+    <div class="session">
+
+     <div>
+
+      <b>
+       ${esc(t.subject)}
+      </b>
+
+      <div class="session-subject">
+       ${t.date}
+      </div>
+
+     </div>
+
+     <b>
+      ${t.mark} / ${t.fullMark}
+     </b>
+
+    </div>
+
+   `).join("");
+
+}
+
+
+/* =========================
+   STATISTICS
+========================= */
+
+function updateStatistics(){
+
+ const average=
+  data.tests.length
+  ?Math.round(
+   data.tests.reduce(
+    (sum,t)=>
+     sum+
+     (
+      Number(t.mark)/
+      Number(t.fullMark)*100
+     ),
+    0
+   )/
+   data.tests.length
+  )
+  :0;
+
+
+ document.getElementById(
+  "statAverage"
+ ).textContent=
+  average+"%";
+
+
+ const subjectScores={};
+
+
+ data.tests.forEach(t=>{
+
+  if(!subjectScores[t.subject])
+   subjectScores[t.subject]=[];
+
+  subjectScores[t.subject].push(
+
+   Number(t.mark)/
+   Number(t.fullMark)*100
+
+  );
+
+ });
+
+
+ const names=
+  Object.keys(subjectScores);
+
+
+ if(names.length){
+
+  const averages=
+   names.map(name=>({
+
+    name:name,
+
+    avg:
+     subjectScores[name]
+      .reduce(
+       (a,b)=>a+b,
+       0
+      )/
+      subjectScores[name].length
+
+   }));
+
+
+  averages.sort(
+   (a,b)=>b.avg-a.avg
+  );
+
+
+  document.getElementById(
+   "statStrong"
+  ).textContent=
+   averages[0].name;
+
+
+  document.getElementById(
+   "statWeak"
+  ).textContent=
+   averages[
+    averages.length-1
+   ].name;
+
+
+ }else{
+
+  document.getElementById(
+   "statStrong"
+  ).textContent="—";
+
+  document.getElementById(
+   "statWeak"
+  ).textContent="—";
+
+ }
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showSection(id,btn){
+
+ const sections=[
+  "dashboard",
+  "study",
+  "statistics",
+  "profile"
+ ];
+
+
+ sections.forEach(section=>{
+
+  const el=
+   document.getElementById(
+    section
+   );
+
+  el.style.display=
+   section===id
+   ?"block"
+   :"none";
+
+ });
+
+
+ document
+  .querySelectorAll("nav button")
+  .forEach(
+   b=>b.classList.remove("active")
+  );
+
+
+ if(btn)
+  btn.classList.add("active");
+
+
+ const section=
+  document.getElementById(id);
+
+ if(section){
+
+  section.classList.remove(
+   "padikya-section-enter"
+  );
+
+  void section.offsetWidth;
+
+  section.classList.add(
+   "padikya-section-enter"
+  );
+
+ }
+
+
+ window.scrollTo({
+  top:0,
+  behavior:"smooth"
+ });
+
+}
+
+
+/* =========================================================
+   CLICK ANIMATIONS
+   VISUAL ONLY
+========================================================= */
+
+document.addEventListener(
+ "click",
+ function(e){
+
+  const target=
+   e.target.closest(
+    "button,.streak-check,.card"
+   );
+
+  if(!target)return;
+
+  target.classList.remove(
+   "padikya-click"
+  );
+
+  void target.offsetWidth;
+
+  target.classList.add(
+   "padikya-click"
+  );
+
+  setTimeout(function(){
+
+   target.classList.remove(
+    "padikya-click"
+   );
+
+  },300);
+
+
+  /* Ripple only for buttons */
+
+  if(target.tagName==="BUTTON"){
+
+   const rect=
+    target.getBoundingClientRect();
+
+   const ripple=
+    document.createElement("span");
+
+   ripple.className=
+    "padikya-ripple";
+
+   const size=
+    Math.max(
+     rect.width,
+     rect.height
+    );
+
+   ripple.style.width=
+    size+"px";
+
+   ripple.style.height=
+    size+"px";
+
+   ripple.style.left=
+    (
+     e.clientX-
+     rect.left-
+     size/2
+    )+"px";
+
+   ripple.style.top=
+    (
+     e.clientY-
+     rect.top-
+     size/2
+    )+"px";
+
+   target.appendChild(ripple);
+
+   setTimeout(function(){
+
+    ripple.remove();
+
+   },600);
+
+  }
+
+
+  /* Tiny particles */
+
+  if(
+   target.tagName==="BUTTON" &&
+   Math.random()>.35
+  ){
+
+   for(
+    let i=0;
+    i<4;
+    i++
+   ){
+
+    const particle=
+     document.createElement("span");
+
+    particle.className=
+     "padikya-particle";
+
+    particle.style.left=
+     e.clientX+"px";
+
+    particle.style.top=
+     e.clientY+"px";
+
+    const angle=
+     Math.random()*
+     Math.PI*2;
+
+    const distance=
+     15+
+     Math.random()*25;
+
+    particle.style.setProperty(
+     "--px",
+     Math.cos(angle)*
+      distance+
+      "px"
+    );
+
+    particle.style.setProperty(
+     "--py",
+     Math.sin(angle)*
+      distance+
+      "px"
+    );
+
+    document.body.appendChild(
+     particle
+    );
+
+    setTimeout(function(){
+
+     particle.remove();
+
+    },600);
+
+   }
+
+  }
+
+ });
+
+
+/* =========================================================
+   DESKTOP CARD MOVEMENT
+========================================================= */
+
+if(
+ window.matchMedia(
+  "(hover:hover) and (pointer:fine)"
+ ).matches
+){
+
+ document.querySelectorAll(
+  ".card"
+ ).forEach(function(card){
+
+  card.addEventListener(
+   "mousemove",
+   function(e){
+
+    const rect=
+     card.getBoundingClientRect();
+
+    const x=
+     e.clientX-
+     rect.left;
+
+    const y=
+     e.clientY-
+     rect.top;
+
+    const centerX=
+     rect.width/2;
+
+    const centerY=
+     rect.height/2;
+
+    const rotateX=
+     ((y-centerY)/
+     centerY)*-1.5;
+
+    const rotateY=
+     ((x-centerX)/
+     centerX)*1.5;
+
+    card.style.transform=
+     "translateY(-4px) "+
+     "perspective(700px) "+
+     "rotateX("+
+     rotateX+
+     "deg) rotateY("+
+     rotateY+
+     "deg)";
+
+   }
+  );
+
+
+  card.addEventListener(
+   "mouseleave",
+   function(){
+
+    card.style.transform="";
+
+   }
+  );
+
+ });
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+initTheme();
+
+checkSession();
+
+</script>
+
 </body>
-</html>
+  </html>
