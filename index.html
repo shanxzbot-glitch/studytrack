@@ -356,8 +356,7 @@ StudyHub V2 • Account login enabled
 
 <script>
 
-/* =========================
-   SUPABASE CONNECTION
+/* ==========
 ========================= */
 
 const SUPABASE_URL =
@@ -1284,134 +1283,693 @@ function setGoal(){
      ).value
    );
 
- if(v>0){
+const SUPABASE_URL="https://qpqkpmckvugrrooknzzn.supabase.co";
+const SUPABASE_KEY="sb_publishable_yjQXPL_Ye6TBz0NnvsvCfw_zJGDKqVy";
 
-   data.dailyGoal=v;
+const supabaseClient=window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
-   document.getElementById(
-     "goalInput"
-   ).value="";
+let data={
+  subjects:[],
+  tasks:[],
+  studyMinutes:0,
+  dailyGoal:60
+};
 
-   save();
+let timerSeconds=1500;
+let timerInterval=null;
 
- }
 
+/* AUTH */
+
+function showSignup(){
+  document.getElementById("loginBox").style.display="none";
+  document.getElementById("signupBox").style.display="block";
+  clearMessages();
 }
 
+function showLogin(){
+  document.getElementById("signupBox").style.display="none";
+  document.getElementById("loginBox").style.display="block";
+  clearMessages();
+}
+
+function clearMessages(){
+  document.getElementById("loginMessage").textContent="";
+  document.getElementById("signupMessage").textContent="";
+}
+
+function usernameToEmail(username){
+  return username.trim().toLowerCase().replace(/\s+/g,"")+"@studyhub.local";
+}
+
+
+/* SIGN UP */
+
+async function signup(){
+
+  const username=document.getElementById("signupUsername").value.trim();
+  const password=document.getElementById("signupPassword").value;
+  const confirm=document.getElementById("signupConfirm").value;
+  const message=document.getElementById("signupMessage");
+
+  if(username.length<3){
+    message.textContent="Username must be at least 3 characters.";
+    return;
+  }
+
+  if(!/^[a-zA-Z0-9_]+$/.test(username)){
+    message.textContent="Use only letters, numbers and _";
+    return;
+  }
+
+  if(password.length<6){
+    message.textContent="Password must be at least 6 characters.";
+    return;
+  }
+
+  if(password!==confirm){
+    message.textContent="Passwords do not match.";
+    return;
+  }
+
+  message.textContent="Creating account...";
+
+  try{
+
+    const email=usernameToEmail(username);
+
+    const {data:result,error}=await supabaseClient.auth.signUp({
+      email:email,
+      password:password,
+      options:{
+        data:{
+          username:username
+        }
+      }
+    });
+
+    if(error){
+      message.textContent=error.message;
+      return;
+    }
+
+    if(result.user){
+
+      data={
+        subjects:[],
+        tasks:[],
+        studyMinutes:0,
+        dailyGoal:60
+      };
+
+      await save();
+
+      message.textContent="Account created!";
+
+      setTimeout(()=>{
+        enterApp(username);
+      },500);
+    }
+
+  }catch(error){
+
+    console.error(error);
+    message.textContent="Something went wrong. Please try again.";
+
+  }
+}
+
+
+/* LOGIN */
+
+async function login(){
+
+  const username=document.getElementById("loginUsername").value.trim();
+  const password=document.getElementById("loginPassword").value;
+  const message=document.getElementById("loginMessage");
+
+  if(!username||!password){
+    message.textContent="Enter username and password.";
+    return;
+  }
+
+  message.textContent="Logging in...";
+
+  try{
+
+    const email=usernameToEmail(username);
+
+    const {data:result,error}=await supabaseClient.auth.signInWithPassword({
+      email:email,
+      password:password
+    });
+
+    if(error){
+      message.textContent=error.message;
+      return;
+    }
+
+    if(result.user){
+
+      await loadCloudData();
+      enterApp(username);
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+    message.textContent="Something went wrong. Please try again.";
+
+  }
+}
+
+
+/* APP */
+
+function enterApp(username){
+
+  document.getElementById("authScreen").style.display="none";
+  document.getElementById("studyApp").style.display="block";
+  document.getElementById("userDisplay").textContent="@"+username;
+
+  render();
+  updateTimer();
+}
+
+
+async function logout(){
+
+  await supabaseClient.auth.signOut();
+
+  document.getElementById("studyApp").style.display="none";
+  document.getElementById("authScreen").style.display="flex";
+
+  document.getElementById("loginUsername").value="";
+  document.getElementById("loginPassword").value="";
+
+  showLogin();
+}
+
+
+/* CLOUD DATA */
+
+async function save(){
+
+  const {data:{user}}=await supabaseClient.auth.getUser();
+
+  if(!user)return;
+
+  const {error}=await supabaseClient
+    .from("studyhub_data")
+    .upsert({
+      id:user.id,
+      data:data,
+      updated_at:new Date().toISOString()
+    });
+
+  if(error){
+    console.error("Cloud save error:",error);
+    alert("Could not save your data.");
+    return;
+  }
+
+  render();
+}
+
+
+async function loadCloudData(){
+
+  const {data:{user}}=await supabaseClient.auth.getUser();
+
+  if(!user)return;
+
+  const {data:cloudData,error}=await supabaseClient
+    .from("studyhub_data")
+    .select("data")
+    .eq("id",user.id)
+    .maybeSingle();
+
+  if(error){
+    console.error("Cloud load error:",error);
+    alert("Could not load your data.");
+    return;
+  }
+
+  if(cloudData&&cloudData.data){
+
+    data=cloudData.data;
+
+  }else{
+
+    await save();
+
+  }
+
+  render();
+}
+
+
+/* SESSION */
+
+async function checkSession(){
+
+  const {data:sessionData}=await supabaseClient.auth.getSession();
+
+  if(sessionData.session){
+
+    await loadCloudData();
+
+    const username=
+      sessionData.session.user.user_metadata?.username ||
+      sessionData.session.user.email.split("@")[0];
+
+    enterApp(username);
+
+  }else{
+
+    document.getElementById("authScreen").style.display="flex";
+    document.getElementById("studyApp").style.display="none";
+
+  }
+}
+
+
+/* STUDY DATA */
+
+function esc(s){
+  return String(s).replace(
+    /[&<>"']/g,
+    m=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    }[m])
+  );
+}
+
+function totals(){
+
+  const topics=data.subjects.flatMap(s=>s.topics);
+  const done=topics.filter(t=>t.done).length;
+  const tasksDone=data.tasks.filter(t=>t.done).length;
+
+  const total=topics.length
+    ?Math.round(done/topics.length*100)
+    :0;
+
+  return {topics,done,tasksDone,total};
+}
+
+function render(){
+
+  const t=totals();
+
+  document.getElementById("overall").textContent=t.total+"%";
+  document.getElementById("topicsDone").textContent=t.done;
+  document.getElementById("tasksDone").textContent=t.tasksDone;
+  document.getElementById("studyTime").textContent=formatMinutes(data.studyMinutes);
+
+  document.getElementById("goalText").textContent=data.dailyGoal+" min";
+
+  const pct=Math.min(
+    100,
+    Math.round(data.studyMinutes/data.dailyGoal*100)
+  );
+
+  document.getElementById("goalBar").style.width=pct+"%";
+
+  document.getElementById("goalStatus").textContent=
+    Math.min(data.studyMinutes,data.dailyGoal)+
+    " / "+data.dailyGoal+" minutes completed";
+
+  renderSubjects();
+  renderDashboardSubjects();
+  renderTasks();
+}
+
+function formatMinutes(m){
+
+  const h=Math.floor(m/60);
+  const min=m%60;
+
+  return h?h+"h "+min+"m":min+"m";
+}
+
+function renderDashboardSubjects(){
+
+  const el=document.getElementById("dashboardSubjects");
+
+  if(!data.subjects.length){
+    el.innerHTML='<div class="empty">No subjects yet.</div>';
+    return;
+  }
+
+  el.innerHTML=data.subjects.map(s=>{
+
+    const done=s.topics.filter(t=>t.done).length;
+    const total=s.topics.length;
+    const pct=total?Math.round(done/total*100):0;
+
+    return `
+      <div class="subject">
+        <div class="row">
+          <b>${esc(s.name)}</b>
+          <span class="small">${done}/${total} • ${pct}%</span>
+        </div>
+        <div class="progress" style="margin-top:8px">
+          <div style="width:${pct}%"></div>
+        </div>
+      </div>
+    `;
+
+  }).join("");
+}
+
+function renderSubjects(){
+
+  const el=document.getElementById("subjectList");
+
+  if(!data.subjects.length){
+    el.innerHTML='<div class="empty">Add your first subject above.</div>';
+    return;
+  }
+
+  el.innerHTML=data.subjects.map(s=>{
+
+    const done=s.topics.filter(t=>t.done).length;
+    const total=s.topics.length;
+    const pct=total?Math.round(done/total*100):0;
+
+    return `
+      <div class="subject">
+
+        <div class="row">
+          <div>
+            <b>${esc(s.name)}</b>
+            <div class="small">${done}/${total} topics completed</div>
+          </div>
+
+          <button class="btn danger smallbtn"
+            onclick="deleteSubject(${s.id})">
+            Delete
+          </button>
+        </div>
+
+        <div class="progress" style="margin:9px 0">
+          <div style="width:${pct}%"></div>
+        </div>
+
+        ${s.topics.map(t=>`
+
+          <div class="task ${t.done?'done':''}">
+
+            <input type="checkbox"
+              ${t.done?'checked':''}
+              onchange="toggleTopic(${s.id},${t.id})">
+
+            <span style="flex:1">${esc(t.name)}</span>
+
+            <button class="btn danger smallbtn"
+              onclick="deleteTopic(${s.id},${t.id})">
+              ×
+            </button>
+
+          </div>
+
+        `).join("")}
+
+        <div class="form">
+
+          <input id="topic-${s.id}"
+            placeholder="Add a chapter/topic">
+
+          <button class="btn smallbtn"
+            onclick="addTopic(${s.id})">
+            Add topic
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+  }).join("");
+}
+
+function addSubject(){
+
+  const input=document.getElementById("subjectInput");
+  const name=input.value.trim();
+
+  if(!name)return;
+
+  data.subjects.push({
+    id:Date.now(),
+    name:name,
+    topics:[]
+  });
+
+  input.value="";
+  save();
+}
+
+function deleteSubject(id){
+
+  if(confirm("Delete this subject and its topics?")){
+
+    data.subjects=data.subjects.filter(s=>s.id!==id);
+
+    save();
+  }
+}
+
+function addTopic(id){
+
+  const input=document.getElementById("topic-"+id);
+  const name=input.value.trim();
+
+  if(!name)return;
+
+  const subject=data.subjects.find(s=>s.id===id);
+
+  if(!subject)return;
+
+  subject.topics.push({
+    id:Date.now(),
+    name:name,
+    done:false
+  });
+
+  input.value="";
+  save();
+}
+
+function toggleTopic(sid,tid){
+
+  const subject=data.subjects.find(s=>s.id===sid);
+  if(!subject)return;
+
+  const topic=subject.topics.find(t=>t.id===tid);
+  if(!topic)return;
+
+  topic.done=!topic.done;
+
+  save();
+}
+
+function deleteTopic(sid,tid){
+
+  const subject=data.subjects.find(s=>s.id===sid);
+  if(!subject)return;
+
+  subject.topics=subject.topics.filter(t=>t.id!==tid);
+
+  save();
+}
+
+function renderTasks(){
+
+  const el=document.getElementById("taskList");
+
+  if(!data.tasks.length){
+
+    el.innerHTML=
+      '<div class="empty">No tasks yet. Add homework or revision above.</div>';
+
+    return;
+  }
+
+  el.innerHTML=data.tasks.map(t=>`
+
+    <div class="task ${t.done?'done':''}">
+
+      <input type="checkbox"
+        ${t.done?'checked':''}
+        onchange="toggleTask(${t.id})">
+
+      <span style="flex:1">${esc(t.name)}</span>
+
+      <button class="btn danger smallbtn"
+        onclick="deleteTask(${t.id})">
+        Delete
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+function addTask(){
+
+  const input=document.getElementById("taskInput");
+  const name=input.value.trim();
+
+  if(!name)return;
+
+  data.tasks.push({
+    id:Date.now(),
+    name:name,
+    done:false
+  });
+
+  input.value="";
+  save();
+}
+
+function toggleTask(id){
+
+  const task=data.tasks.find(t=>t.id===id);
+  if(!task)return;
+
+  task.done=!task.done;
+
+  save();
+}
+
+function deleteTask(id){
+
+  data.tasks=data.tasks.filter(t=>t.id!==id);
+
+  save();
+}
+
+function setGoal(){
+
+  const v=parseInt(
+    document.getElementById("goalInput").value
+  );
+
+  if(v>0){
+
+    data.dailyGoal=v;
+
+    document.getElementById("goalInput").value="";
+
+    save();
+  }
+}
+
+
+/* NAVIGATION */
 
 function showSection(id,btn){
 
- ["dashboard","subjects","tasks","timer"]
- .forEach(
-   x=>
-   document.getElementById(x).style.display=
-   x===id?"block":"none"
- );
+  ["dashboard","subjects","tasks","timer"].forEach(x=>{
+    document.getElementById(x).style.display=
+      x===id?"block":"none";
+  });
 
- document
- .querySelectorAll("nav button")
- .forEach(
-   b=>b.classList.remove("active")
- );
+  document.querySelectorAll("nav button").forEach(b=>{
+    b.classList.remove("active");
+  });
 
- if(btn)btn.classList.add("active");
-
+  if(btn)btn.classList.add("active");
 }
 
+
+/* TIMER */
 
 function updateTimer(){
 
- const m=
-   Math.floor(timerSeconds/60);
+  const m=Math.floor(timerSeconds/60);
+  const s=timerSeconds%60;
 
- const s=
-   timerSeconds%60;
-
- document.getElementById(
-   "timerDisplay"
- ).textContent=
-   String(m).padStart(2,"0")
-   +":"
-   +String(s).padStart(2,"0");
-
+  document.getElementById("timerDisplay").textContent=
+    String(m).padStart(2,"0")+":"+
+    String(s).padStart(2,"0");
 }
-
 
 function startTimer(){
 
- if(timerInterval)return;
+  if(timerInterval)return;
 
- timerInterval=
-   setInterval(()=>{
+  timerInterval=setInterval(()=>{
 
-     if(timerSeconds<=0){
+    if(timerSeconds<=0){
 
-       clearInterval(timerInterval);
+      clearInterval(timerInterval);
+      timerInterval=null;
 
-       timerInterval=null;
+      data.studyMinutes+=25;
+      save();
 
-       data.studyMinutes+=25;
+      alert("Study session complete! 25 minutes added.");
 
-       save();
+      resetTimer();
+      return;
+    }
 
-       alert(
-         "Study session complete! 25 minutes added."
-       );
+    timerSeconds--;
+    updateTimer();
 
-       resetTimer();
-
-       return;
-
-     }
-
-     timerSeconds--;
-
-     updateTimer();
-
-   },1000);
-
+  },1000);
 }
-
 
 function pauseTimer(){
 
- clearInterval(timerInterval);
-
- timerInterval=null;
-
+  clearInterval(timerInterval);
+  timerInterval=null;
 }
-
 
 function resetTimer(){
 
- pauseTimer();
+  pauseTimer();
 
- timerSeconds=1500;
+  timerSeconds=1500;
 
- updateTimer();
-
+  updateTimer();
 }
 
 
-function resetData(){
+/* RESET */
 
- if(confirm(
-   "This will delete all StudyHub data on this device. Continue?"
- )){
+async function resetData(){
 
-   localStorage.removeItem(KEY);
+  if(confirm("Delete all your StudyHub data?")){
 
-   location.reload();
+    data={
+      subjects:[],
+      tasks:[],
+      studyMinutes:0,
+      dailyGoal:60
+    };
 
- }
+    await save();
 
+    render();
+  }
 }
 
 
 /* START */
 
 checkSession();
-
 updateTimer();
 
 </script>
