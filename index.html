@@ -379,31 +379,16 @@ window.supabase.createClient(
 ========================= */
 
 const KEY="studyhub_v1";
+const KEY="studyhub_v1";
 
-let data=JSON.parse(
- localStorage.getItem(KEY)||"null"
-)||{
- subjects:[
-   {
-     id:1,
-     name:"Mathematics",
-     topics:[
-       {id:11,name:"Algebra",done:false},
-       {id:12,name:"Geometry",done:false}
-     ]
-   },
-   {
-     id:2,
-     name:"Science",
-     topics:[
-       {id:21,name:"Physics",done:false}
-     ]
-   }
- ],
- tasks:[],
- studyMinutes:0,
- dailyGoal:60
+let data={
+  subjects:[],
+  tasks:[],
+  studyMinutes:0,
+  dailyGoal:60
 };
+
+let cloudLoaded=false;
 
 let timerSeconds=1500;
 let timerInterval=null;
