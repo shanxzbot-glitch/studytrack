@@ -2,2057 +2,2404 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#1769ff">
-<title>PlanSync</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>StudyHub</title>
 
-<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box}
-
-html,body{
-margin:0;
-padding:0;
-font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-background:#f6f8fc;
-color:#111936
-}
-
-button,input{font:inherit}
-button{border:0;cursor:pointer}
-
 :root{
---blue:#1769ff;
---blue2:#0b84ff;
---ink:#111936;
---muted:#7d879d;
---card:#fff;
---line:#e8ecf3;
---soft:#edf4ff;
---green:#35b86b;
---purple:#7657f5
+ --bg:#faf9f7;
+ --text:#1c1917;
+ --card-bg:#ffffff;
+ --card-border:#ece9e4;
+ --card-shadow:rgba(28,25,23,.05);
+ --ink:#1c1917;
+ --ink-text:#faf9f7;
+ --accent:#a9784f;
+ --accent-soft:#f3ece3;
+ --danger-bg:#fdf2f1;
+ --danger-text:#b3402f;
+ --muted:#78716c;
+ --track:#ece9e4;
+ --border:#ece9e4;
+ --input-border:#ddd8d1;
+ --input-bg:#fff;
+ --nav-border:#ece9e4;
+ --done-text:#a8a29b;
 }
 
-body{min-height:100vh}
-.hidden{display:none!important}
-
-/* ================= LOGIN ================= */
-
-#login{
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:24px;
-background:
-radial-gradient(circle at 10% 10%,#dceaff 0 20%,transparent 42%),
-radial-gradient(circle at 95% 15%,#d9d7ff 0 16%,transparent 38%),
-#f7f9fd
+[data-theme="dark"]{
+ --bg:#121110;
+ --text:#e9e6e1;
+ --card-bg:#1b1a18;
+ --card-border:#2c2a27;
+ --card-shadow:rgba(0,0,0,.35);
+ --ink:#e9e6e1;
+ --ink-text:#171614;
+ --accent:#c9a06b;
+ --accent-soft:#2a231b;
+ --danger-bg:#2c1a17;
+ --danger-text:#e2887a;
+ --muted:#9a948c;
+ --track:#26241f;
+ --border:#26241f;
+ --input-border:#302d28;
+ --input-bg:#181715;
+ --nav-border:#2c2a27;
+ --done-text:#5d574f;
 }
 
-.login-card{
-width:min(430px,100%);
-background:rgba(255,255,255,.92);
-border:1px solid rgba(255,255,255,.8);
-border-radius:34px;
-padding:28px;
-box-shadow:0 24px 70px rgba(28,55,110,.13);
-backdrop-filter:blur(18px)
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;
+ font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ background:var(--bg);
+ color:var(--text);
+ transition:background .25s ease,color .25s ease
 }
-
-.logo-row{
-display:flex;
-align-items:center;
-gap:12px;
-margin-bottom:30px
+button,input{font:inherit}
+button{cursor:pointer;border:0;transition:background .18s ease,color .18s ease,transform .12s ease,opacity .18s ease}
+button:active{transform:scale(.96)}
+.app{max-width:1100px;margin:auto;padding:18px 18px calc(96px + env(safe-area-inset-bottom));animation:fadeIn .4s ease}
+header{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:18px;
+ gap:10px
 }
-
-.logo{
-width:48px;
-height:48px;
-border-radius:16px;
-background:linear-gradient(135deg,#1265ff,#42a5ff);
-display:grid;
-place-items:center;
-color:white;
-font-weight:900;
-font-size:22px;
-box-shadow:0 10px 25px #1769ff35
-}
-
-.brand{
-font-weight:850;
-font-size:21px
-}
-
-.login-art{
-height:150px;
-border-radius:25px;
-background:linear-gradient(135deg,#1265ff,#62b8ff);
-position:relative;
-overflow:hidden;
-margin-bottom:28px
-}
-
-.login-art:before,
-.login-art:after{
-content:"";
-position:absolute;
-border-radius:50%;
-background:rgba(255,255,255,.16)
-}
-
-.login-art:before{
-width:190px;
-height:190px;
-right:-50px;
-top:-80px
-}
-
-.login-art:after{
-width:130px;
-height:130px;
-left:-35px;
-bottom:-70px
-}
-
-.mini-phone{
-position:absolute;
-width:118px;
-height:145px;
-left:50%;
-top:7px;
-transform:translateX(-50%);
-border:5px solid #10182f;
-border-radius:22px;
-background:#f8fbff;
-box-shadow:0 16px 30px #071b4830;
-padding:20px 12px
-}
-
-.mini-phone b{
-display:block;
-color:#1769ff;
-font-size:11px;
-margin-bottom:14px
-}
-
-.mini-line{
-height:9px;
-border-radius:8px;
-background:#dce8ff;
-margin:8px 0
-}
-
-.mini-line.w{width:72%}
-
-.mini-task{
-height:32px;
-border-radius:10px;
-background:#1769ff;
-margin-top:13px
-}
-
-.login-card h1{
-font-size:31px;
-line-height:1.1;
-margin:0 0 9px
-}
-
-.login-card p{
-color:var(--muted);
-margin:0 0 24px;
-line-height:1.5
-}
-
-.field{
-margin:13px 0
-}
-
-.field label{
-display:block;
-font-size:13px;
-font-weight:700;
-margin:0 0 7px
-}
-
-.field input{
-width:100%;
-padding:15px 16px;
-border:1px solid var(--line);
-border-radius:15px;
-outline:none;
-background:#f9fbff
-}
-
-.field input:focus{
-border-color:#8ab4ff;
-box-shadow:0 0 0 4px #1769ff12
-}
-
-.primary{
-width:100%;
-padding:16px;
-border-radius:17px;
-background:linear-gradient(135deg,#1769ff,#1687ff);
-color:white;
-font-weight:800;
-box-shadow:0 12px 25px #1769ff35;
-margin-top:10px
-}
-
-.demo{
-text-align:center;
-font-size:12px;
-color:#9aa2b3;
-margin-top:13px
-}
-
-/* ================= APP ================= */
-
-#app{
-min-height:100vh;
-padding-bottom:92px
-}
-
-.topbar{
-height:76px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 18px;
-background:#fff;
-border-bottom:1px solid #eef1f6;
-position:sticky;
-top:0;
-z-index:10
-}
-
-.top-title{
-font-size:21px;
-font-weight:850
-}
-
-.top-sub{
-font-size:12px;
-color:var(--muted);
-margin-top:2px
-}
-
-.avatar{
-width:42px;
-height:42px;
-border-radius:50%;
-display:grid;
-place-items:center;
-background:#e9f1ff;
-color:#1769ff;
-font-weight:900
-}
-
-.page{
-max-width:720px;
-margin:auto;
-padding:20px 16px
-}
-
-/* ================= HOME ================= */
-
-.hero{
-background:linear-gradient(135deg,#1769ff,#4ca9ff);
-border-radius:27px;
-color:white;
-padding:23px;
-box-shadow:0 18px 35px #1769ff28;
-position:relative;
-overflow:hidden
-}
-
-.hero:after{
-content:"";
-position:absolute;
-width:180px;
-height:180px;
-border-radius:50%;
-right:-80px;
-top:-80px;
-background:#ffffff18
-}
-
-.hero h2{
-margin:0;
-font-size:25px;
-position:relative;
-z-index:1
-}
-
-.hero p{
-margin:8px 0 0;
-color:#eaf4ff;
-position:relative;
-z-index:1
-}
-
-.section-head{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin:25px 2px 12px
-}
-
-.section-head h3{
-margin:0;
-font-size:17px
-}
-
-.small-btn{
-background:#edf4ff;
-color:#1769ff;
-border-radius:12px;
-padding:8px 11px;
-font-size:12px;
-font-weight:800
-}
-
+.logo{font-size:24px;font-weight:800;color:var(--ink);transition:color .25s ease;letter-spacing:-.02em}
+.logo span{color:var(--accent);transition:color .25s ease}
 .card{
-background:var(--card);
-border:1px solid var(--line);
-border-radius:20px;
-padding:16px;
-margin:10px 0;
-box-shadow:0 8px 25px #263b6310
+ background:var(--card-bg);
+ border:1px solid var(--card-border);
+ border-radius:20px;
+ padding:22px;
+ box-shadow:0 1px 2px var(--card-shadow);
+ transition:background .25s ease,border-color .25s ease,box-shadow .18s ease,transform .18s ease
+}
+.card:hover{box-shadow:0 4px 16px var(--card-shadow)}
+
+@keyframes fadeIn{
+ from{opacity:0;transform:translateY(6px)}
+ to{opacity:1;transform:translateY(0)}
 }
 
+@keyframes spin{
+ from{transform:rotate(0deg)}
+ to{transform:rotate(360deg)}
+}
+.hero{
+ background:var(--ink);
+ color:var(--ink-text);
+ border-radius:20px;
+ padding:22px;
+ margin-bottom:16px;
+ transition:background .25s ease,color .25s ease
+}
+.hero h1{margin:0 0 6px;font-size:27px}
+.hero p{margin:0;opacity:.75}
 .stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:12px;
+ margin-bottom:16px
+}
+.stat b{display:block;font-size:26px;margin-top:5px}
+.label{font-size:13px;color:var(--muted)}
+.section-title{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:10px
+}
+h2{font-size:18px;margin:0}
+.grid{
+ display:grid;
+ grid-template-columns:1.2fr .8fr;
+ gap:16px
+}
+.progress{
+ height:8px;
+ background:var(--track);
+ border-radius:20px;
+ overflow:hidden;
+ transition:background .25s ease
+}
+.progress div{
+ height:100%;
+ background:var(--accent);
+ border-radius:20px;
+ transition:width .5s cubic-bezier(.4,0,.2,1),background .25s ease
+}
+.subject{
+ padding:13px 0;
+ border-bottom:1px solid var(--border);
+ animation:fadeIn .3s ease;
+ transition:border-color .25s ease
+}
+.subject:last-child{border-bottom:0}
+.row{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px
+}
+.small{font-size:13px;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{
+ padding:13px 18px;
+ border-radius:12px;
+ background:var(--ink);
+ color:var(--ink-text);
+ font-weight:650;
+ font-size:15px;
+ min-height:48px
+}
+.btn:hover{opacity:.85}
+.btn.secondary{background:var(--accent-soft);color:var(--accent)}
+.btn.danger{background:var(--danger-bg);color:var(--danger-text)}
+.btn.smallbtn{padding:10px 14px;font-size:14px;min-height:44px}
+.theme-toggle{
+ width:48px;
+ height:48px;
+ border-radius:14px;
+ background:var(--accent-soft);
+ color:var(--accent);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:20px;
+ padding:0;
+ flex-shrink:0;
+ transition:background .18s ease,transform .3s ease
+}
+.theme-toggle:hover{transform:rotate(15deg)}
+.streak-badge{
+ display:flex;
+ align-items:center;
+ gap:4px;
+ background:var(--accent-soft);
+ color:var(--accent);
+ font-weight:700;
+ font-size:14px;
+ padding:8px 12px;
+ border-radius:12px;
+ min-height:38px;
+ white-space:nowrap;
+ transition:background .18s ease,color .18s ease,transform .15s ease
+}
+.streak-badge:not(:empty):hover{transform:scale(1.04)}
+.streak-card{margin-bottom:16px}
+.streak-row{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ flex-wrap:wrap;
+ gap:14px;
+ margin-top:6px
+}
+.streak-count{display:flex;align-items:baseline;gap:8px}
+#streakNumber{font-size:36px;font-weight:800;line-height:1;transition:color .25s ease}
+.streak-count-label{font-size:14px;color:var(--muted);font-weight:600}
+.streak-check{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ background:var(--accent-soft);
+ padding:12px 16px;
+ border-radius:14px;
+ cursor:pointer;
+ font-weight:650;
+ font-size:15px;
+ color:var(--text);
+ min-height:48px;
+ transition:background .18s ease
+}
+.streak-check input[type=checkbox]{
+ width:22px;
+ height:22px;
+ cursor:pointer;
+ accent-color:var(--accent);
+ flex-shrink:0
+}
+.streak-hint{margin:12px 0 0}
+input{
+ width:100%;
+ padding:13px 14px;
+ border:1px solid var(--input-border);
+ border-radius:12px;
+ outline:none;
+ background:var(--input-bg);
+ color:var(--text);
+ font-size:16px;
+ min-height:48px;
+ transition:border-color .18s ease,background .25s ease,box-shadow .18s ease
+}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.form{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.form input{flex:1;min-width:160px}
+.form .btn{flex-shrink:0}
+.task{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ padding:16px 4px;
+ border-bottom:1px solid var(--border);
+ animation:fadeIn .3s ease;
+ transition:border-color .25s ease
+}
+.task:last-child{border-bottom:0}
+.task input[type=checkbox]{width:24px;height:24px;cursor:pointer;transition:transform .15s ease;flex-shrink:0;accent-color:var(--accent)}
+.task input[type=checkbox]:active{transform:scale(1.15)}
+.task span{transition:color .25s ease;font-size:15px}
+.task.done span{text-decoration:line-through;color:var(--done-text)}
+.timer{text-align:center}
+.timer-display{
+ font-size:48px;
+ font-weight:800;
+ letter-spacing:2px;
+ margin:14px 0;
+ font-variant-numeric:tabular-nums;
+ transition:color .25s ease
+}
+.goal{margin-top:14px}
+.empty{
+ padding:18px 0;
+ text-align:center;
+ color:var(--muted);
+ font-size:14px
+}
+nav{
+ position:fixed;
+ left:0;
+ right:0;
+ bottom:0;
+ display:flex;
+ justify-content:space-around;
+ align-items:stretch;
+ background:var(--card-bg);
+ border-top:1px solid var(--nav-border);
+ padding:6px 6px calc(6px + env(safe-area-inset-bottom));
+ z-index:50;
+ backdrop-filter:blur(10px);
+ transition:background .25s ease,border-color .25s ease
+}
+nav button{
+ flex:1;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:3px;
+ background:transparent;
+ border:0;
+ color:var(--muted);
+ padding:8px 4px 6px;
+ border-radius:14px;
+ min-height:56px;
+ font-size:11px;
+ font-weight:600;
+ white-space:nowrap;
+ transition:background .18s ease,color .18s ease
+}
+nav button .nav-icon{font-size:21px;line-height:1}
+nav button:hover{color:var(--text)}
+nav button.active{
+ background:var(--accent-soft);
+ color:var(--accent)
+}
+
+.auth-screen{
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+ position:relative
+}
+.auth-theme-toggle{
+ position:absolute;
+ top:18px;
+ right:18px
+}
+.auth-card{
+ width:100%;
+ max-width:420px
+}
+.auth-logo{
+ text-align:center;
+ font-size:30px;
+ font-weight:800;
+ color:var(--accent);
+ margin-bottom:8px
+}
+.auth-subtitle{
+ text-align:center;
+ color:var(--muted);
+ margin:0 0 22px
+}
+.auth-form{
+ display:flex;
+ flex-direction:column;
+ gap:12px
+}
+.auth-form label{
+ font-size:13px;
+ font-weight:650
+}
+.auth-form input{margin-top:5px}
+.auth-message{
+ min-height:20px;
+ font-size:13px;
+ text-align:center;
+ margin-top:12px
+}
+.auth-switch{
+ text-align:center;
+ margin-top:18px;
+ font-size:14px;
+ color:var(--muted)
+}
+.link-btn{
+ background:none;
+ color:var(--accent);
+ font-weight:700;
+ padding:0
+}
+.auth-preview{
+ text-align:center;
+ margin-top:16px;
+ padding-top:16px;
+ border-top:1px solid var(--card-border)
+}
+.auth-preview .link-btn{
+ font-size:13px;
+ color:var(--muted);
+ font-weight:600
+}
+.message-error{color:var(--danger-text)}
+.message-success{color:#16803c}
+[data-theme="dark"] .message-success{color:#4ade80}
+
+main,
+section#subjects,
+section#tasks,
+section#timer{
+ animation:fadeIn .35s ease
 }
 
 .stat{
-background:#fff;
-border:1px solid var(--line);
-border-radius:18px;
-padding:14px
+ transition:transform .18s ease
+}
+.stat:hover{transform:translateY(-2px)}
+
+.auth-card{
+ animation:fadeIn .4s ease
 }
 
-.stat b{
-font-size:22px
+@media(max-width:700px){
+ .app{padding:14px 14px calc(96px + env(safe-area-inset-bottom))}
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .grid{grid-template-columns:1fr}
+ .hero h1{font-size:23px}
+ .card{padding:18px}
+ header{align-items:flex-start}
+ .actions{gap:8px}
+ #userDisplay{display:none}
 }
 
-.stat span{
-display:block;
-color:var(--muted);
-font-size:11px;
-margin-top:4px
-}
-
-.schedule{
-display:flex;
-gap:12px;
-align-items:center
-}
-
-.time{
-width:66px;
-font-size:12px;
-color:#71809a;
-font-weight:750
-}
-
-.schedule-box{
-flex:1;
-background:#f7faff;
-border:1px solid #e4edfc;
-border-left:4px solid #1769ff;
-border-radius:14px;
-padding:12px
-}
-
-.schedule-box b{
-font-size:14px
-}
-
-.schedule-box span{
-display:block;
-color:var(--muted);
-font-size:11px;
-margin-top:3px
-}
-
-/* ================= TODO ================= */
-
-.todo-input{
-display:flex;
-gap:8px
-}
-
-.todo-input input{
-flex:1;
-padding:14px;
-border:1px solid var(--line);
-border-radius:15px;
-outline:none;
-background:#fff
-}
-
-.todo-input button{
-width:50px;
-border-radius:15px;
-background:#1769ff;
-color:#fff;
-font-size:22px
-}
-
-.filter{
-display:flex;
-gap:8px;
-overflow:auto;
-margin:15px 0
-}
-
-.filter button{
-white-space:nowrap;
-padding:8px 12px;
-border-radius:12px;
-background:#fff;
-border:1px solid var(--line);
-color:#778197;
-font-size:12px;
-font-weight:750
-}
-
-.filter button.active{
-background:#1769ff;
-color:white;
-border-color:#1769ff
-}
-
-.task{
-display:flex;
-align-items:center;
-gap:12px
-}
-
-.check{
-width:27px;
-height:27px;
-border-radius:9px;
-border:2px solid #cfd8e9;
-background:#fff;
-display:grid;
-place-items:center;
-flex:none
-}
-
-.check.done{
-background:#35b86b;
-border-color:#35b86b;
-color:white
-}
-
-.task-main{
-min-width:0;
-flex:1
-}
-
-.task-title{
-font-weight:800
-}
-
-.task-title.done{
-text-decoration:line-through;
-color:#a0a7b5
-}
-
-.task-meta{
-font-size:12px;
-color:var(--muted);
-margin-top:4px
-}
-
-.tag{
-font-size:10px;
-font-weight:800;
-padding:6px 8px;
-border-radius:9px;
-background:#eef4ff;
-color:#1769ff
-}
-
-.empty{
-text-align:center;
-padding:35px 15px;
-color:var(--muted)
-}
-
-.empty .emoji{
-font-size:42px
-}
-
-/* ================= CALENDAR ================= */
-
-.month{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:14px
-}
-
-.month b{
-font-size:20px
-}
-
-.month button{
-width:36px;
-height:36px;
-border-radius:12px;
-background:#fff;
-border:1px solid var(--line)
-}
-
-.calendar{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:6px
-}
-
-.dayname{
-text-align:center;
-font-size:10px;
-color:#9aa2b3;
-font-weight:800;
-padding:5px
-}
-
-.day{
-min-height:43px;
-border-radius:12px;
-background:#fff;
-border:1px solid var(--line);
-display:grid;
-place-items:center;
-font-size:12px
-}
-
-.day.today{
-background:#1769ff;
-color:white;
-border-color:#1769ff;
-font-weight:850
-}
-
-.day.muted{
-color:#c5cad5;
-background:#fafbfc
-}
-
-/* ================= PROFILE ================= */
-
-.profile-head{
-text-align:center;
-padding:25px 0
-}
-
-.big-avatar{
-width:82px;
-height:82px;
-border-radius:27px;
-margin:auto;
-display:grid;
-place-items:center;
-background:linear-gradient(135deg,#1769ff,#7c5cff);
-color:white;
-font-size:30px;
-font-weight:900;
-box-shadow:0 15px 30px #1769ff30
-}
-
-.profile-head h2{
-margin:12px 0 4px
-}
-
-.profile-head p{
-margin:0;
-color:var(--muted)
-}
-
-.setting{
-display:flex;
-align-items:center;
-gap:13px;
-padding:15px 2px;
-border-bottom:1px solid #eef1f6
-}
-
-.setting:last-child{
-border:0
-}
-
-.setting-icon{
-width:38px;
-height:38px;
-border-radius:12px;
-background:#eef4ff;
-display:grid;
-place-items:center
-}
-
-.setting-main{
-flex:1
-}
-
-.setting-main b{
-font-size:14px
-}
-
-.setting-main span{
-display:block;
-font-size:11px;
-color:var(--muted);
-margin-top:2px
-}
-
-/* ================= BOTTOM NAV ================= */
-
-.bottom-nav{
-position:fixed;
-z-index:30;
-bottom:0;
-left:0;
-right:0;
-height:76px;
-background:rgba(255,255,255,.96);
-border-top:1px solid #e8ecf3;
-display:flex;
-align-items:center;
-justify-content:space-around;
-padding:8px max(12px,env(safe-area-inset-left))
-calc(8px + env(safe-area-inset-bottom));
-backdrop-filter:blur(16px)
-}
-
-.nav-btn{
-background:transparent;
-color:#9aa3b5;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-gap:4px;
-width:66px;
-height:56px;
-border-radius:15px;
-transition:.18s
-}
-
-.nav-btn .ico{
-font-size:21px;
-line-height:1
-}
-
-.nav-btn span{
-font-size:10px;
-font-weight:750
-}
-
-.nav-btn.active{
-color:#1769ff;
-background:#eef5ff
-}
-
-.add-btn{
-width:52px;
-height:52px;
-border-radius:17px;
-background:#1769ff;
-color:#fff;
-font-size:27px;
-box-shadow:0 10px 23px #1769ff3b
-}
-
-.add-btn:active{
-transform:scale(.95)
-}
-
-.loading{
-text-align:center;
-padding:50px 20px;
-color:var(--muted)
-}
-
-.error{
-background:#fff1f1;
-border:1px solid #ffd3d3;
-color:#c33;
-padding:14px;
-border-radius:15px;
-margin:15px 0;
-font-size:13px
-}
-
-@media(min-width:700px){
-
-.bottom-nav{
-left:50%;
-right:auto;
-width:520px;
-transform:translateX(-50%);
-border:1px solid var(--line);
-border-radius:22px 22px 0 0
-}
-
-.page{
-padding-top:28px
-}
-
+@media(prefers-reduced-motion:reduce){
+ *{animation-duration:.001ms !important;transition-duration:.001ms !important}
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= LOGIN ================= -->
+<!-- =========================
+     LOGIN / SIGNUP
+========================= -->
 
-<section id="login">
+<div id="authScreen" class="auth-screen">
 
-<div class="login-card">
+<button
+ class="theme-toggle auth-theme-toggle"
+ id="authThemeToggleBtn"
+ onclick="toggleTheme()"
+ title="Toggle dark mode"
+ aria-label="Toggle dark mode">
+🌙
+</button>
 
-<div class="logo-row">
+<div class="card auth-card">
 
-<div class="logo">P</div>
+<div class="auth-logo">StudyHub</div>
+<p class="auth-subtitle">Your personal study space</p>
 
-<div class="brand">PlanSync</div>
+<!-- LOGIN -->
 
-</div>
+<div id="loginBox">
 
-<div class="login-art">
+<h2 style="margin-bottom:15px">Welcome back 👋</h2>
 
-<div class="mini-phone">
+<div class="auth-form">
 
-<b>Today</b>
-
-<div class="mini-line"></div>
-
-<div class="mini-line w"></div>
-
-<div class="mini-task"></div>
-
-</div>
-
-</div>
-
-<h1>
-Plan your day.<br>
-Stay one step ahead.
-</h1>
-
-<p>
-Your timetable, study plan and to-do list —
-together in one simple space.
-</p>
-
-<div class="field">
-
-<label>Name</label>
-
+<label>
+Username
 <input
-id="loginName"
-type="text"
-placeholder="Enter your name"
->
+ id="loginUsername"
+ autocomplete="username"
+ placeholder="Enter username">
+</label>
+
+<label>
+Password
+<input
+ id="loginPassword"
+ type="password"
+ autocomplete="current-password"
+ placeholder="Enter password">
+</label>
+
+<button class="btn" onclick="login()">Login</button>
 
 </div>
 
-<div class="field">
+<div id="loginMessage" class="auth-message"></div>
 
-<label>Email</label>
+<div class="auth-switch">
+Don't have an account?
+<button class="link-btn" onclick="showSignup()">
+Create account
+</button>
+</div>
 
+</div>
+
+
+<!-- SIGNUP -->
+
+<div id="signupBox" style="display:none">
+
+<h2 style="margin-bottom:15px">Create account 📝</h2>
+
+<div class="auth-form">
+
+<label>
+Username
 <input
-id="loginEmail"
-type="email"
-placeholder="you@example.com"
->
+ id="signupUsername"
+ autocomplete="username"
+ placeholder="Choose a username">
+</label>
 
+<label>
+Password
+<input
+ id="signupPassword"
+ type="password"
+ autocomplete="new-password"
+ placeholder="Choose a password">
+</label>
+
+<label>
+Confirm password
+<input
+ id="signupConfirm"
+ type="password"
+ autocomplete="new-password"
+ placeholder="Enter password again">
+</label>
+
+<button class="btn" onclick="signup()">
+Create account
+</button>
+
+</div>
+
+<div id="signupMessage" class="auth-message"></div>
+
+<div class="auth-switch">
+Already have an account?
+<button class="link-btn" onclick="showLogin()">
+Login
+</button>
+</div>
+
+</div>
+
+<div class="auth-preview">
+<button class="link-btn" onclick="enterGuestPreview()">
+Preview without an account
+</button>
+</div>
+
+</div>
+</div>
+
+
+<!-- =========================
+     MAIN APP
+========================= -->
+
+<div id="studyApp" class="app" style="display:none">
+
+<header>
+
+<div class="logo">
+Study<span>Hub</span>
+</div>
+
+<div class="actions">
+
+<span id="userDisplay" class="small"></span>
+
+<div class="streak-badge" id="streakBadge" title="Current study streak">
+🔥 0
 </div>
 
 <button
-class="primary"
-onclick="login()"
->
-Get Started&nbsp; →
+ class="theme-toggle"
+ id="themeToggleBtn"
+ onclick="toggleTheme()"
+ title="Toggle dark mode"
+ aria-label="Toggle dark mode">
+🌙
 </button>
 
-<div class="demo">
-Your data is securely stored in the cloud.
-</div>
+<button
+ id="logoutBtn"
+ class="btn secondary smallbtn"
+ onclick="logout()">
+Logout
+</button>
+
+<button
+ id="resetDataBtn"
+ class="btn danger smallbtn"
+ onclick="resetData()">
+Reset data
+</button>
+
+<button
+ id="exitPreviewBtn"
+ class="btn secondary smallbtn"
+ style="display:none"
+ onclick="exitGuestPreview()">
+Exit preview
+</button>
 
 </div>
-
-</section>
-
-
-<!-- ================= APP ================= -->
-
-<section id="app" class="hidden">
-
-<header class="topbar">
-
-<div>
-
-<div
-class="top-title"
-id="topTitle"
->
-Home
-</div>
-
-<div
-class="top-sub"
-id="topSub"
->
-Let's organize your day 👋
-</div>
-
-</div>
-
-<div
-class="avatar"
-id="avatar"
->
-P
-</div>
-
 </header>
 
-<main
-id="content"
-class="page"
-></main>
 
-
-<!-- BOTTOM NAV -->
-
-<nav class="bottom-nav">
+<nav>
 
 <button
-class="nav-btn active"
-data-page="home"
-onclick="go('home')"
->
-
-<div class="ico">⌂</div>
-
-<span>Home</span>
-
+ class="active"
+ onclick="showSection('dashboard',this)">
+<span class="nav-icon">🏠</span>
+Dashboard
 </button>
 
-
 <button
-class="nav-btn"
-data-page="calendar"
-onclick="go('calendar')"
->
-
-<div class="ico">▦</div>
-
-<span>Calendar</span>
-
+ onclick="showSection('subjects',this)">
+<span class="nav-icon">📚</span>
+Subjects
 </button>
 
-
-<!-- + NOW OPENS TODO — NO POPUP -->
-
 <button
-class="add-btn"
-onclick="go('todo')"
->
-+
+ onclick="showSection('tasks',this)">
+<span class="nav-icon">✅</span>
+Tasks
 </button>
 
-
 <button
-class="nav-btn"
-data-page="todo"
-onclick="go('todo')"
->
-
-<div class="ico">☑</div>
-
-<span>To-do</span>
-
-</button>
-
-
-<button
-class="nav-btn"
-data-page="profile"
-onclick="go('profile')"
->
-
-<div class="ico">◯</div>
-
-<span>Profile</span>
-
+ onclick="showSection('timer',this)">
+<span class="nav-icon">⏱️</span>
+Timer
 </button>
 
 </nav>
 
-</section>
 
+<!-- DASHBOARD -->
 
-<script>
+<main id="dashboard">
 
-/* =====================================================
-SUPABASE CONNECTION
-===================================================== */
+<div class="hero">
 
-const SUPABASE_URL =
-'https://qpqkpmckvugrrooknzzn.supabase.co';
-
-const SUPABASE_KEY =
-'sb_publishable_yjQXPL_Ye6TBz0NnvsvCfw_zJGDKqVy';
-
-const supabaseClient =
-supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
-
-/* =====================================================
-APP DATA
-===================================================== */
-
-const $ =
-id => document.getElementById(id);
-
-let user = null;
-
-let todos = [];
-
-let current = 'home';
-
-
-/* =====================================================
-LOGIN
-===================================================== */
-
-async function login(){
-
-const name =
-$('loginName').value.trim() || 'Student';
-
-const email =
-$('loginEmail').value.trim().toLowerCase();
-
-if(!email){
-
-alert('Please enter your email.');
-
-return;
-
-}
-
-
-$('loginName').disabled = true;
-$('loginEmail').disabled = true;
-
-
-try{
-
-/*
-Find existing user row.
-*/
-
-const {data:existing,error:findError} =
-await supabaseClient
-.from('test_studyhub')
-.select('id,name,email')
-.eq('email',email)
-.is('todo_text',null)
-.limit(1);
-
-
-if(findError)
-throw findError;
-
-
-/*
-If user doesn't exist,
-create a profile row.
-*/
-
-if(!existing || existing.length === 0){
-
-const {error:insertError} =
-await supabaseClient
-.from('test_studyhub')
-.insert({
-name:name,
-email:email
-});
-
-if(insertError)
-throw insertError;
-
-}
-
-
-/*
-Keep user only in memory.
-NOT localStorage.
-*/
-
-user = {
-name:name,
-email:email
-};
-
-
-await loadTodos();
-
-startApp();
-
-
-}catch(error){
-
-console.error(error);
-
-alert(
-'Could not connect to Supabase.\n\n' +
-(error.message || 'Unknown error')
-);
-
-$('loginName').disabled = false;
-$('loginEmail').disabled = false;
-
-}
-
-}
-
-
-/* =====================================================
-START APP
-===================================================== */
-
-function startApp(){
-
-$('login').classList.add('hidden');
-
-$('app').classList.remove('hidden');
-
-$('avatar').textContent =
-(user?.name || 'P')[0].toUpperCase();
-
-go('home');
-
-}
-
-
-/* =====================================================
-LOAD TODOS FROM SUPABASE
-===================================================== */
-
-async function loadTodos(){
-
-if(!user?.email){
-
-todos = [];
-
-return;
-
-}
-
-
-const {data,error} =
-await supabaseClient
-.from('test_studyhub')
-.select('id,name,email,todo_text,todo_done,todo_time,created_at')
-.eq('email',user.email)
-.not('todo_text','is',null)
-.order('created_at',{ascending:false});
-
-
-if(error){
-
-console.error(error);
-
-throw error;
-
-}
-
-
-todos =
-(data || []).map(row => ({
-
-id:row.id,
-
-text:row.todo_text,
-
-done:row.todo_done || false,
-
-time:row.todo_time || 'Anytime'
-
-}));
-
-}
-
-
-/* =====================================================
-NAVIGATION
-===================================================== */
-
-function go(page){
-
-current = page;
-
-
-document
-.querySelectorAll('.nav-btn')
-.forEach(button => {
-
-button.classList.toggle(
-'active',
-button.dataset.page === page
-);
-
-});
-
-
-const titles = {
-
-home:[
-'Home',
-'Let’s organize your day 👋'
-],
-
-calendar:[
-'Calendar',
-'See your plan at a glance'
-],
-
-todo:[
-'To-do',
-'Keep small tasks moving'
-],
-
-profile:[
-'Profile',
-'Your PlanSync space'
-]
-
-};
-
-
-$('topTitle').textContent =
-titles[page][0];
-
-$('topSub').textContent =
-titles[page][1];
-
-
-if(page === 'home')
-renderHome();
-
-if(page === 'calendar')
-renderCalendar();
-
-if(page === 'todo')
-renderTodo();
-
-if(page === 'profile')
-renderProfile();
-
-}
-
-
-/* =====================================================
-HOME
-===================================================== */
-
-function renderHome(){
-
-const name =
-user?.name || 'Student';
-
-const done =
-todos.filter(x => x.done).length;
-
-
-$('content').innerHTML = `
-
-<section class="hero">
-
-<h2>
-Good day, ${escapeHtml(name)}! 👋
-</h2>
+<h1>Welcome to StudyHub 👋</h1>
 
 <p>
-You have a clear plan.
-Let's get it done one step at a time.
+Stay organized, study consistently, and see your progress.
 </p>
 
-</section>
+</div>
 
 
-<div class="section-head">
+<div class="card streak-card">
 
-<h3>Today</h3>
+<div class="section-title">
+<h2>Study Streak</h2>
+</div>
 
-<button
-class="small-btn"
-onclick="go('todo')"
->
-View to-do
-</button>
+<div class="streak-row">
+
+<div class="streak-count">
+<span id="streakNumber">0</span>
+<span class="streak-count-label">day streak 🔥</span>
+</div>
+
+<label class="streak-check">
+<input
+ type="checkbox"
+ id="streakCheckbox"
+ onchange="toggleStreak()">
+<span>I studied today</span>
+</label>
+
+</div>
+
+<p class="small streak-hint">
+Check this once a day after you study to keep your streak going.
+</p>
 
 </div>
 
 
 <div class="stats">
 
-<div class="stat">
-
-<b>9–5</b>
-
-<span>Class time</span>
-
+<div class="card stat">
+<span class="label">Overall progress</span>
+<b id="overall">0%</b>
 </div>
 
-
-<div class="stat">
-
-<b>${done}</b>
-
-<span>Tasks done</span>
-
+<div class="card stat">
+<span class="label">Topics done</span>
+<b id="topicsDone">0</b>
 </div>
 
+<div class="card stat">
+<span class="label">Tasks done</span>
+<b id="tasksDone">0</b>
+</div>
 
-<div class="stat">
-
-<b>${todos.length}</b>
-
-<span>To-do</span>
-
+<div class="card stat">
+<span class="label">Study time</span>
+<b id="studyTime">0m</b>
 </div>
 
 </div>
 
 
-<div class="section-head">
+<div class="grid">
 
-<h3>Study plan</h3>
+<section class="card">
 
-<span
-style="font-size:11px;color:#8993a8"
->
-Today
-</span>
+<div class="section-title">
 
-</div>
-
-
-<div class="card">
-
-<div class="schedule">
-
-<div class="time">
-9:15 AM
-</div>
-
-<div class="schedule-box">
-
-<b>
-Class / Institution
-</b>
-
-<span>
-9:15 AM – 5:00 PM
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<div class="schedule">
-
-<div class="time">
-6:00 PM
-</div>
-
-<div class="schedule-box">
-
-<b>
-Daily revision
-</b>
-
-<span>
-Review today's class + short recall
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<div class="schedule">
-
-<div class="time">
-8:00 PM
-</div>
-
-<div class="schedule-box">
-
-<b>
-Self-test
-</b>
-
-<span>
-Practice questions from previously studied topics
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="section-head">
-
-<h3>Quick to-do</h3>
+<h2>Subject progress</h2>
 
 <button
-class="small-btn"
-onclick="go('todo')"
->
-＋ Add
+ class="btn smallbtn"
+ onclick="showSection('subjects')">
+Manage
 </button>
 
 </div>
 
+<div id="dashboardSubjects"></div>
 
-${
-todos
-.slice(0,3)
-.map(todoHTML)
-.join('')
-||
-`
-<div class="empty">
+</section>
 
-<div class="emoji">✨</div>
 
-<p>
-No tasks yet.<br>
-Add your first to-do.
+<section class="card">
+
+<div class="section-title">
+<h2>Today's goal</h2>
+</div>
+
+<div class="small">
+Daily study target:
+<b id="goalText">60 min</b>
+</div>
+
+<div class="goal progress">
+<div id="goalBar" style="width:0%"></div>
+</div>
+
+<p class="small" id="goalStatus">
+0 / 60 minutes completed
 </p>
 
-</div>
-`
-}
-
-`;
-
-}
-
-
-/* =====================================================
-TODO CARD
-===================================================== */
-
-function todoHTML(t){
-
-return `
-
-<div class="card">
-
-<div class="task">
-
-<button
-class="check ${t.done ? 'done' : ''}"
-onclick="toggleTodo('${t.id}')"
->
-
-${t.done ? '✓' : ''}
-
-</button>
-
-
-<div class="task-main">
-
-<div
-class="task-title ${t.done ? 'done' : ''}"
->
-
-${escapeHtml(t.text)}
-
-</div>
-
-
-<div class="task-meta">
-
-${escapeHtml(t.time || 'Anytime')}
-
-</div>
-
-</div>
-
-
-<span class="tag">
-
-${t.done ? 'Done' : 'Task'}
-
-</span>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-
-/* =====================================================
-TODO PAGE
-===================================================== */
-
-function renderTodo(){
-
-$('content').innerHTML = `
-
-<div class="todo-input">
+<div class="form">
 
 <input
-id="newTodo"
-placeholder="What needs to be done?"
-onkeydown="if(event.key==='Enter') addTodo()"
->
+ id="goalInput"
+ type="number"
+ min="1"
+ placeholder="Set minutes">
 
-<button
-onclick="addTodo()"
->
-+
+<button class="btn" onclick="setGoal()">
+Save
 </button>
 
 </div>
 
+</section>
 
-<div class="filter">
+</div>
 
-<button
-class="active"
-onclick="filterTodos('all',this)"
->
-All
+</main>
+
+
+<!-- SUBJECTS -->
+
+<section id="subjects" style="display:none">
+
+<div class="card">
+
+<div class="section-title">
+<h2>Subjects & topics</h2>
+</div>
+
+<div class="form">
+
+<input
+ id="subjectInput"
+ placeholder="e.g. Mathematics">
+
+<button class="btn" onclick="addSubject()">
+Add
 </button>
 
+</div>
 
-<button
-onclick="filterTodos('open',this)"
->
-Open
+<div id="subjectList"></div>
+
+</div>
+
+</section>
+
+
+<!-- TASKS -->
+
+<section id="tasks" style="display:none">
+
+<div class="card">
+
+<div class="section-title">
+<h2>Tasks & homework</h2>
+</div>
+
+<div class="form">
+
+<input
+ id="taskInput"
+ placeholder="e.g. Finish science assignment">
+
+<button class="btn" onclick="addTask()">
+Add
 </button>
 
+</div>
 
-<button
-onclick="filterTodos('done',this)"
->
-Completed
-</button>
+<div id="taskList"></div>
 
 </div>
 
+</section>
 
-<div id="todoList">
 
-${
-todos
-.map(todoHTML)
-.join('')
-||
-`
-<div class="empty">
+<!-- TIMER -->
 
-<div class="emoji">
-📝
+<section id="timer" style="display:none">
+
+<div class="card timer">
+
+<h2>Study Timer</h2>
+
+<div class="timer-display" id="timerDisplay">
+25:00
 </div>
 
-<p>
-Your to-do list is empty.
-</p>
-
-</div>
-`
-}
-
-</div>
-
-`;
-
-}
-
-
-/* =====================================================
-TODO FILTER
-===================================================== */
-
-function filterTodos(type,btn){
-
-document
-.querySelectorAll('.filter button')
-.forEach(x =>
-x.classList.remove('active')
-);
-
-btn.classList.add('active');
-
-
-let arr;
-
-
-if(type === 'done'){
-
-arr =
-todos.filter(x => x.done);
-
-}
-
-else if(type === 'open'){
-
-arr =
-todos.filter(x => !x.done);
-
-}
-
-else{
-
-arr = todos;
-
-}
-
-
-$('todoList').innerHTML =
-
-arr
-.map(todoHTML)
-.join('')
-
-||
-
-`
-<div class="empty">
-
-<div class="emoji">✨</div>
-
-<p>Nothing here.</p>
-
-</div>
-`;
-
-}
-
-
-/* =====================================================
-ADD TODO → SUPABASE
-===================================================== */
-
-async function addTodo(){
-
-const input =
-$('newTodo');
-
-if(!input || !input.value.trim())
-return;
-
-
-if(!user?.email){
-
-alert('Please log in first.');
-
-return;
-
-}
-
-
-const text =
-input.value.trim();
-
-
-const {data,error} =
-await supabaseClient
-.from('test_studyhub')
-.insert({
-
-name:user.name,
-
-email:user.email,
-
-todo_text:text,
-
-todo_done:false,
-
-todo_time:'Added just now'
-
-})
-.select()
-.single();
-
-
-if(error){
-
-console.error(error);
-
-alert(
-'Could not save task.\n\n' +
-error.message
-);
-
-return;
-
-}
-
-
-/*
-Add returned Supabase row
-to the current screen.
-*/
-
-todos.unshift({
-
-id:data.id,
-
-text:data.todo_text,
-
-done:data.todo_done,
-
-time:data.todo_time
-
-});
-
-
-input.value='';
-
-renderTodo();
-
-}
-
-
-/* =====================================================
-TOGGLE TODO → SUPABASE
-===================================================== */
-
-async function toggleTodo(id){
-
-const t =
-todos.find(x => x.id === id);
-
-if(!t)
-return;
-
-
-const newStatus =
-!t.done;
-
-
-const {error} =
-await supabaseClient
-.from('test_studyhub')
-.update({
-
-todo_done:newStatus
-
-})
-.eq('id',id)
-.eq('email',user.email);
-
-
-if(error){
-
-console.error(error);
-
-alert(
-'Could not update task.\n\n' +
-error.message
-);
-
-return;
-
-}
-
-
-t.done =
-newStatus;
-
-
-if(current === 'todo')
-renderTodo();
-
-else
-renderHome();
-
-}
-
-
-/* =====================================================
-CALENDAR
-===================================================== */
-
-function renderCalendar(){
-
-const d =
-new Date();
-
-const y =
-d.getFullYear();
-
-const m =
-d.getMonth();
-
-const today =
-d.getDate();
-
-const first =
-new Date(y,m,1).getDay();
-
-const days =
-new Date(y,m+1,0).getDate();
-
-
-const names =
-[
-'Sun',
-'Mon',
-'Tue',
-'Wed',
-'Thu',
-'Fri',
-'Sat'
-];
-
-
-let cells =
-names.map(x =>
-
-`
-<div class="dayname">
-${x}
-</div>
-`
-
-).join('');
-
-
-for(
-let i=0;
-i<first;
-i++
-){
-
-cells +=
-`
-<div class="day muted"></div>
-`;
-
-}
-
-
-for(
-let i=1;
-i<=days;
-i++
-){
-
-cells +=
-`
 <div
-class="day ${i === today ? 'today' : ''}"
->
-${i}
-</div>
-`;
+ class="actions"
+ style="justify-content:center">
 
-}
-
-
-$('content').innerHTML = `
-
-<div class="month">
-
-<button
-onclick="alert('Month navigation can be added next')"
->
-‹
+<button class="btn" onclick="startTimer()">
+Start
 </button>
 
+<button class="btn secondary" onclick="pauseTimer()">
+Pause
+</button>
 
-<b>
-${d.toLocaleString(
-'en',
-{
-month:'long',
-year:'numeric'
-}
-)}
-</b>
-
-
-<button
-onclick="alert('Month navigation can be added next')"
->
-›
+<button class="btn danger" onclick="resetTimer()">
+Reset
 </button>
 
 </div>
 
-
-<div class="calendar">
-
-${cells}
-
-</div>
-
-
-<div class="section-head">
-
-<h3>
-Today's plan
-</h3>
-
-</div>
-
-
-<div class="card">
-
-<div class="schedule">
-
-<div class="time">
-9:15
-</div>
-
-<div class="schedule-box">
-
-<b>Class</b>
-
-<span>
-9:15 AM – 5:00 PM
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<div class="schedule">
-
-<div class="time">
-6:00
-</div>
-
-<div class="schedule-box">
-
-<b>Revision</b>
-
-<span>
-Review today's class
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-
-/* =====================================================
-PROFILE
-===================================================== */
-
-function renderProfile(){
-
-const name =
-user?.name || 'Student';
-
-
-$('content').innerHTML = `
-
-<div class="profile-head">
-
-<div class="big-avatar">
-
-${escapeHtml(
-name[0].toUpperCase()
-)}
-
-</div>
-
-
-<h2>
-${escapeHtml(name)}
-</h2>
-
-
-<p>
-${escapeHtml(
-user?.email || ''
-)}
+<p class="small">
+When you complete a timer session,
+the study time is added to your total.
 </p>
 
 </div>
 
-
-<div class="card">
-
-
-<div class="setting">
-
-<div class="setting-icon">
-🎨
-</div>
+</section>
 
 
-<div class="setting-main">
-
-<b>
-Modern blue theme
-</b>
-
-<span>
-Clean PlanSync interface
-</span>
-
-</div>
+<footer>
+StudyHub V3 • Cloud account enabled
+</footer>
 
 </div>
 
 
-<div class="setting">
+<script>
 
-<div class="setting-icon">
-☁
-</div>
+/* =========================
+   SUPABASE
+========================= */
 
+const SUPABASE_URL =
+"https://qpqkpmckvugrrooknzzn.supabase.co";
 
-<div class="setting-main">
+const SUPABASE_KEY =
+"sb_publishable_yjQXPL_Ye6TBz0NnvsvCfw_zJGDKqVy";
 
-<b>
-Cloud data</b>
-
-<span>
-Your tasks are stored in Supabase
-</span>
-
-</div>
-
-</div>
-
-
-<div class="setting">
-
-<div class="setting-icon">
-↪
-</div>
-
-
-<div class="setting-main">
-
-<b>
-Log out
-</b>
-
-<span>
-Return to the login screen
-</span>
-
-</div>
-
-
-<button
-class="small-btn"
-onclick="logout()"
->
-Log out
-</button>
-
-</div>
-
-
-</div>
-
-`;
-
-}
-
-
-/* =====================================================
-LOGOUT
-===================================================== */
-
-function logout(){
-
-/*
-No localStorage is used.
-Just return to login.
-*/
-
-user = null;
-
-todos = [];
-
-$('app').classList.add('hidden');
-
-$('login').classList.remove('hidden');
-
-$('loginName').value='';
-$('loginEmail').value='';
-
-}
-
-
-/* =====================================================
-HTML ESCAPE
-===================================================== */
-
-function escapeHtml(s){
-
-return String(s)
-.replace(
-/[&<>"']/g,
-m =>
-({
-'&':'&amp;',
-'<':'&lt;',
-'>':'&gt;',
-'"':'&quot;',
-"'":'&#039;'
-}[m])
+const supabaseClient =
+window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY
 );
 
+
+/* =========================
+   APP DATA
+========================= */
+
+let data = {
+ subjects: [],
+ tasks: [],
+ studyMinutes: 0,
+ dailyGoal: 60,
+ streak: 0,
+ lastStudyDate: null
+};
+
+let timerSeconds = 1500;
+let timerInterval = null;
+
+
+/* =========================
+   THEME (DARK MODE)
+========================= */
+
+function applyTheme(theme){
+
+ if(theme==="dark"){
+
+  document.documentElement.setAttribute(
+   "data-theme","dark"
+  );
+
+ }else{
+
+  document.documentElement.removeAttribute(
+   "data-theme"
+  );
+
+ }
+
+
+ const icon =
+  theme==="dark" ? "☀️" : "🌙";
+
+ const mainBtn=
+  document.getElementById("themeToggleBtn");
+
+ const authBtn=
+  document.getElementById("authThemeToggleBtn");
+
+ if(mainBtn) mainBtn.textContent=icon;
+
+ if(authBtn) authBtn.textContent=icon;
+
 }
 
-</script>
 
-</body>
-</html>
+function toggleTheme(){
+
+ const current =
+  document.documentElement.getAttribute("data-theme")==="dark"
+   ? "dark"
+   : "light";
+
+ const next =
+  current==="dark" ? "light" : "dark";
+
+ applyTheme(next);
+
+ try{
+
+  localStorage.setItem("studyhub_theme",next);
+
+ }catch(e){
+
+  console.warn("Could not persist theme preference.");
+
+ }
+
+}
+
+
+function initTheme(){
+
+ let saved=null;
+
+ try{
+
+  saved=localStorage.getItem("studyhub_theme");
+
+ }catch(e){
+
+  saved=null;
+
+ }
+
+
+ if(!saved){
+
+  saved=
+   (window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches)
+   ? "dark"
+   : "light";
+
+ }
+
+
+ applyTheme(saved);
+
+}
+
+
+/* =========================
+   AUTH UI
+========================= */
+
+function showSignup(){
+
+ document.getElementById("loginBox").style.display="none";
+
+ document.getElementById("signupBox").style.display="block";
+
+ clearMessages();
+}
+
+
+function showLogin(){
+
+ document.getElementById("signupBox").style.display="none";
+
+ document.getElementById("loginBox").style.display="block";
+
+ clearMessages();
+}
+
+
+function clearMessages(){
+
+ document.getElementById("loginMessage").textContent="";
+
+ document.getElementById("signupMessage").textContent="";
+
+ document.getElementById("loginMessage").className="auth-message";
+
+ document.getElementById("signupMessage").className="auth-message";
+}
+
+
+function showError(element,message){
+
+ element.textContent=message;
+ element.className="auth-message message-error";
+}
+
+
+function showSuccess(element,message){
+
+ element.textContent=message;
+ element.className="auth-message message-success";
+}
+
+
+/* =========================
+   USERNAME → EMAIL
+========================= */
+
+function usernameToEmail(username){
+
+ return username
+  .trim()
+  .toLowerCase()
+  .replace(/\s+/g,"")
+  +"@studyhub.local";
+}
+
+
+/* =========================
+   SIGN UP
+========================= */
+
+async function signup(){
+
+ const username =
+  document.getElementById("signupUsername")
+  .value.trim();
+
+ const password =
+  document.getElementById("signupPassword")
+  .value;
+
+ const confirm =
+  document.getElementById("signupConfirm")
+  .value;
+
+ const message =
+  document.getElementById("signupMessage");
+
+
+ if(username.length < 3){
+
+  showError(
+   message,
+   "Username must be at least 3 characters."
+  );
+
+  return;
+ }
+
+
+ if(!/^[a-zA-Z0-9_]+$/.test(username)){
+
+  showError(
+   message,
+   "Use only letters, numbers and _"
+  );
+
+  return;
+ }
+
+
+ if(password.length < 6){
+
+  showError(
+   message,
+   "Password must be at least 6 characters."
+  );
+
+  return;
+ }
+
+
+ if(password !== confirm){
+
+  showError(
+   message,
+   "Passwords do not match."
+  );
+
+  return;
+ }
+
+
+ message.className="auth-message";
+ message.textContent="Creating account...";
+
+
+ const email =
+  usernameToEmail(username);
+
+
+ try{
+
+  const result =
+   await supabaseClient.auth.signUp({
+
+    email:email,
+
+    password:password,
+
+    options:{
+     data:{
+      username:username
+     }
+    }
+
+   });
+
+
+  if(result.error){
+
+   console.error(result.error);
+
+   showError(
+    message,
+    result.error.message
+   );
+
+   return;
+  }
+
+
+  if(!result.data.user){
+
+   showError(
+    message,
+    "Account could not be created."
+   );
+
+   return;
+  }
+
+
+  /*
+   Supabase may return a user without
+   a session when email confirmation
+   is enabled.
+  */
+
+  if(!result.data.session){
+
+   showError(
+    message,
+    "Account created, but email confirmation is enabled in Supabase. Turn OFF 'Confirm email' in Supabase Authentication settings, then try again."
+   );
+
+   return;
+  }
+
+
+  data={
+   subjects:[],
+   tasks:[],
+   studyMinutes:0,
+   dailyGoal:60,
+   streak:0,
+   lastStudyDate:null
+  };
+
+
+  await saveCloudData();
+
+
+  showSuccess(
+   message,
+   "Account created! Opening StudyHub..."
+  );
+
+
+  setTimeout(function(){
+
+   enterApp(username);
+
+  },500);
+
+
+ }catch(error){
+
+  console.error(error);
+
+  showError(
+   message,
+   "Something went wrong. Please try again."
+  );
+
+ }
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+async function login(){
+
+ const username =
+  document.getElementById("loginUsername")
+  .value.trim();
+
+ const password =
+  document.getElementById("loginPassword")
+  .value;
+
+ const message =
+  document.getElementById("loginMessage");
+
+
+ if(!username || !password){
+
+  showError(
+   message,
+   "Enter username and password."
+  );
+
+  return;
+ }
+
+
+ message.className="auth-message";
+ message.textContent="Logging in...";
+
+
+ const email =
+  usernameToEmail(username);
+
+
+ try{
+
+  const result =
+   await supabaseClient.auth.signInWithPassword({
+
+    email:email,
+
+    password:password
+
+   });
+
+
+  if(result.error){
+
+   console.error(result.error);
+
+   showError(
+    message,
+    result.error.message
+   );
+
+   return;
+  }
+
+
+  if(result.data.user){
+
+   await loadCloudData();
+
+   showSuccess(
+    message,
+    "Login successful!"
+   );
+
+   enterApp(username);
+
+  }
+
+
+ }catch(error){
+
+  console.error(error);
+
+  showError(
+   message,
+   "Something went wrong. Please try again."
+  );
+
+ }
+
+}
+
+
+/* =========================
+   ENTER APP
+========================= */
+
+function enterApp(username){
+
+ document.getElementById("authScreen")
+  .style.display="none";
+
+ document.getElementById("studyApp")
+  .style.display="block";
+
+ document.getElementById("userDisplay")
+  .textContent="@"+username;
+
+ render();
+
+ updateTimer();
+
+}
+
+
+/* =========================
+   GUEST PREVIEW
+   (local only — no Supabase
+   account required, no cloud
+   data is read or written)
+========================= */
+
+let isGuest=false;
+
+
+function enterGuestPreview(){
+
+ isGuest=true;
+
+ data={
+  subjects:[],
+  tasks:[],
+  studyMinutes:0,
+  dailyGoal:60,
+  streak:0,
+  lastStudyDate:null
+ };
+
+ document.getElementById("authScreen")
+  .style.display="none";
+
+ document.getElementById("studyApp")
+  .style.display="block";
+
+ document.getElementById("userDisplay")
+  .textContent="Preview mode (not saved)";
+
+ document.getElementById("logoutBtn")
+  .style.display="none";
+
+ document.getElementById("resetDataBtn")
+  .style.display="none";
+
+ document.getElementById("exitPreviewBtn")
+  .style.display="inline-flex";
+
+ render();
+
+ updateTimer();
+
+}
+
+
+function exitGuestPreview(){
+
+ isGuest=false;
+
+ data={
+  subjects:[],
+  tasks:[],
+  studyMinutes:0,
+  dailyGoal:60,
+  streak:0,
+  lastStudyDate:null
+ };
+
+ document.getElementById("studyApp")
+  .style.display="none";
+
+ document.getElementById("authScreen")
+  .style.display="flex";
+
+ document.getElementById("logoutBtn")
+  .style.display="inline-flex";
+
+ document.getElementById("resetDataBtn")
+  .style.display="inline-flex";
+
+ document.getElementById("exitPreviewBtn")
+  .style.display="none";
+
+ showLogin();
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+async function logout(){
+
+ await supabaseClient.auth.signOut();
+
+ data={
+  subjects:[],
+  tasks:[],
+  studyMinutes:0,
+  dailyGoal:60,
+  streak:0,
+  lastStudyDate:null
+ };
+
+ document.getElementById("studyApp")
+  .style.display="none";
+
+ document.getElementById("authScreen")
+  .style.display="flex";
+
+ document.getElementById("loginUsername").value="";
+
+ document.getElementById("loginPassword").value="";
+
+ showLogin();
+
+}
+
+
+/* =========================
+   SESSION CHECK
+========================= */
+
+async function checkSession(){
+
+ try{
+
+  const result =
+   await supabaseClient.auth.getSession();
+
+  if(result.data.session){
+
+   const user =
+    result.data.session.user;
+
+   const username =
+    user.user_metadata?.username
+    ||user.email.split("@")[0];
+
+   await loadCloudData();
+
+   enterApp(username);
+
+  }else{
+
+   document.getElementById("authScreen")
+    .style.display="flex";
+
+   document.getElementById("studyApp")
+    .style.display="none";
+
+  }
+
+ }catch(error){
+
+  console.error(error);
+
+ }
+
+}
+
+
+/* =========================
+   CLOUD SAVE
+========================= */
+
+async function saveCloudData(){
+
+ const result =
+  await supabaseClient.auth.getUser();
+
+ const user=result.data.user;
+
+ if(!user){
+
+  console.warn("No logged-in user.");
+
+  return false;
+ }
+
+
+ const response =
+  await supabaseClient
+   .from("studyhub_data")
+   .upsert({
+
+    id:user.id,
+
+    data:data,
+
+    updated_at:
+     new Date().toISOString()
+
+   });
+
+
+ if(response.error){
+
+  console.error(
+   "Cloud save error:",
+   response.error
+  );
+
+  alert(
+   "Could not save your StudyHub data. Check Supabase RLS policies."
+  );
+
+  return false;
+ }
+
+
+ return true;
+
+}
+
+
+/* =========================
+   CLOUD LOAD
+========================= */
+
+async function loadCloudData(){
+
+ const result =
+  await supabaseClient.auth.getUser();
+
+ const user=result.data.user;
+
+ if(!user)return;
+
+
+ const response =
+  await supabaseClient
+   .from("studyhub_data")
+   .select("data")
+   .eq("id",user.id)
+   .maybeSingle();
+
+
+ if(response.error){
+
+  console.error(
+   "Cloud load error:",
+   response.error
+  );
+
+  alert(
+   "Could not load your StudyHub data. Check Supabase RLS policies."
+  );
+
+  return;
+ }
+
+
+ if(response.data && response.data.data){
+
+  data=response.data.data;
+
+  if(typeof data.streak!=="number") data.streak=0;
+
+  if(!("lastStudyDate" in data)) data.lastStudyDate=null;
+
+ }else{
+
+  data={
+   subjects:[],
+   tasks:[],
+   studyMinutes:0,
+   dailyGoal:60,
+   streak:0,
+   lastStudyDate:null
+  };
+
+  await saveCloudData();
+
+ }
+
+
+ render();
+
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+async function save(){
+
+ await saveCloudData();
+
+ render();
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function esc(s){
+
+ return String(s).replace(
+  /[&<>"']/g,
+  function(m){
+
+   return {
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+   }[m];
+
+  }
+ );
+
+}
+
+
+/* =========================
+   TOTALS
+========================= */
+
+function totals(){
+
+ const topics =
+  data.subjects.flatMap(
+   function(s){
+    return s.topics || [];
+   }
+  );
+
+ const done =
+  topics.filter(
+   function(t){
+    return t.done;
+   }
+  ).length;
+
+ const tasksDone =
+  data.tasks.filter(
+   function(t){
+    return t.done;
+   }
+  ).length;
+
+ const total =
+  topics.length
+  ?Math.round(
+    done/topics.length*100
+   )
+  :0;
+
+ return{
+  topics:topics,
+  done:done,
+  tasksDone:tasksDone,
+  total:total
+ };
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+ const t=totals();
+
+ document.getElementById("overall")
+  .textContent=t.total+"%";
+
+ document.getElementById("topicsDone")
+  .textContent=t.done;
+
+ document.getElementById("tasksDone")
+  .textContent=t.tasksDone;
+
+ document.getElementById("studyTime")
+  .textContent=formatMinutes(
+   data.studyMinutes
+  );
+
+ document.getElementById("goalText")
+  .textContent=data.dailyGoal+" min";
+
+
+ const pct =
+  data.dailyGoal > 0
+  ?Math.min(
+   100,
+   Math.round(
+    data.studyMinutes/
+    data.dailyGoal*100
+   )
+  )
+  :0;
+
+
+ document.getElementById("goalBar")
+  .style.width=pct+"%";
+
+
+ document.getElementById("goalStatus")
+  .textContent=
+   Math.min(
+    data.studyMinutes,
+    data.dailyGoal
+   )
+   +" / "
+   +data.dailyGoal
+   +" minutes completed";
+
+
+ renderDashboardSubjects();
+
+ renderSubjects();
+
+ renderTasks();
+
+ renderStreak();
+
+}
+
+
+/* =========================
+   STREAK
+========================= */
+
+function todayStr(){
+
+ return new Date().toISOString().slice(0,10);
+
+}
+
+
+function yesterdayStr(){
+
+ const d=new Date();
+
+ d.setDate(d.getDate()-1);
+
+ return d.toISOString().slice(0,10);
+
+}
+
+
+function renderStreak(){
+
+ const streak=data.streak || 0;
+
+ const badge=
+  document.getElementById("streakBadge");
+
+ if(badge)
+  badge.textContent="🔥 "+streak;
+
+
+ const numEl=
+  document.getElementById("streakNumber");
+
+ if(numEl)
+  numEl.textContent=streak;
+
+
+ const box=
+  document.getElementById("streakCheckbox");
+
+ if(box)
+  box.checked=
+   data.lastStudyDate===todayStr();
+
+}
+
+
+async function toggleStreak(){
+
+ const box=
+  document.getElementById("streakCheckbox");
+
+ const today=todayStr();
+
+
+ if(box.checked){
+
+  if(data.lastStudyDate!==today){
+
+   if(data.lastStudyDate===yesterdayStr()){
+
+    data.streak=(data.streak || 0)+1;
+
+   }else{
+
+    data.streak=1;
+
+   }
+
+   data.lastStudyDate=today;
+
+  }
+
+ }else{
+
+  if(data.lastStudyDate===today){
+
+   data.streak=
+    Math.max(0,(data.streak || 0)-1);
+
+   data.lastStudyDate=null;
+
+  }
+
+ }
+
+
+ await save();
+
+}
+
+
+/* =========================
+   FORMAT MINUTES
+========================= */
+
+function formatMinutes(m){
+
+ const h=Math.floor(m/60);
+
+ const min=m%60;
+
+ return h
+  ?h+"h "+min+"m"
+  :min+"m";
+
+}
+
+
+/* =========================
+   DASHBOARD SUBJECTS
+========================= */
+
+function renderDashboardSubjects(){
+
+ const el=
+  document.getElementById(
+   "dashboardSubjects"
+  );
+
+
+ if(!data.subjects.length){
+
+  el.innerHTML=
+   '<div class="empty">No subjects yet.</div>';
+
+  return;
+ }
+
+
+ el.innerHTML=
+  data.subjects.map(
+   function(s){
+
+    const topics=s.topics || [];
+
+    const done=
+     topics.filter(
+      function(t){
+       return t.done;
+      }
+     ).length;
+
+    const total=topics.length;
+
+    const pct=
+     total
+     ?Math.round(done/total*100)
+     :0;
+
+
+    return `
+    <div class="subject">
+
+     <div class="row">
+
+      <b>${esc(s.name)}</b>
+
+      <span class="small">
+       ${done}/${total} • ${pct}%
+      </span>
+
+     </div>
+
+     <div
+      class="progress"
+      style="margin-top:8px">
+
+      <div style="width:${pct}%"></div>
+
+     </div>
+
+    </div>
+    `;
+
+   }
+  ).join("");
+
+}
+
+
+/* =========================
+   SUBJECTS
+========================= */
+
+function renderSubjects(){
+
+ const el=
+  document.getElementById(
+   "subjectList"
+  );
+
+
+ if(!data.subjects.length){
+
+  el.innerHTML=
+   '<div class="empty">Add your first subject above.</div>';
+
+  return;
+ }
+
+
+ el.innerHTML=
+  data.subjects.map(
+   function(s){
+
+    const topics=s.topics || [];
+
+    const done=
+     topics.filter(
+      function(t){
+       return t.done;
+      }
+     ).length;
+
+    const total=topics.length;
+
+    const pct=
+     total
+     ?Math.round(done/total*100)
+     :0;
+
+
+    return `
+    <div class="subject">
+
+     <div class="row">
+
+      <div>
+
+       <b>${esc(s.name)}</b>
+
+       <div class="small">
+        ${done}/${total} topics completed
+       </div>
+
+      </div>
+
+      <button
+       class="btn danger smallbtn"
+       onclick="deleteSubject(${s.id})">
+       Delete
+      </button>
+
+     </div>
+
+
+     <div
+      class="progress"
+      style="margin:9px 0">
+
+      <div style="width:${pct}%"></div>
+
+     </div>
+
+
+     ${topics.map(
+      function(t){
+
+       return `
+       <div
+        class="task ${t.done?"done":""}">
+
+        <input
+         type="checkbox"
+         ${t.done?"checked":""}
+         onchange="toggleTopic(${s.id},${t.id})">
+
+        <span style="flex:1">
+         ${esc(t.name)}
+        </span>
+
+        <button
+         class="btn danger smallbtn"
+         onclick="deleteTopic(${s.id},${t.id})">
+         ×
+        </button>
+
+       </div>
+       `;
+
+      }
+     ).join("")}
+
+
+     <div class="form">
+
+      <input
+       id="topic-${s.id}"
+       placeholder="Add a chapter/topic">
+
+      <button
+       class="btn smallbtn"
+       onclick="addTopic(${s.id})">
+       Add topic
+      </button>
+
+     </div>
+
+    </div>
+    `;
+
+   }
+  ).join("");
+
+}
+
+
+/* =========================
+   ADD SUBJECT
+========================= */
+
+async function addSubject(){
+
+ const input =
+  document.getElementById(
+   "subjectInput"
+  );
+
+ const name=input.value.trim();
+
+ if(!name)return;
+
+
+ data.subjects.push({
+
+  id:Date.now(),
+
+  name:name,
+
+  topics:[]
+
+ });
+
+
+ input.value="";
+
+ await save();
+
+}
+
+
+/* =========================
+   DELETE SUBJECT
+========================= */
+
+async function deleteSubject(id){
+
+ if(!confirm(
+  "Delete this subject and its topics?"
+ ))return;
+
+
+ data.subjects=
+  data.subjects.filter(
+   function(s){
+    return s.id!==id;
+   }
+  );
+
+
+ await save();
+
+}
+
+
+/* =========================
+   ADD TOPIC
+========================= */
+
+async function addTopic(id){
+
+ const input=
+  document.getElementById(
+   "topic-"+id
+  );
+
+ const name=input.value.trim();
+
+ if(!name)return;
+
+
+ const subject=
+  data.subjects.find(
+   function(s){
+    return s.id===id;
+   }
+  );
+
+
+ if(!subject)return;
+
+
+ if(!subject.topics)
+  subject.topics=[];
+
+
+ subject.topics.push({
+
+  id:Date.now(),
+
+  name:name,
+
+  done:false
+
+ });
+
+
+ input.value="";
+
+ await save();
+
+}
+
+
+/* =========================
+   TOGGLE TOPIC
+========================= */
+
+async function toggleTopic(sid,tid){
+
+ const subject=
+  data.subjects.find(
+   function(s){
+    return s.id===sid;
+   }
+  );
+
+ if(!subject)return;
+
+
+ const topic=
+  subject.topics.find(
+   function(t){
+    return t.id===tid;
+   }
+  );
+
+ if(!topic)return;
+
+
+ topic.done=!topic.done;
+
+ await save();
+
+}
+
+
+/* =========================
+   DELETE TOPIC
+========================= */
+
+async function deleteTopic(sid,tid){
+
+ const subject=
+  data.subjects.find(
+   function(s){
+    return s.id===sid;
+   }
+  );
+
+ if(!subject)return;
+
+
+ subject.topics=
+  subject.topics.filter(
+   function(t){
+    return t.id!==tid;
+   }
+  );
+
+
+ await save();
+
+}
+
+
+/* =========================
+   TASKS
+========================= */
+
+function renderTasks(){
+
+ const el=
+  document.getElementById(
+   "taskList"
+  );
+
+
+ if(!data.tasks.length){
+
+  el.innerHTML=
+   '<div class="empty">No tasks yet. Add homework or revision above.</div>';
+
+  return;
+ }
+
+
+ el.innerHTML=
+  data.tasks.map(
+   function(t){
+
+    return `
+    <div
+     class="task ${t.done?"done":""}">
+
+     <input
+      type="checkbox"
+      ${t.done?"checked":""}
+      onchange="toggleTask(${t.id})">
+
+     <span style="flex:1">
+      ${esc(t.name)}
+     </span>
+
+     <button
+      class="btn danger smallbtn"
+      onclick="deleteTask(${t.id})">
+      Delete
+     </button>
+
+    </div>
+    `;
+
+   }
+  ).join("");
+
+}
+
+
+/* =========================
+   ADD TASK
+========================= */
+
+async function addTask(){
+
+ const input=
+  document.getElementById(
+   "taskInput"
+  );
+
+ const name=input.value.trim();
+
+ if(!name)return;
+
+
+ data.tasks.push({
+
+  id:Date.now(),
+
+  name:name,
+
+  done:false
+
+ });
+
+
+ input.value="";
+
+ await save();
+
+}
+
+
+/* =========================
+   TOGGLE TASK
+========================= */
+
+async function toggleTask(id){
+
+ const task=
+  data.tasks.find(
+   function(t){
+    return t.id===id;
+   }
+  );
+
+ if(!task)return;
+
+
+ task.done=!task.done;
+
+ await save();
+
+}
+
+
+/* =========================
+   DELETE TASK
+========================= */
+
+async function deleteTask(id){
+
+ data.tasks=
+  data.tasks.filter(
+   function(t){
+    return t.id!==id;
+   }
+  );
+
+
+ await save();
+
+}
+
+
+/* =========================
+   DAILY GOAL
+========================= */
+
+async function setGoal(){
+
+ const input=
+  document.getElementById(
+   "goalInput"
+  );
+
+ const value=
+  parseInt(input.value,10);
+
+
+ if(!value || value<1)return;
+
+
+ data.dailyGoal=value;
+
+ input.value="";
+
+ await save();
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showSection(id,
