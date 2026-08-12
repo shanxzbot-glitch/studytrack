@@ -111,33 +111,54 @@ header {
 .header-right {
  display: flex;
  align-items: center;
- gap: 12px;
+ gap: 10px;
 }
 
-.profile-btn {
- width: 46px;
- height: 46px;
- border-radius: 50%;
+/* Aligned Header User Card */
+.header-user-badge {
+ display: flex;
+ align-items: center;
+ gap: 10px;
  background: var(--card-bg);
  border: 1px solid var(--card-border);
- color: var(--text);
+ padding: 5px 14px 5px 6px;
+ border-radius: 30px;
+ cursor: pointer;
+ box-shadow: 0 2px 8px var(--card-shadow);
+ transition: all 0.2s ease;
+}
+
+.header-user-badge:hover {
+ border-color: var(--accent);
+ transform: translateY(-1px);
+}
+
+.header-avatar {
+ width: 36px;
+ height: 36px;
+ border-radius: 50%;
+ overflow: hidden;
  display: flex;
  align-items: center;
  justify-content: center;
- box-shadow: 0 2px 8px var(--card-shadow);
- position: relative;
- overflow: hidden;
- padding: 0;
+ flex-shrink: 0;
+ background: var(--accent-soft);
 }
 
-.profile-btn:hover {
- border-color: var(--accent);
-}
-
-.profile-btn svg, .profile-btn img {
+.header-avatar svg {
  width: 100%;
  height: 100%;
  object-fit: cover;
+}
+
+.header-name {
+ font-size: 14px;
+ font-weight: 700;
+ color: var(--text);
+ white-space: nowrap;
+ max-width: 120px;
+ overflow: hidden;
+ text-overflow: ellipsis;
 }
 
 .card {
@@ -619,7 +640,7 @@ nav button.active {
  color: var(--accent);
 }
 
-/* Profile Modal & Avatar Grid */
+/* Modal Profile Card Alignment */
 .modal-overlay {
  position: fixed;
  top: 0;
@@ -681,6 +702,45 @@ nav button.active {
  align-items: center;
  justify-content: center;
  font-weight: 700;
+}
+
+.modal-profile-card {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ text-align: center;
+ padding: 18px;
+ background: var(--bg);
+ border-radius: 20px;
+ margin-bottom: 20px;
+ gap: 12px;
+}
+
+.modal-avatar-preview {
+ width: 68px;
+ height: 68px;
+ border-radius: 50%;
+ overflow: hidden;
+ border: 3px solid var(--accent);
+ background: var(--card-bg);
+ box-shadow: 0 4px 12px var(--card-shadow);
+}
+
+.modal-avatar-preview svg {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+}
+
+.modal-profile-info {
+ width: 100%;
+}
+
+.modal-profile-info input {
+ text-align: center;
+ font-weight: 700;
+ font-size: 16px;
+ margin-top: 6px;
 }
 
 .avatar-selector-title {
@@ -848,7 +908,7 @@ footer {
  .hero { padding: 20px; }
  .hero h1 { font-size: 22px; }
  .card { padding: 18px; border-radius: 20px; }
- #userDisplay { display: none; }
+ .header-name { max-width: 80px; }
 }
 </style>
 </head>
@@ -924,10 +984,11 @@ footer {
   </div>
 
   <div class="header-right">
-   <span id="userDisplay" class="small"></span>
-   <button class="profile-btn" onclick="openProfileModal()" title="Settings & Profile" id="headerProfileBtn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-   </button>
+   <!-- Aligned Header User Card -->
+   <div class="header-user-badge" onclick="openProfileModal()" title="Settings & Profile">
+    <div class="header-avatar" id="headerAvatarContainer"></div>
+    <span class="header-name" id="headerDisplayName">Student</span>
+   </div>
   </div>
  </header>
 
@@ -1071,10 +1132,17 @@ footer {
    <button class="close-btn" onclick="closeProfileModal()">✕</button>
   </div>
 
-  <div class="avatar-selector-title">Choose Your 3D Avatar</div>
-  <div class="avatar-grid" id="avatarGrid">
-   <!-- Generated via JavaScript for full clarity -->
+  <!-- Centered Aligned Profile Summary -->
+  <div class="modal-profile-card">
+   <div class="modal-avatar-preview" id="modalAvatarPreview"></div>
+   <div class="modal-profile-info">
+    <div class="small" id="modalUsernameTag">@user</div>
+    <input id="displayNameInput" placeholder="Enter Display Name" onchange="updateDisplayName()">
+   </div>
   </div>
+
+  <div class="avatar-selector-title">Choose 3D Avatar</div>
+  <div class="avatar-grid" id="avatarGrid"></div>
 
   <div class="modal-body">
    <div class="settings-item">
@@ -1096,14 +1164,14 @@ footer {
    CURATED HIGH-CLARITY VECTOR AVATARS
 ===================================================== */
 const avatarPresets = [
- { id: 'av1', bg: '#2dbe5f', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#2dbe5f"/><circle cx="50" cy="40" r="20" fill="#ffffff"/><path d="M20 85c0-18 14-30 30-30s30 12 30 30" fill="#ffffff"/></svg>` },
- { id: 'av2', bg: '#2563eb', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#2563eb"/><rect x="28" y="28" width="44" height="44" rx="12" fill="#ffffff"/><circle cx="50" cy="50" r="12" fill="#2563eb"/></svg>` },
- { id: 'av3', bg: '#d97706', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#d97706"/><path d="M50 20 L80 80 L20 80 Z" fill="#ffffff"/></svg>` },
- { id: 'av4', bg: '#7c3aed', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#7c3aed"/><circle cx="50" cy="50" r="26" fill="#ffffff"/></svg>` },
- { id: 'av5', bg: '#059669', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#059669"/><path d="M30 30 L70 30 L70 70 L30 70 Z" fill="#ffffff"/></svg>` },
- { id: 'av6', bg: '#dc2626', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#dc2626"/><polygon points="50,15 63,40 90,40 68,57 76,85 50,68 24,85 32,57 10,40 37,40" fill="#ffffff"/></svg>` },
- { id: 'av7', bg: '#0891b2', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#0891b2"/><path d="M50 22 C35 22 22 35 22 50 C22 65 35 78 50 78 C65 78 78 65 78 50" stroke="#ffffff" stroke-width="12" fill="none" stroke-linecap="round"/></svg>` },
- { id: 'av8', bg: '#4b5563', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#4b5563"/><rect x="25" y="42" width="50" height="16" rx="8" fill="#ffffff"/></svg>` }
+ { id: 'av1', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#2dbe5f"/><circle cx="50" cy="40" r="20" fill="#ffffff"/><path d="M20 85c0-18 14-30 30-30s30 12 30 30" fill="#ffffff"/></svg>` },
+ { id: 'av2', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#2563eb"/><rect x="28" y="28" width="44" height="44" rx="12" fill="#ffffff"/><circle cx="50" cy="50" r="12" fill="#2563eb"/></svg>` },
+ { id: 'av3', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#d97706"/><path d="M50 20 L80 80 L20 80 Z" fill="#ffffff"/></svg>` },
+ { id: 'av4', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#7c3aed"/><circle cx="50" cy="50" r="26" fill="#ffffff"/></svg>` },
+ { id: 'av5', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#059669"/><path d="M30 30 L70 30 L70 70 L30 70 Z" fill="#ffffff"/></svg>` },
+ { id: 'av6', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#dc2626"/><polygon points="50,15 63,40 90,40 68,57 76,85 50,68 24,85 32,57 10,40 37,40" fill="#ffffff"/></svg>` },
+ { id: 'av7', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#0891b2"/><path d="M50 22 C35 22 22 35 22 50 C22 65 35 78 50 78 C65 78 78 65 78 50" stroke="#ffffff" stroke-width="12" fill="none" stroke-linecap="round"/></svg>` },
+ { id: 'av8', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#4b5563"/><rect x="25" y="42" width="50" height="16" rx="8" fill="#ffffff"/></svg>` }
 ];
 
 /* =====================================================
@@ -1204,7 +1272,6 @@ function toggleLofiAudio() {
  const sub = document.getElementById("lofiTrackSub");
 
  if (!isPlayingRain) {
-  // Generate Ambient Pink Noise (Rain effect)
   const bufferSize = audioCtx.sampleRate * 2;
   const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
   const data = buffer.getChannelData(0);
@@ -1262,15 +1329,17 @@ function getDefaultData() {
   dailyGoal: 60,
   streak: 0,
   lastStudyDate: null,
-  avatar: 'av1'
+  avatar: 'av1',
+  displayName: ''
  };
 }
 
 let data = getDefaultData();
 let isGuest = false;
+let activeUsername = 'User';
 
 /* =====================================================
-   THEME & AVATARS
+   THEME, DISPLAY NAME & AVATARS
 ===================================================== */
 function applyTheme(theme) {
  if (theme === "dark") {
@@ -1297,6 +1366,27 @@ function initTheme() {
  applyTheme(saved);
 }
 
+function renderUserProfile() {
+ const nameToShow = data.displayName || activeUsername;
+ const currentPreset = avatarPresets.find(a => a.id === data.avatar) || avatarPresets[0];
+
+ // Update Header Badge
+ const headerAvatar = document.getElementById("headerAvatarContainer");
+ const headerName = document.getElementById("headerDisplayName");
+ if (headerAvatar) headerAvatar.innerHTML = currentPreset.svg;
+ if (headerName) headerName.textContent = nameToShow;
+
+ // Update Modal Profile
+ const modalAvatar = document.getElementById("modalAvatarPreview");
+ const modalUserTag = document.getElementById("modalUsernameTag");
+ const nameInput = document.getElementById("displayNameInput");
+ if (modalAvatar) modalAvatar.innerHTML = currentPreset.svg;
+ if (modalUserTag) modalUserTag.textContent = "@" + activeUsername;
+ if (nameInput && document.activeElement !== nameInput) nameInput.value = data.displayName || '';
+
+ renderAvatarPresets();
+}
+
 function renderAvatarPresets() {
  const grid = document.getElementById("avatarGrid");
  if (!grid) return;
@@ -1306,22 +1396,26 @@ function renderAvatarPresets() {
    ${a.svg}
   </div>
  `).join("");
-
- const headerBtn = document.getElementById("headerProfileBtn");
- const currentPreset = avatarPresets.find(a => a.id === data.avatar) || avatarPresets[0];
- if (headerBtn) headerBtn.innerHTML = currentPreset.svg;
 }
 
 async function selectAvatar(id) {
  playSound('click');
  data.avatar = id;
- renderAvatarPresets();
+ renderUserProfile();
+ await save();
+}
+
+async function updateDisplayName() {
+ const input = document.getElementById("displayNameInput");
+ if (!input) return;
+ data.displayName = input.value.trim();
+ renderUserProfile();
  await save();
 }
 
 function openProfileModal() {
  playSound('click');
- renderAvatarPresets();
+ renderUserProfile();
  document.getElementById("profileModal").classList.add("active");
 }
 
@@ -1433,9 +1527,9 @@ async function login() {
 
 function enterApp(username) {
  isGuest = false;
+ activeUsername = username;
  document.getElementById("authScreen").style.display = "none";
  document.getElementById("studyApp").style.display = "block";
- document.getElementById("userDisplay").textContent = "@" + username;
 
  document.getElementById("logoutBtn").style.display = "block";
  document.getElementById("resetDataBtn").style.display = "inline-flex";
@@ -1446,10 +1540,10 @@ function enterApp(username) {
 function enterGuestPreview() {
  playSound('click');
  isGuest = true;
+ activeUsername = "Guest";
  data = getDefaultData();
  document.getElementById("authScreen").style.display = "none";
  document.getElementById("studyApp").style.display = "block";
- document.getElementById("userDisplay").textContent = "Preview Mode";
 
  document.getElementById("logoutBtn").style.display = "none";
  document.getElementById("resetDataBtn").style.display = "none";
@@ -1534,6 +1628,7 @@ async function loadCloudData() {
    if (!Array.isArray(data.tasks)) data.tasks = [];
    if (typeof data.streak !== "number") data.streak = 0;
    if (!data.avatar) data.avatar = 'av1';
+   if (!data.displayName) data.displayName = '';
   } else {
    data = getDefaultData();
    await saveCloudData();
@@ -1570,7 +1665,7 @@ function render() {
  renderSubjects();
  renderTasks();
  renderStreak();
- renderAvatarPresets();
+ renderUserProfile();
 }
 
 function todayStr() {
@@ -1619,8 +1714,7 @@ function getDaysUntil(dateStr) {
  const target = new Date(dateStr);
  const now = new Date();
  const diffTime = target - now;
- const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
- return diffDays;
+ return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 }
 
 function renderDashboardSubjects() {
