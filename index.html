@@ -6,6 +6,9 @@
 <meta name="theme-color" content="#1769ff">
 <title>PlanSync</title>
 
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
 
@@ -674,25 +677,20 @@ box-shadow:0 10px 23px #1769ff3b
 transform:scale(.95)
 }
 
-.toast{
-position:fixed;
-left:50%;
-bottom:88px;
-transform:translateX(-50%) translateY(15px);
-background:#101936;
-color:#fff;
-padding:11px 16px;
-border-radius:13px;
-font-size:12px;
-opacity:0;
-pointer-events:none;
-transition:.2s;
-z-index:50
+.loading{
+text-align:center;
+padding:50px 20px;
+color:var(--muted)
 }
 
-.toast.show{
-opacity:1;
-transform:translateX(-50%) translateY(0)
+.error{
+background:#fff1f1;
+border:1px solid #ffd3d3;
+color:#c33;
+padding:14px;
+border-radius:15px;
+margin:15px 0;
+font-size:13px
 }
 
 @media(min-width:700px){
@@ -716,9 +714,7 @@ padding-top:28px
 
 <body>
 
-<!-- =====================================================
-LOGIN PAGE
-===================================================== -->
+<!-- ================= LOGIN ================= -->
 
 <section id="login">
 
@@ -728,12 +724,9 @@ LOGIN PAGE
 
 <div class="logo">P</div>
 
-<div class="brand">
-PlanSync
-</div>
+<div class="brand">PlanSync</div>
 
 </div>
-
 
 <div class="login-art">
 
@@ -751,7 +744,6 @@ PlanSync
 
 </div>
 
-
 <h1>
 Plan your day.<br>
 Stay one step ahead.
@@ -761,7 +753,6 @@ Stay one step ahead.
 Your timetable, study plan and to-do list —
 together in one simple space.
 </p>
-
 
 <div class="field">
 
@@ -775,7 +766,6 @@ placeholder="Enter your name"
 
 </div>
 
-
 <div class="field">
 
 <label>Email</label>
@@ -788,7 +778,6 @@ placeholder="you@example.com"
 
 </div>
 
-
 <button
 class="primary"
 onclick="login()"
@@ -796,9 +785,8 @@ onclick="login()"
 Get Started&nbsp; →
 </button>
 
-
 <div class="demo">
-Your data stays on this device.
+Your data is securely stored in the cloud.
 </div>
 
 </div>
@@ -806,12 +794,9 @@ Your data stays on this device.
 </section>
 
 
-<!-- =====================================================
-APP
-===================================================== -->
+<!-- ================= APP ================= -->
 
 <section id="app" class="hidden">
-
 
 <header class="topbar">
 
@@ -833,7 +818,6 @@ Let's organize your day 👋
 
 </div>
 
-
 <div
 class="avatar"
 id="avatar"
@@ -843,24 +827,13 @@ P
 
 </header>
 
-
 <main
 id="content"
 class="page"
 ></main>
 
 
-<!-- BOTTOM NAVIGATION
-
-NO STUDY BUTTON HERE.
-
-Home
-Calendar
-+
-To-do
-Profile
-
--->
+<!-- BOTTOM NAV -->
 
 <nav class="bottom-nav">
 
@@ -870,13 +843,9 @@ data-page="home"
 onclick="go('home')"
 >
 
-<div class="ico">
-⌂
-</div>
+<div class="ico">⌂</div>
 
-<span>
-Home
-</span>
+<span>Home</span>
 
 </button>
 
@@ -887,20 +856,18 @@ data-page="calendar"
 onclick="go('calendar')"
 >
 
-<div class="ico">
-▦
-</div>
+<div class="ico">▦</div>
 
-<span>
-Calendar
-</span>
+<span>Calendar</span>
 
 </button>
 
 
+<!-- + NOW OPENS TODO — NO POPUP -->
+
 <button
 class="add-btn"
-onclick="quickAdd()"
+onclick="go('todo')"
 >
 +
 </button>
@@ -912,13 +879,9 @@ data-page="todo"
 onclick="go('todo')"
 >
 
-<div class="ico">
-☑
-</div>
+<div class="ico">☑</div>
 
-<span>
-To-do
-</span>
+<span>To-do</span>
 
 </button>
 
@@ -929,13 +892,9 @@ data-page="profile"
 onclick="go('profile')"
 >
 
-<div class="ico">
-◯
-</div>
+<div class="ico">◯</div>
 
-<span>
-Profile
-</span>
+<span>Profile</span>
 
 </button>
 
@@ -944,29 +903,35 @@ Profile
 </section>
 
 
-<div
-id="toast"
-class="toast"
-></div>
-
-
 <script>
 
 /* =====================================================
-DATA
+SUPABASE CONNECTION
 ===================================================== */
 
-const $ = id => document.getElementById(id);
+const SUPABASE_URL =
+'https://qpqkpmckvugrrooknzzn.supabase.co';
 
-let user =
-JSON.parse(
-localStorage.getItem('plansyncUser') || 'null'
+const SUPABASE_KEY =
+'sb_publishable_yjQXPL_Ye6TBz0NnvsvCfw_zJGDKqVy';
+
+const supabaseClient =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
-let todos =
-JSON.parse(
-localStorage.getItem('plansyncTodos') || '[]'
-);
+
+/* =====================================================
+APP DATA
+===================================================== */
+
+const $ =
+id => document.getElementById(id);
+
+let user = null;
+
+let todos = [];
 
 let current = 'home';
 
@@ -975,25 +940,96 @@ let current = 'home';
 LOGIN
 ===================================================== */
 
-function login(){
+async function login(){
 
 const name =
 $('loginName').value.trim() || 'Student';
 
 const email =
-$('loginEmail').value.trim() || '';
+$('loginEmail').value.trim().toLowerCase();
+
+if(!email){
+
+alert('Please enter your email.');
+
+return;
+
+}
+
+
+$('loginName').disabled = true;
+$('loginEmail').disabled = true;
+
+
+try{
+
+/*
+Find existing user row.
+*/
+
+const {data:existing,error:findError} =
+await supabaseClient
+.from('test_studyhub')
+.select('id,name,email')
+.eq('email',email)
+.is('todo_text',null)
+.limit(1);
+
+
+if(findError)
+throw findError;
+
+
+/*
+If user doesn't exist,
+create a profile row.
+*/
+
+if(!existing || existing.length === 0){
+
+const {error:insertError} =
+await supabaseClient
+.from('test_studyhub')
+.insert({
+name:name,
+email:email
+});
+
+if(insertError)
+throw insertError;
+
+}
+
+
+/*
+Keep user only in memory.
+NOT localStorage.
+*/
 
 user = {
-name,
-email
+name:name,
+email:email
 };
 
-localStorage.setItem(
-'plansyncUser',
-JSON.stringify(user)
-);
+
+await loadTodos();
 
 startApp();
+
+
+}catch(error){
+
+console.error(error);
+
+alert(
+'Could not connect to Supabase.\n\n' +
+(error.message || 'Unknown error')
+);
+
+$('loginName').disabled = false;
+$('loginEmail').disabled = false;
+
+}
 
 }
 
@@ -1017,15 +1053,50 @@ go('home');
 
 
 /* =====================================================
-SAVE TODO
+LOAD TODOS FROM SUPABASE
 ===================================================== */
 
-function saveTodos(){
+async function loadTodos(){
 
-localStorage.setItem(
-'plansyncTodos',
-JSON.stringify(todos)
-);
+if(!user?.email){
+
+todos = [];
+
+return;
+
+}
+
+
+const {data,error} =
+await supabaseClient
+.from('test_studyhub')
+.select('id,name,email,todo_text,todo_done,todo_time,created_at')
+.eq('email',user.email)
+.not('todo_text','is',null)
+.order('created_at',{ascending:false});
+
+
+if(error){
+
+console.error(error);
+
+throw error;
+
+}
+
+
+todos =
+(data || []).map(row => ({
+
+id:row.id,
+
+text:row.todo_text,
+
+done:row.todo_done || false,
+
+time:row.todo_time || 'Anytime'
+
+}));
 
 }
 
@@ -1108,9 +1179,7 @@ const name =
 user?.name || 'Student';
 
 const done =
-todos.filter(
-x => x.done
-).length;
+todos.filter(x => x.done).length;
 
 
 $('content').innerHTML = `
@@ -1131,9 +1200,7 @@ Let's get it done one step at a time.
 
 <div class="section-head">
 
-<h3>
-Today
-</h3>
+<h3>Today</h3>
 
 <button
 class="small-btn"
@@ -1149,39 +1216,27 @@ View to-do
 
 <div class="stat">
 
-<b>
-9–5
-</b>
+<b>9–5</b>
 
-<span>
-Class time
-</span>
+<span>Class time</span>
 
 </div>
 
 
 <div class="stat">
 
-<b>
-${done}
-</b>
+<b>${done}</b>
 
-<span>
-Tasks done
-</span>
+<span>Tasks done</span>
 
 </div>
 
 
 <div class="stat">
 
-<b>
-${todos.length}
-</b>
+<b>${todos.length}</b>
 
-<span>
-To-do
-</span>
+<span>To-do</span>
 
 </div>
 
@@ -1190,9 +1245,7 @@ To-do
 
 <div class="section-head">
 
-<h3>
-Study plan
-</h3>
+<h3>Study plan</h3>
 
 <span
 style="font-size:11px;color:#8993a8"
@@ -1280,13 +1333,11 @@ Practice questions from previously studied topics
 
 <div class="section-head">
 
-<h3>
-Quick to-do
-</h3>
+<h3>Quick to-do</h3>
 
 <button
 class="small-btn"
-onclick="quickAdd()"
+onclick="go('todo')"
 >
 ＋ Add
 </button>
@@ -1303,9 +1354,7 @@ todos
 `
 <div class="empty">
 
-<div class="emoji">
-✨
-</div>
+<div class="emoji">✨</div>
 
 <p>
 No tasks yet.<br>
@@ -1356,7 +1405,7 @@ ${escapeHtml(t.text)}
 
 <div class="task-meta">
 
-${t.time || 'Anytime'}
+${escapeHtml(t.time || 'Anytime')}
 
 </div>
 
@@ -1391,6 +1440,7 @@ $('content').innerHTML = `
 <input
 id="newTodo"
 placeholder="What needs to be done?"
+onkeydown="if(event.key==='Enter') addTodo()"
 >
 
 <button
@@ -1478,18 +1528,14 @@ let arr;
 if(type === 'done'){
 
 arr =
-todos.filter(
-x => x.done
-);
+todos.filter(x => x.done);
 
 }
 
 else if(type === 'open'){
 
 arr =
-todos.filter(
-x => !x.done
-);
+todos.filter(x => !x.done);
 
 }
 
@@ -1511,13 +1557,9 @@ arr
 `
 <div class="empty">
 
-<div class="emoji">
-✨
-</div>
+<div class="emoji">✨</div>
 
-<p>
-Nothing here.
-</p>
+<p>Nothing here.</p>
 
 </div>
 `;
@@ -1526,61 +1568,135 @@ Nothing here.
 
 
 /* =====================================================
-ADD TODO
+ADD TODO → SUPABASE
 ===================================================== */
 
-function addTodo(){
+async function addTodo(){
 
 const input =
 $('newTodo');
 
-if(
-!input ||
-!input.value.trim()
-)return;
+if(!input || !input.value.trim())
+return;
 
+
+if(!user?.email){
+
+alert('Please log in first.');
+
+return;
+
+}
+
+
+const text =
+input.value.trim();
+
+
+const {data,error} =
+await supabaseClient
+.from('test_studyhub')
+.insert({
+
+name:user.name,
+
+email:user.email,
+
+todo_text:text,
+
+todo_done:false,
+
+todo_time:'Added just now'
+
+})
+.select()
+.single();
+
+
+if(error){
+
+console.error(error);
+
+alert(
+'Could not save task.\n\n' +
+error.message
+);
+
+return;
+
+}
+
+
+/*
+Add returned Supabase row
+to the current screen.
+*/
 
 todos.unshift({
 
-id:Date.now().toString(),
+id:data.id,
 
-text:
-input.value.trim(),
+text:data.todo_text,
 
-done:false,
+done:data.todo_done,
 
-time:'Added just now'
+time:data.todo_time
 
 });
 
-
-saveTodos();
 
 input.value='';
 
 renderTodo();
 
-toast('Task added ✓');
-
 }
 
 
 /* =====================================================
-TOGGLE TODO
+TOGGLE TODO → SUPABASE
 ===================================================== */
 
-function toggleTodo(id){
+async function toggleTodo(id){
 
 const t =
-todos.find(
-x => x.id === id
+todos.find(x => x.id === id);
+
+if(!t)
+return;
+
+
+const newStatus =
+!t.done;
+
+
+const {error} =
+await supabaseClient
+.from('test_studyhub')
+.update({
+
+todo_done:newStatus
+
+})
+.eq('id',id)
+.eq('email',user.email);
+
+
+if(error){
+
+console.error(error);
+
+alert(
+'Could not update task.\n\n' +
+error.message
 );
 
-if(t){
+return;
 
-t.done = !t.done;
+}
 
-saveTodos();
+
+t.done =
+newStatus;
 
 
 if(current === 'todo')
@@ -1588,52 +1704,6 @@ renderTodo();
 
 else
 renderHome();
-
-}
-
-}
-
-
-/* =====================================================
-BOTTOM + BUTTON
-===================================================== */
-
-function quickAdd(){
-
-const text =
-prompt('Add a to-do:');
-
-
-if(
-text &&
-text.trim()
-){
-
-todos.unshift({
-
-id:Date.now().toString(),
-
-text:text.trim(),
-
-done:false,
-
-time:'Added just now'
-
-});
-
-
-saveTodos();
-
-toast('Task added ✓');
-
-
-if(current === 'todo')
-renderTodo();
-
-else
-renderHome();
-
-}
 
 }
 
@@ -1657,18 +1727,10 @@ const today =
 d.getDate();
 
 const first =
-new Date(
-y,
-m,
-1
-).getDay();
+new Date(y,m,1).getDay();
 
 const days =
-new Date(
-y,
-m + 1,
-0
-).getDate();
+new Date(y,m+1,0).getDate();
 
 
 const names =
@@ -1684,36 +1746,34 @@ const names =
 
 
 let cells =
-names
-.map(
-x =>
+names.map(x =>
+
 `
 <div class="dayname">
 ${x}
 </div>
 `
-)
-.join('');
+
+).join('');
 
 
 for(
-let i = 0;
-i < first;
+let i=0;
+i<first;
 i++
 ){
 
 cells +=
 `
-<div class="day muted">
-</div>
+<div class="day muted"></div>
 `;
 
 }
 
 
 for(
-let i = 1;
-i <= days;
+let i=1;
+i<=days;
 i++
 ){
 
@@ -1734,7 +1794,7 @@ $('content').innerHTML = `
 <div class="month">
 
 <button
-onclick="toast('Previous month')"
+onclick="alert('Month navigation can be added next')"
 >
 ‹
 </button>
@@ -1752,7 +1812,7 @@ year:'numeric'
 
 
 <button
-onclick="toast('Next month')"
+onclick="alert('Month navigation can be added next')"
 >
 ›
 </button>
@@ -1786,9 +1846,7 @@ Today's plan
 
 <div class="schedule-box">
 
-<b>
-Class
-</b>
+<b>Class</b>
 
 <span>
 9:15 AM – 5:00 PM
@@ -1811,9 +1869,7 @@ Class
 
 <div class="schedule-box">
 
-<b>
-Revision
-</b>
+<b>Revision</b>
 
 <span>
 Review today's class
@@ -1860,7 +1916,7 @@ ${escapeHtml(name)}
 
 <p>
 ${escapeHtml(
-user?.email || 'Local account'
+user?.email || ''
 )}
 </p>
 
@@ -1902,11 +1958,10 @@ Clean PlanSync interface
 <div class="setting-main">
 
 <b>
-Local data
-</b>
+Cloud data</b>
 
 <span>
-Your tasks are saved on this device
+Your tasks are stored in Supabase
 </span>
 
 </div>
@@ -1957,43 +2012,27 @@ LOGOUT
 
 function logout(){
 
-localStorage.removeItem(
-'plansyncUser'
-);
+/*
+No localStorage is used.
+Just return to login.
+*/
 
-location.reload();
+user = null;
 
-}
+todos = [];
 
+$('app').classList.add('hidden');
 
-/* =====================================================
-TOAST
-===================================================== */
+$('login').classList.remove('hidden');
 
-function toast(msg){
-
-const t =
-$('toast');
-
-t.textContent =
-msg;
-
-t.classList.add(
-'show'
-);
-
-
-setTimeout(
-() =>
-t.classList.remove('show'),
-1600
-);
+$('loginName').value='';
+$('loginEmail').value='';
 
 }
 
 
 /* =====================================================
-SECURITY / HTML ESCAPE
+HTML ESCAPE
 ===================================================== */
 
 function escapeHtml(s){
@@ -2012,14 +2051,6 @@ m =>
 );
 
 }
-
-
-/* =====================================================
-AUTO LOGIN
-===================================================== */
-
-if(user)
-startApp();
 
 </script>
 
