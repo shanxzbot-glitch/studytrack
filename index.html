@@ -23,6 +23,7 @@
  --accent: #2dbe5f;
  --accent-gradient: linear-gradient(135deg, #2dbe5f 0%, #1ea64f 100%);
  --accent-soft: rgba(45, 190, 95, 0.1);
+ --accent-card-gradient: linear-gradient(135deg, rgba(45, 190, 95, 0.12) 0%, rgba(45, 190, 95, 0.03) 100%);
  --accent-hover: #23a851;
  --danger-bg: #fee2e2;
  --danger-text: #dc2626;
@@ -45,6 +46,7 @@
  --accent: #2dbe5f;
  --accent-gradient: linear-gradient(135deg, #32d66b 0%, #25b357 100%);
  --accent-soft: rgba(45, 190, 95, 0.16);
+ --accent-card-gradient: linear-gradient(135deg, rgba(45, 190, 95, 0.22) 0%, rgba(45, 190, 95, 0.05) 100%);
  --accent-hover: #37e373;
  --danger-bg: #2a1212;
  --danger-text: #f87171;
@@ -80,7 +82,7 @@ button {
  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-button:active { transform: scale(0.96); }
+button:active { transform: scale(0.95); }
 
 .app {
  max-width: 960px;
@@ -134,8 +136,8 @@ header {
 }
 
 .header-avatar {
- width: 36px;
- height: 36px;
+ width: 38px;
+ height: 38px;
  border-radius: 50%;
  overflow: hidden;
  display: flex;
@@ -159,6 +161,78 @@ header {
  max-width: 120px;
  overflow: hidden;
  text-overflow: ellipsis;
+}
+
+/* Minimalist Toast Notification */
+.toast-notification {
+ position: fixed;
+ top: 16px;
+ left: 50%;
+ transform: translateX(-50%) translateY(-80px);
+ background: var(--card-bg);
+ border: 1px solid var(--card-border);
+ color: var(--text);
+ padding: 8px 16px;
+ border-radius: 30px;
+ box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+ z-index: 1000;
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ opacity: 0;
+ pointer-events: none;
+ transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+ backdrop-filter: blur(10px);
+ max-width: 90%;
+}
+
+.toast-notification.active {
+ transform: translateX(-50%) translateY(0);
+ opacity: 1;
+}
+
+.toast-icon { font-size: 16px; flex-shrink: 0; }
+.toast-content { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.toast-title { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; }
+.toast-desc { font-size: 12px; font-weight: 700; color: var(--text); }
+
+/* Daily Study Checklist Card */
+.study-checklist-card {
+ background: var(--accent-card-gradient);
+ border: 1px solid rgba(45, 190, 95, 0.25);
+ border-radius: 20px;
+ padding: 16px 20px;
+ margin-bottom: 20px;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ box-shadow: var(--card-shadow);
+ transition: all 0.25s ease;
+}
+
+.study-checklist-card:hover {
+ border-color: var(--accent);
+}
+
+.study-checklist-left {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+}
+
+.study-checkbox {
+ width: 24px;
+ height: 24px;
+ cursor: pointer;
+ accent-color: var(--accent);
+ flex-shrink: 0;
+}
+
+.study-check-label {
+ font-size: 15px;
+ font-weight: 700;
+ color: var(--text);
+ cursor: pointer;
 }
 
 .card {
@@ -226,7 +300,6 @@ header {
  font-weight: 500;
 }
 
-/* XP Level Bar */
 .xp-container {
  background: rgba(255, 255, 255, 0.08);
  border-radius: 14px;
@@ -259,56 +332,161 @@ header {
  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.wisdom-ticker {
+.badge-header-row {
  display: flex;
+ justify-content: space-between;
  align-items: center;
- gap: 12px;
- background: var(--card-bg);
- border: 1px solid var(--card-border);
- padding: 14px 20px;
- border-radius: 18px;
- margin-bottom: 20px;
- cursor: pointer;
- box-shadow: var(--card-shadow);
- transition: all 0.25s ease;
+ margin-bottom: 12px;
 }
 
-.wisdom-ticker:hover {
- border-color: var(--accent);
- transform: translateY(-1px);
-}
-
-.wisdom-icon {
+.badge-progress-pill {
+ font-size: 11px;
+ font-weight: 800;
  color: var(--accent);
+ background: var(--accent-soft);
+ padding: 4px 10px;
+ border-radius: 20px;
+ border: 1px solid rgba(45, 190, 95, 0.2);
+}
+
+.badge-collection-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+ gap: 12px;
+ margin-top: 10px;
+}
+
+.badge-item {
+ background: var(--bg);
+ border: 1px solid var(--border);
+ border-radius: 18px;
+ padding: 14px 8px;
+ text-align: center;
+ opacity: 0.35;
+ filter: grayscale(1);
+ transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ gap: 6px;
+ cursor: pointer;
+}
+
+.badge-item.unlocked {
+ opacity: 1;
+ filter: grayscale(0);
+ border-color: var(--accent);
+ background: var(--card-bg);
+ box-shadow: 0 4px 14px rgba(45, 190, 95, 0.15);
+}
+
+.badge-item.unlocked:hover {
+ transform: translateY(-3px) scale(1.03);
+}
+
+.badge-icon { font-size: 26px; }
+.badge-name { font-size: 11px; font-weight: 800; color: var(--text); line-height: 1.2; }
+.badge-req { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+
+/* POLISHED 3D GLASS TROPHY & EMBLEM MODAL */
+.badge-3d-overlay {
+ position: fixed;
+ top: 0; left: 0; right: 0; bottom: 0;
+ background: rgba(5, 7, 12, 0.88);
+ backdrop-filter: blur(14px);
+ z-index: 200;
  display: flex;
  align-items: center;
- flex-shrink: 0;
+ justify-content: center;
+ opacity: 0;
+ pointer-events: none;
+ transition: opacity 0.35s ease;
 }
 
-.wisdom-text {
- margin: 0;
- font-size: 14px;
- font-weight: 600;
- color: var(--text);
- font-style: italic;
- flex: 1;
+.badge-3d-overlay.active {
+ opacity: 1;
+ pointer-events: auto;
 }
 
-.spotify-card {
+.badge-3d-card {
  background: var(--card-bg);
  border: 1px solid var(--card-border);
- border-radius: 20px;
- padding: 10px;
- margin-bottom: 20px;
- overflow: hidden;
- box-shadow: var(--card-shadow);
+ border-radius: 32px;
+ padding: 36px 28px;
+ text-align: center;
+ max-width: 340px;
+ width: 88%;
+ box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ position: relative;
+ transform: scale(0.85);
+ transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.spotify-card iframe {
- border-radius: 14px;
- width: 100%;
- height: 152px;
- border: 0;
+.badge-3d-overlay.active .badge-3d-card {
+ transform: scale(1);
+}
+
+.badge-3d-viewport {
+ width: 160px;
+ height: 160px;
+ perspective: 800px;
+ margin-bottom: 24px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+
+.badge-3d-shield-model {
+ width: 120px;
+ height: 130px;
+ position: relative;
+ transform-style: preserve-3d;
+ animation: rotate3dShield 9s infinite ease-in-out;
+}
+
+@keyframes rotate3dShield {
+ 0% { transform: rotateY(-18deg) rotateX(10deg) translateY(0px); }
+ 50% { transform: rotateY(18deg) rotateX(-10deg) translateY(-8px); }
+ 100% { transform: rotateY(-18deg) rotateX(10deg) translateY(0px); }
+}
+
+.shield-outer-ring {
+ position: absolute;
+ inset: 0;
+ border-radius: 28px 28px 60px 60px;
+ background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 100%);
+ backdrop-filter: blur(8px);
+ border: 3px solid rgba(255,255,255,0.6);
+ box-shadow: 0 12px 30px rgba(45, 190, 95, 0.35), inset 0 2px 12px rgba(255,255,255,0.8);
+ transform: translateZ(0px);
+}
+
+.shield-inner-gem {
+ position: absolute;
+ inset: 12px;
+ border-radius: 20px 20px 48px 48px;
+ background: linear-gradient(135deg, #2dbe5f 0%, #1ea64f 100%);
+ border: 2px solid rgba(255,255,255,0.5);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 52px;
+ transform: translateZ(24px);
+ box-shadow: 0 8px 20px rgba(0,0,0,0.25), inset 0 4px 10px rgba(255,255,255,0.4);
+}
+
+.shield-glow-backdrop {
+ position: absolute;
+ width: 100px;
+ height: 100px;
+ background: #2dbe5f;
+ filter: blur(35px);
+ opacity: 0.45;
+ border-radius: 50%;
+ transform: translateZ(-30px);
 }
 
 .stats {
@@ -326,22 +504,9 @@ header {
  margin-bottom: 0;
 }
 
-.stat-info b {
- display: block;
- font-size: 28px;
- font-weight: 800;
- margin-top: 4px;
- color: var(--text);
- letter-spacing: -0.02em;
-}
+.stat-info b { display: block; font-size: 28px; font-weight: 800; margin-top: 4px; color: var(--text); letter-spacing: -0.02em; }
 
-/* Ring Progress */
-.progress-ring {
- width: 48px;
- height: 48px;
- flex-shrink: 0;
-}
-
+.progress-ring { width: 48px; height: 48px; flex-shrink: 0; }
 .progress-ring circle {
  fill: transparent;
  stroke-width: 5;
@@ -353,62 +518,18 @@ header {
 .progress-ring .bg { stroke: var(--track); }
 .progress-ring .fill { stroke: var(--accent); stroke-linecap: round; }
 
-.label {
- font-size: 12px;
- font-weight: 700;
- color: var(--muted);
- text-transform: uppercase;
- letter-spacing: 0.05em;
-}
+.label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+h2 { font-size: 19px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
 
-.section-title {
- display: flex;
- justify-content: space-between;
- align-items: center;
- margin-bottom: 16px;
-}
+.progress { height: 8px; background: var(--track); border-radius: 20px; overflow: hidden; }
+.progress div { height: 100%; background: var(--accent-gradient); border-radius: 20px; transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
 
-h2 {
- font-size: 19px;
- font-weight: 800;
- margin: 0;
- letter-spacing: -0.02em;
-}
-
-.progress {
- height: 8px;
- background: var(--track);
- border-radius: 20px;
- overflow: hidden;
-}
-
-.progress div {
- height: 100%;
- background: var(--accent-gradient);
- border-radius: 20px;
- transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.subject {
- padding: 18px 0;
- border-bottom: 1px solid var(--border);
- animation: flowFade 0.3s ease;
-}
-
+.subject { padding: 18px 0; border-bottom: 1px solid var(--border); animation: flowFade 0.3s ease; }
 .subject:last-child { border-bottom: 0; }
 
-.row {
- display: flex;
- justify-content: space-between;
- align-items: center;
- gap: 12px;
-}
-
-.small {
- font-size: 13px;
- color: var(--muted);
- font-weight: 500;
-}
+.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.small { font-size: 13px; color: var(--muted); font-weight: 500; }
 
 .exam-tag {
  display: inline-flex;
@@ -438,39 +559,32 @@ h2 {
  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-.btn:hover {
- opacity: 0.92;
- transform: translateY(-1px);
-}
-
-.btn.primary-accent {
- background: var(--accent-gradient);
- color: #ffffff;
- box-shadow: 0 6px 16px rgba(45, 190, 95, 0.25);
-}
-
+.btn:hover { opacity: 0.92; transform: translateY(-1px); }
+.btn.primary-accent { background: var(--accent-gradient); color: #ffffff; box-shadow: 0 6px 16px rgba(45, 190, 95, 0.25); }
 .btn.primary-accent:hover { background: var(--accent-hover); }
+.btn.secondary { background: var(--accent-soft); color: var(--accent); box-shadow: none; }
+.btn.danger { background: var(--danger-bg); color: var(--danger-text); box-shadow: none; }
+.btn.smallbtn { padding: 8px 14px; font-size: 13px; min-height: 38px; border-radius: 10px; }
 
-.btn.secondary {
- background: var(--accent-soft);
- color: var(--accent);
- box-shadow: none;
+.analytics-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+ gap: 16px;
+ margin-top: 14px;
 }
 
-.btn.danger {
- background: var(--danger-bg);
- color: var(--danger-text);
- box-shadow: none;
+.analytics-card {
+ background: var(--bg);
+ border: 1px solid var(--border);
+ padding: 18px;
+ border-radius: 18px;
+ display: flex;
+ flex-direction: column;
+ gap: 6px;
 }
 
-.btn.smallbtn {
- padding: 8px 14px;
- font-size: 13px;
- min-height: 38px;
- border-radius: 10px;
-}
+.analytics-card b { font-size: 26px; font-weight: 800; color: var(--text); }
 
-/* Streak & Habit Grid */
 .habit-grid {
  display: grid;
  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -489,31 +603,10 @@ h2 {
  transition: all 0.25s ease;
 }
 
-.habit-card:hover {
- border-color: var(--accent);
- transform: translateY(-2px);
-}
-
-.habit-left {
- display: flex;
- flex-direction: column;
- gap: 2px;
-}
-
-.habit-title {
- font-size: 15px;
- font-weight: 700;
- color: var(--text);
-}
-
-.habit-streak-badge {
- font-size: 12px;
- font-weight: 800;
- color: var(--accent);
- display: inline-flex;
- align-items: center;
- gap: 4px;
-}
+.habit-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.habit-left { display: flex; flex-direction: column; gap: 2px; }
+.habit-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.habit-streak-badge { font-size: 12px; font-weight: 800; color: var(--accent); display: inline-flex; align-items: center; gap: 4px; }
 
 .habit-check {
  width: 36px;
@@ -529,11 +622,7 @@ h2 {
  color: transparent;
 }
 
-.habit-check.done {
- background: var(--accent-gradient);
- border-color: var(--accent);
- color: #ffffff;
-}
+.habit-check.done { background: var(--accent-gradient); border-color: var(--accent); color: #ffffff; }
 
 input, select {
  width: 100%;
@@ -549,30 +638,12 @@ input, select {
  transition: all 0.2s ease;
 }
 
-input:focus, select:focus {
- border-color: var(--accent);
- box-shadow: 0 0 0 4px var(--accent-soft);
-}
+input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
 
-.form {
- display: flex;
- flex-wrap: wrap;
- gap: 10px;
- margin-top: 14px;
-}
+.form { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.form input, .form select { flex: 1; min-width: 140px; }
 
-.form input, .form select {
- flex: 1;
- min-width: 160px;
-}
-
-/* Swipeable Task Items */
-.task-wrapper {
- overflow: hidden;
- border-bottom: 1px solid var(--border);
- touch-action: pan-y;
-}
-
+.task-wrapper { overflow: hidden; border-bottom: 1px solid var(--border); touch-action: pan-y; }
 .task-wrapper:last-child { border-bottom: 0; }
 
 .task {
@@ -585,24 +656,9 @@ input:focus, select:focus {
  user-select: none;
 }
 
-.task input[type=checkbox] {
- width: 22px;
- height: 22px;
- cursor: pointer;
- accent-color: var(--accent);
- flex-shrink: 0;
-}
-
-.task span {
- font-size: 15px;
- font-weight: 600;
- color: var(--text);
-}
-
-.task.done span {
- text-decoration: line-through;
- color: var(--done-text);
-}
+.task input[type=checkbox] { width: 22px; height: 22px; cursor: pointer; accent-color: var(--accent); flex-shrink: 0; }
+.task span { font-size: 15px; font-weight: 600; color: var(--text); }
+.task.done span { text-decoration: line-through; color: var(--done-text); }
 
 .priority-badge {
  font-size: 11px;
@@ -618,13 +674,7 @@ input:focus, select:focus {
 .priority-medium { background: rgba(217, 119, 6, 0.12); color: #d97706; }
 .priority-low { background: var(--accent-soft); color: var(--accent); }
 
-.empty {
- padding: 24px 0;
- text-align: center;
- color: var(--muted);
- font-size: 14px;
- font-weight: 500;
-}
+.empty { padding: 24px 0; text-align: center; color: var(--muted); font-size: 14px; font-weight: 500; }
 
 nav {
  position: fixed;
@@ -632,7 +682,7 @@ nav {
  transform: translateX(-50%);
  bottom: 18px;
  width: calc(100% - 36px);
- max-width: 480px;
+ max-width: 540px;
  display: flex;
  justify-content: space-around;
  align-items: center;
@@ -661,25 +711,13 @@ nav button {
  font-weight: 700;
 }
 
-nav button svg {
- width: 20px;
- height: 20px;
- transition: transform 0.2s ease;
-}
-
+nav button svg { width: 20px; height: 20px; transition: transform 0.2s ease; }
 nav button:hover svg { transform: translateY(-2px); }
-
-nav button.active {
- background: var(--accent-soft);
- color: var(--accent);
-}
+nav button.active { background: var(--accent-soft); color: var(--accent); }
 
 .modal-overlay {
  position: fixed;
- top: 0;
- left: 0;
- right: 0;
- bottom: 0;
+ top: 0; left: 0; right: 0; bottom: 0;
  background: rgba(0,0,0,0.45);
  backdrop-filter: blur(6px);
  z-index: 100;
@@ -691,17 +729,14 @@ nav button.active {
  transition: opacity 0.25s ease;
 }
 
-.modal-overlay.active {
- opacity: 1;
- pointer-events: auto;
-}
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
 
 .modal-card {
  background: var(--card-bg);
  border: 1px solid var(--card-border);
  border-radius: 28px;
  width: 90%;
- max-width: 420px;
+ max-width: 440px;
  padding: 24px;
  box-shadow: var(--card-shadow);
  transform: scale(0.92);
@@ -711,19 +746,8 @@ nav button.active {
 }
 
 .modal-overlay.active .modal-card { transform: scale(1); }
-
-.modal-header {
- display: flex;
- justify-content: space-between;
- align-items: center;
- margin-bottom: 20px;
-}
-
-.modal-header h3 {
- margin: 0;
- font-size: 18px;
- font-weight: 800;
-}
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.modal-header h3 { margin: 0; font-size: 18px; font-weight: 800; }
 
 .close-btn {
  background: var(--accent-soft);
@@ -750,8 +774,8 @@ nav button.active {
 }
 
 .modal-avatar-preview {
- width: 68px;
- height: 68px;
+ width: 72px;
+ height: 72px;
  border-radius: 50%;
  overflow: hidden;
  border: 3px solid var(--accent);
@@ -759,36 +783,19 @@ nav button.active {
  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.modal-avatar-preview svg {
- width: 100%;
- height: 100%;
- object-fit: cover;
-}
-
+.modal-avatar-preview svg { width: 100%; height: 100%; object-fit: cover; }
 .modal-profile-info { width: 100%; }
-
-.modal-profile-info input {
- text-align: center;
- font-weight: 700;
- font-size: 16px;
- margin-top: 6px;
-}
+.modal-profile-info input { text-align: center; font-weight: 700; font-size: 16px; margin-top: 6px; }
 
 .avatar-selector-title {
  font-size: 12px;
  font-weight: 700;
  color: var(--muted);
- margin-bottom: 12px;
  text-transform: uppercase;
  letter-spacing: 0.05em;
 }
 
-.avatar-grid {
- display: grid;
- grid-template-columns: repeat(4, 1fr);
- gap: 12px;
- margin-bottom: 20px;
-}
+.avatar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
 
 .avatar-item {
  width: 100%;
@@ -805,131 +812,30 @@ nav button.active {
  padding: 4px;
 }
 
-.avatar-item:hover {
- border-color: var(--accent);
- transform: scale(1.05);
-}
+.avatar-item:hover { border-color: var(--accent); transform: scale(1.05); }
+.avatar-item.active { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 3px var(--accent-soft); }
+.avatar-item svg { width: 100%; height: 100%; border-radius: 14px; }
 
-.avatar-item.active {
- border-color: var(--accent);
- background: var(--accent-soft);
- box-shadow: 0 0 0 3px var(--accent-soft);
-}
+.modal-body { display: flex; flex-direction: column; gap: 12px; }
+.settings-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--bg); border-radius: 16px; font-weight: 600; font-size: 14px; }
 
-.avatar-item svg {
- width: 100%;
- height: 100%;
- border-radius: 14px;
-}
-
-.modal-body {
- display: flex;
- flex-direction: column;
- gap: 12px;
-}
-
-.settings-item {
- display: flex;
- align-items: center;
- justify-content: space-between;
- padding: 12px 16px;
- background: var(--bg);
- border-radius: 16px;
- font-weight: 600;
- font-size: 14px;
-}
-
-.auth-screen {
- min-height: 100vh;
- display: flex;
- align-items: center;
- justify-content: center;
- padding: 20px;
-}
-
-.auth-card {
- width: 100%;
- max-width: 400px;
- animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
- margin-bottom: 0;
-}
-
-.auth-logo {
- text-align: center;
- font-size: 32px;
- font-weight: 800;
- color: var(--accent);
- margin-bottom: 6px;
- letter-spacing: -0.03em;
-}
-
-.auth-subtitle {
- text-align: center;
- color: var(--muted);
- margin: 0 0 24px;
- font-weight: 500;
- font-size: 14px;
-}
-
-.auth-form {
- display: flex;
- flex-direction: column;
- gap: 14px;
-}
-
-.auth-form label {
- font-size: 13px;
- font-weight: 700;
- color: var(--text);
-}
-
+.auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.auth-card { width: 100%; max-width: 400px; animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); margin-bottom: 0; }
+.auth-logo { text-align: center; font-size: 32px; font-weight: 800; color: var(--accent); margin-bottom: 6px; letter-spacing: -0.03em; }
+.auth-subtitle { text-align: center; color: var(--muted); margin: 0 0 24px; font-weight: 500; font-size: 14px; }
+.auth-form { display: flex; flex-direction: column; gap: 14px; }
+.auth-form label { font-size: 13px; font-weight: 700; color: var(--text); }
 .auth-form input { margin-top: 6px; }
-
-.auth-message {
- min-height: 20px;
- font-size: 13px;
- text-align: center;
- margin-top: 14px;
- font-weight: 600;
-}
-
-.auth-switch {
- text-align: center;
- margin-top: 20px;
- font-size: 14px;
- color: var(--muted);
-}
-
-.link-btn {
- background: none;
- color: var(--accent);
- font-weight: 700;
- padding: 0;
-}
-
-.auth-preview {
- text-align: center;
- margin-top: 20px;
- padding-top: 16px;
- border-top: 1px solid var(--border);
-}
-
-.auth-preview .link-btn {
- font-size: 13px;
- color: var(--muted);
-}
+.auth-message { min-height: 20px; font-size: 13px; text-align: center; margin-top: 14px; font-weight: 600; }
+.auth-switch { text-align: center; margin-top: 20px; font-size: 14px; color: var(--muted); }
+.link-btn { background: none; color: var(--accent); font-weight: 700; padding: 0; }
+.auth-preview { text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+.auth-preview .link-btn { font-size: 13px; color: var(--muted); }
 
 .message-error { color: var(--danger-text); }
 .message-success { color: var(--accent); }
 
-footer {
- text-align: center;
- padding: 30px 0;
- color: var(--muted);
- font-size: 12px;
- font-weight: 600;
- line-height: 1.6;
-}
+footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12px; font-weight: 600; line-height: 1.6; }
 
 @media(max-width: 700px) {
  .app { padding: 16px 16px calc(96px + env(safe-area-inset-bottom)); }
@@ -946,6 +852,15 @@ footer {
 </head>
 <body>
 
+<!-- MINIMALIST SMALL TOAST NOTIFICATION -->
+<div class="toast-notification" id="toastBox">
+ <div class="toast-icon" id="toastIcon">🏆</div>
+ <div class="toast-content">
+  <span class="toast-title" id="toastTitle">Unlocked</span>
+  <span class="toast-desc" id="toastDesc">FIRST STEP</span>
+ </div>
+</div>
+
 <!-- =========================
      LOGIN / SIGNUP
 ========================= -->
@@ -954,7 +869,6 @@ footer {
   <div class="auth-logo">Padikya</div>
   <p class="auth-subtitle">Your minimal study space</p>
 
-  <!-- LOGIN -->
   <div id="loginBox">
    <h2 style="margin-bottom:16px">Welcome back</h2>
    <div class="auth-form">
@@ -975,7 +889,6 @@ footer {
    </div>
   </div>
 
-  <!-- SIGNUP -->
   <div id="signupBox" style="display:none">
    <h2 style="margin-bottom:16px">Create account</h2>
    <div class="auth-form">
@@ -1041,6 +954,10 @@ footer {
    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
    Habits
   </button>
+  <button onclick="showSection('statsPage',this)">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+   Stats
+  </button>
  </nav>
 
  <!-- DASHBOARD -->
@@ -1051,7 +968,6 @@ footer {
     <p>Track your study routine and level up every day.</p>
    </div>
 
-   <!-- XP Progress -->
    <div class="xp-container">
     <div class="xp-header">
      <span id="levelLabel">Level 1 Scholar</span>
@@ -1063,15 +979,28 @@ footer {
    </div>
   </div>
 
-  <div class="wisdom-ticker" onclick="cycleQuote()" title="Tap for another quote">
-   <div class="wisdom-icon">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"></path></svg>
+  <!-- DAILY STUDY STREAK CHECKLIST -->
+  <div class="study-checklist-card">
+   <div class="study-checklist-left">
+    <input type="checkbox" id="dailyStudyCheckbox" class="study-checkbox" onchange="toggleDailyStudyCheck()">
+    <label for="dailyStudyCheckbox" class="study-check-label">I studied today!</label>
    </div>
-   <p class="wisdom-text" id="dailyQuoteText">"Consistency over perfection, every single day."</p>
+   <div class="badge-progress-pill" style="font-size: 13px; padding: 6px 14px;" title="Current Streak">
+    ⚡ <span id="cardStreakValue">0</span> day streak
+   </div>
   </div>
 
-  <div class="spotify-card">
-   <iframe src="https://open.spotify.com/embed/playlist/5sY8P5fDxDYJwItM7ayOnu?utm_source=generator&theme=0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+  <!-- Dual Hours & Minutes Study Log -->
+  <div class="card">
+   <div class="section-title">
+    <h2>Log Today's Study Time</h2>
+    <button class="btn smallbtn secondary" onclick="showSectionById('statsPage')">View Stats</button>
+   </div>
+   <div class="form">
+    <input id="logHoursInput" type="number" min="0" placeholder="Hours (e.g. 1)">
+    <input id="logMinsInput" type="number" min="0" max="59" placeholder="Minutes (e.g. 9 or 45)">
+    <button class="btn primary-accent" onclick="logStudyTime()">Log Time</button>
+   </div>
   </div>
 
   <div class="stats">
@@ -1106,6 +1035,38 @@ footer {
    <div id="dashboardSubjects"></div>
   </section>
  </main>
+
+ <!-- STATS & ANALYTICS -->
+ <section id="statsPage" style="display:none">
+  <div class="card">
+   <div class="section-title">
+    <h2>Study Time Analytics</h2>
+   </div>
+
+   <div class="analytics-grid">
+    <div class="analytics-card">
+     <span class="label">Today</span>
+     <b id="statToday">0 hrs</b>
+     <span class="small">Hours & mins logged today</span>
+    </div>
+    <div class="analytics-card">
+     <span class="label">This Week</span>
+     <b id="statWeek">0 hrs</b>
+     <span class="small">Last 7 days total</span>
+    </div>
+    <div class="analytics-card">
+     <span class="label">This Month</span>
+     <b id="statMonth">0 hrs</b>
+     <span class="small">Last 30 days total</span>
+    </div>
+    <div class="analytics-card">
+     <span class="label">All Time</span>
+     <b id="statTotal">0 hrs</b>
+     <span class="small">Total study investment</span>
+    </div>
+   </div>
+  </div>
+ </section>
 
  <!-- SUBJECTS -->
  <section id="subjects" style="display:none">
@@ -1156,11 +1117,11 @@ footer {
  </section>
 
  <footer>
-  Padikya v4.0 • Mindful Learning Platform<br>by shnoi
+  Padikya v5.0 • Mindful Learning Platform<br>by shnoi
  </footer>
 </div>
 
-<!-- PROFILE & SETTINGS MODAL -->
+<!-- PROFILE & SETTINGS MODAL WITH BADGE SHOWCASE -->
 <div class="modal-overlay" id="profileModal">
  <div class="modal-card">
   <div class="modal-header">
@@ -1176,7 +1137,14 @@ footer {
    </div>
   </div>
 
-  <div class="avatar-selector-title">Choose 3D Avatar</div>
+  <!-- Badge Showcase with Progress Tracker -->
+  <div class="badge-header-row">
+   <div class="avatar-selector-title">Unlocked Badges</div>
+   <div class="badge-progress-pill" id="badgeCountPill">🏆 0/16 Unlocked</div>
+  </div>
+  <div class="badge-collection-grid" id="badgeCollectionGrid"></div>
+
+  <div class="avatar-selector-title" style="margin-top: 20px; margin-bottom: 12px;">Choose 3D Avatar Head</div>
   <div class="avatar-grid" id="avatarGrid"></div>
 
   <div class="modal-body">
@@ -1194,56 +1162,258 @@ footer {
  </div>
 </div>
 
+<!-- POLISHED 3D GLASS TROPHY & EMBLEM MODAL -->
+<div class="badge-3d-overlay" id="badge3dModal" onclick="closeBadge3dModal()">
+ <div class="badge-3d-card" onclick="event.stopPropagation()">
+  <div class="badge-3d-viewport">
+   <div class="badge-3d-shield-model">
+    <div class="shield-glow-backdrop"></div>
+    <div class="shield-outer-ring"></div>
+    <div class="shield-inner-gem" id="badge3dIcon">🏆</div>
+   </div>
+  </div>
+  <h2 id="badge3dTitle" style="font-size: 20px; margin-bottom: 6px;">FIRST STEP</h2>
+  <div id="badge3dReq" class="badge-progress-pill" style="margin-bottom: 16px;">1 TASK COMPLETED</div>
+  <p id="badge3dStatus" class="small" style="margin: 0 0 20px;">Unlocked and synchronized to cloud profile.</p>
+  <button class="btn primary-accent" onclick="closeBadge3dModal()" style="width: 100%;">Close Showcase</button>
+ </div>
+</div>
+
 <script>
 /* =====================================================
-   CURATED HIGH-CLARITY VECTOR AVATARS
+   GLOSSY 3D VINYL TOY CHARACTER HEAD AVATARS
 ===================================================== */
 const avatarPresets = [
- { id: 'av1', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#2dbe5f"/><circle cx="50" cy="40" r="20" fill="#ffffff"/><path d="M20 85c0-18 14-30 30-30s30 12 30 30" fill="#ffffff"/></svg>` },
- { id: 'av2', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#2563eb"/><rect x="28" y="28" width="44" height="44" rx="12" fill="#ffffff"/><circle cx="50" cy="50" r="12" fill="#2563eb"/></svg>` },
- { id: 'av3', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#d97706"/><path d="M50 20 L80 80 L20 80 Z" fill="#ffffff"/></svg>` },
- { id: 'av4', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#7c3aed"/><circle cx="50" cy="50" r="26" fill="#ffffff"/></svg>` },
- { id: 'av5', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#059669"/><path d="M30 30 L70 30 L70 70 L30 70 Z" fill="#ffffff"/></svg>` },
- { id: 'av6', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#dc2626"/><polygon points="50,15 63,40 90,40 68,57 76,85 50,68 24,85 32,57 10,40 37,40" fill="#ffffff"/></svg>` },
- { id: 'av7', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#0891b2"/><path d="M50 22 C35 22 22 35 22 50 C22 65 35 78 50 78 C65 78 78 65 78 50" stroke="#ffffff" stroke-width="12" fill="none" stroke-linecap="round"/></svg>` },
- { id: 'av8', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#4b5563"/><rect x="25" y="42" width="50" height="16" rx="8" fill="#ffffff"/></svg>` }
-];
-
-const wisdomQuotes = [
- "Consistency over perfection, every single day.",
- "Focus is a muscle. The more you practice, the easier it gets.",
- "Small daily improvements over time lead to stunning results.",
- "Discipline is choosing between what you want now and what you want most.",
- "Action precedes motivation. Start first, inspiration follows.",
- "Mastery requires patience and relentless repetition.",
- "Your future self will thank you for today's effort."
-];
-
-let currentQuoteIndex = 0;
-
-function initDailyQuote() {
- const today = new Date().toISOString().slice(0, 10);
- let hash = 0;
- for (let i = 0; i < today.length; i++) {
-  hash = today.charCodeAt(i) + ((hash << 5) - hash);
+ { 
+   id: 'av1', 
+   svg: `<svg viewBox="0 0 100 100">
+    <defs>
+     <radialGradient id="headSkin1" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#fff5e6"/>
+      <stop offset="60%" stop-color="#f2c9a1"/>
+      <stop offset="100%" stop-color="#d19c67"/>
+     </radialGradient>
+     <linearGradient id="visorGrad1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff007f"/>
+      <stop offset="50%" stop-color="#7928ca"/>
+      <stop offset="100%" stop-color="#00dfd8"/>
+     </linearGradient>
+    </defs>
+    <circle cx="50" cy="50" r="50" fill="#2dbe5f"/>
+    <ellipse cx="50" cy="55" rx="33" ry="31" fill="url(#headSkin1)"/>
+    <path d="M 20 48 Q 28 20 50 18 Q 72 20 80 48 Q 50 32 20 48 Z" fill="#ff2a5f"/>
+    <rect x="14" y="42" width="56" height="8" rx="4" fill="#d8113a"/>
+    <rect x="24" y="46" width="52" height="18" rx="9" fill="url(#visorGrad1)" stroke="#ffffff" stroke-width="2"/>
+    <path d="M 28 48 Q 50 47 70 50" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.6" stroke-linecap="round"/>
+    <path d="M 42 72 Q 50 80 58 72" stroke="#4a2c11" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 46 75 Q 50 82 54 75 Z" fill="#ff4757"/>
+   </svg>` 
+ },
+ { 
+   id: 'av2', 
+   svg: `<svg viewBox="0 0 100 100">
+    <defs>
+     <radialGradient id="headSkin2" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#ffe8d6"/>
+      <stop offset="65%" stop-color="#e2b184"/>
+      <stop offset="100%" stop-color="#be8353"/>
+     </radialGradient>
+     <linearGradient id="visorGrad2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="100%" stop-color="#4facfe"/>
+     </linearGradient>
+    </defs>
+    <circle cx="50" cy="50" r="50" fill="#7c3aed"/>
+    <path d="M 16 52 A 34 34 0 0 1 84 52" stroke="#ff007f" stroke-width="10" fill="none"/>
+    <rect x="10" y="44" width="14" height="20" rx="6" fill="#222" stroke="#ff007f" stroke-width="2"/>
+    <rect x="76" y="44" width="14" height="20" rx="6" fill="#222" stroke="#ff007f" stroke-width="2"/>
+    <ellipse cx="50" cy="55" rx="32" ry="30" fill="url(#headSkin2)"/>
+    <path d="M 22 42 L 30 20 L 40 32 L 50 14 L 60 32 L 70 20 L 78 42 Z" fill="#00d2ff"/>
+    <rect x="25" y="47" width="50" height="16" rx="8" fill="url(#visorGrad2)" stroke="#ffffff" stroke-width="2"/>
+    <ellipse cx="38" cy="51" rx="8" ry="3" fill="#ffffff" opacity="0.6"/>
+    <path d="M 43 72 Q 50 78 57 72" stroke="#3d2109" stroke-width="3" fill="none" stroke-linecap="round"/>
+   </svg>` 
+ },
+ { 
+   id: 'av3', 
+   svg: `<svg viewBox="0 0 100 100">
+    <defs>
+     <radialGradient id="headSkin3" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#e0ac69"/>
+      <stop offset="70%" stop-color="#c68642"/>
+      <stop offset="100%" stop-color="#8d5524"/>
+     </radialGradient>
+    </defs>
+    <circle cx="50" cy="50" r="50" fill="#ff9900"/>
+    <circle cx="50" cy="38" r="28" fill="#1a1a1a"/>
+    <circle cx="28" cy="44" r="16" fill="#1a1a1a"/>
+    <circle cx="72" cy="44" r="16" fill="#1a1a1a"/>
+    <ellipse cx="50" cy="56" rx="31" ry="29" fill="url(#headSkin3)"/>
+    <circle cx="36" cy="53" r="13" fill="#111" stroke="#2dbe5f" stroke-width="3"/>
+    <circle cx="64" cy="53" r="13" fill="#111" stroke="#2dbe5f" stroke-width="3"/>
+    <line x1="49" y1="53" x2="51" y2="53" stroke="#2dbe5f" stroke-width="3"/>
+    <circle cx="32" cy="49" r="4" fill="#ffffff" opacity="0.8"/>
+    <circle cx="60" cy="49" r="4" fill="#ffffff" opacity="0.8"/>
+    <path d="M 42 73 Q 50 82 58 73" stroke="#221100" stroke-width="3" fill="none" stroke-linecap="round"/>
+   </svg>` 
+ },
+ { 
+   id: 'av4', 
+   svg: `<svg viewBox="0 0 100 100">
+    <defs>
+     <radialGradient id="headSkin4" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#fff0f5"/>
+      <stop offset="65%" stop-color="#ffd1dc"/>
+      <stop offset="100%" stop-color="#e69ab0"/>
+     </radialGradient>
+    </defs>
+    <circle cx="50" cy="50" r="50" fill="#06b6d4"/>
+    <ellipse cx="34" cy="18" rx="9" ry="20" fill="#ff9a9e" transform="rotate(-12 34 18)"/>
+    <ellipse cx="66" cy="18" rx="9" ry="20" fill="#ff9a9e" transform="rotate(12 66 18)"/>
+    <ellipse cx="34" cy="18" rx="5" ry="14" fill="#ffffff" transform="rotate(-12 34 18)"/>
+    <ellipse cx="66" cy="18" rx="5" ry="14" fill="#ffffff" transform="rotate(12 66 18)"/>
+    <ellipse cx="50" cy="56" rx="31" ry="29" fill="url(#headSkin4)"/>
+    <path d="M 20 54 Q 25 28 50 28 Q 75 28 80 54 Q 50 40 20 54 Z" fill="#ff69b4"/>
+    <rect x="25" y="48" width="22" height="15" rx="6" fill="#222" stroke="#ffb6c1" stroke-width="2.5"/>
+    <rect x="53" y="48" width="22" height="15" rx="6" fill="#222" stroke="#ffb6c1" stroke-width="2.5"/>
+    <line x1="47" y1="55" x2="53" y2="55" stroke="#ffb6c1" stroke-width="2.5"/>
+    <ellipse cx="31" cy="52" rx="5" ry="2" fill="#ffffff" opacity="0.7"/>
+    <ellipse cx="59" cy="52" rx="5" ry="2" fill="#ffffff" opacity="0.7"/>
+    <circle cx="50" cy="73" r="3.5" fill="#ff4757"/>
+   </svg>` 
+ },
+ { 
+   id: 'av5', 
+   svg: `<svg viewBox="0 0 100 100">
+    <defs>
+     <radialGradient id="headSkin5" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#fff5e6"/>
+      <stop offset="65%" stop-color="#f3c59a"/>
+      <stop offset="100%" stop-color="#cf9461"/>
+     </radialGradient>
+    </defs>
+    <circle cx="50" cy="50" r="50" fill="#ec4899"/>
+    <ellipse cx="50" cy="55" rx="31" ry="29" fill="url(#headSkin5)"/>
+    <path d="M 20 44 Q 50 14 80 44 Z" fill="#3b82f6"/>
+    <rect x="18" y="38" width="64" height="10" rx="5" fill="#1d4ed8"/>
+    <rect x="25" y="48" width="22" height="15" rx="7" fill="#111" stroke="#ffffff" stroke-width="2.5"/>
+    <rect x="53" y="48" width="22" height="15" rx="7" fill="#111" stroke="#ffffff" stroke-width="2.5"/>
+    <line x1="47" y1="55" x2="53" y2="55" stroke="#ffffff" stroke-width="2.5"/>
+    <path d="M 28 50 L 42 60" stroke="#ffffff" stroke-width="2" opacity="0.5"/>
+    <path d="M 56 50 L 70 60" stroke="#ffffff" stroke-width="2" opacity="0.5"/>
+    <path d="M 42 72 Q 50 80 58 72" stroke="#3a200a" stroke-width="3" fill="none" stroke-linecap="round"/>
+   </svg>` 
+ },
+ { 
+   id: 'av6', 
+   svg: `<svg viewBox="0 0 100 100">
+    <defs>
+     <radialGradient id="headSkin6" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#eec0a7"/>
+      <stop offset="65%" stop-color="#c58c85"/>
+      <stop offset="100%" stop-color="#9e5a52"/>
+     </radialGradient>
+    </defs>
+    <circle cx="50" cy="50" r="50" fill="#10b981"/>
+    <path d="M 42 12 L 58 12 L 54 38 L 46 38 Z" fill="#10b981"/>
+    <path d="M 40 20 L 60 20 L 56 38 L 44 38 Z" fill="#34d399"/>
+    <ellipse cx="50" cy="56" rx="31" ry="29" fill="url(#headSkin6)"/>
+    <rect x="25" y="48" width="22" height="15" rx="4" fill="#111" stroke="#ef4444" stroke-width="2.5"/>
+    <rect x="53" y="48" width="22" height="15" rx="4" fill="#111" stroke="#ef4444" stroke-width="2.5"/>
+    <line x1="47" y1="55" x2="53" y2="55" stroke="#ef4444" stroke-width="2.5"/>
+    <path d="M 43 71 Q 50 78 57 71" stroke="#2a1210" stroke-width="2.5" fill="none"/>
+    <path d="M 47 73 Q 50 81 53 73 Z" fill="#ef4444"/>
+   </svg>` 
+ },
+ { 
+   id: 'av7', 
+   svg: `<svg viewBox="0 0 100 100">
+    <defs>
+     <radialGradient id="headSkin7" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#fff5e6"/>
+      <stop offset="65%" stop-color="#f2c9a1"/>
+      <stop offset="100%" stop-color="#d19c67"/>
+     </radialGradient>
+    </defs>
+    <circle cx="50" cy="50" r="50" fill="#f59e0b"/>
+    <circle cx="30" cy="30" r="14" fill="#facc15"/>
+    <circle cx="50" cy="24" r="16" fill="#facc15"/>
+    <circle cx="70" cy="30" r="14" fill="#facc15"/>
+    <path d="M 28 30 L 20 14 L 36 22 Z" fill="#ec4899"/>
+    <path d="M 72 30 L 80 14 L 64 22 Z" fill="#ec4899"/>
+    <ellipse cx="50" cy="56" rx="31" ry="29" fill="url(#headSkin7)"/>
+    <polygon points="37,45 40,53 48,53 42,58 44,65 37,60 30,65 32,58 26,53 34,53" fill="#111" stroke="#a855f7" stroke-width="2"/>
+    <polygon points="63,45 66,53 74,53 68,58 70,65 63,60 56,65 58,58 52,53 60,53" fill="#111" stroke="#a855f7" stroke-width="2"/>
+    <path d="M 42 73 Q 50 81 58 73" stroke="#3d2109" stroke-width="3" fill="none" stroke-linecap="round"/>
+   </svg>` 
+ },
+ { 
+   id: 'av8', 
+   svg: `<svg viewBox="0 0 100 100">
+    <defs>
+     <radialGradient id="headSkin8" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#a06332"/>
+      <stop offset="70%" stop-color="#73421b"/>
+      <stop offset="100%" stop-color="#47260c"/>
+     </radialGradient>
+    </defs>
+    <circle cx="50" cy="50" r="50" fill="#64748b"/>
+    <ellipse cx="50" cy="56" rx="31" ry="29" fill="url(#headSkin8)"/>
+    <path d="M 12 38 Q 50 28 88 38 L 80 43 L 20 43 Z" fill="#1e293b"/>
+    <path d="M 28 38 Q 50 16 72 38 Z" fill="#0f172a"/>
+    <rect x="25" y="48" width="22" height="15" rx="5" fill="#111" stroke="#38bdf8" stroke-width="2.5"/>
+    <rect x="53" y="48" width="22" height="15" rx="5" fill="#111" stroke="#38bdf8" stroke-width="2.5"/>
+    <line x1="47" y1="55" x2="53" y2="55" stroke="#38bdf8" stroke-width="2.5"/>
+    <path d="M 28 50 L 42 60" stroke="#38bdf8" stroke-width="2" opacity="0.6"/>
+    <path d="M 56 50 L 70 60" stroke="#38bdf8" stroke-width="2" opacity="0.6"/>
+    <path d="M 42 72 Q 50 79 58 72" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+   </svg>` 
  }
- currentQuoteIndex = Math.abs(hash) % wisdomQuotes.length;
- renderQuote();
-}
+];
 
-function cycleQuote() {
- playSound('click');
- currentQuoteIndex = (currentQuoteIndex + 1) % wisdomQuotes.length;
- renderQuote();
-}
+/* Comprehensive Badge Engine Definitions */
+const badgeDefinitions = [
+ { id: 'task_1', icon: '🎯', name: 'FIRST STEP', req: '1 Task Done', check: d => (d.tasks.filter(t => t.done).length >= 1) },
+ { id: 'task_5', icon: '⚡', name: 'MOMENTUM', req: '5 Tasks Done', check: d => (d.tasks.filter(t => t.done).length >= 5) },
+ { id: 'task_10', icon: '🔥', name: 'ON FIRE', req: '10 Tasks Done', check: d => (d.tasks.filter(t => t.done).length >= 10) },
+ { id: 'task_25', icon: '🏅', name: 'TASK MASTER', req: '25 Tasks Done', check: d => (d.tasks.filter(t => t.done).length >= 25) },
+ { id: 'task_50', icon: '🚀', name: 'UNSTOPPABLE', req: '50 Tasks Done', check: d => (d.tasks.filter(t => t.done).length >= 50) },
+ { id: 'clean_slate', icon: '✨', name: 'CLEAN SLATE', req: 'Clear All Tasks', check: d => (d.tasks.length > 0 && d.tasks.every(t => t.done)) },
+ { id: 'comeback', icon: '⚔️', name: 'COMEBACK', req: 'Finish Overdue Task', check: d => (d.hasComeback === true) },
+ { id: 'consistent_3', icon: '📈', name: 'CONSISTENT', req: '3 Day Streak', check: d => ((d.streak || 0) >= 3) },
+ { id: 'consistent_7', icon: '👑', name: 'GRINDSET', req: '7 Day Streak', check: d => ((d.streak || 0) >= 7) },
+ { id: 'lvl_2', icon: '🥉', name: 'BRONZE SCHOLAR', req: 'Reach Level 2', check: (d, lvl) => lvl >= 2 },
+ { id: 'lvl_5', icon: '🛡️', name: 'IRON STRATEGIST', req: 'Reach Level 5', check: (d, lvl) => lvl >= 5 },
+ { id: 'lvl_10', icon: '🥈', name: 'SILVER SCHOLAR', req: 'Reach Level 10', check: (d, lvl) => lvl >= 10 },
+ { id: 'lvl_25', icon: '🥇', name: 'GOLD SCHOLAR', req: 'Reach Level 25', check: (d, lvl) => lvl >= 25 },
+ { id: 'lvl_50', icon: '💎', name: 'MASTER SCHOLAR', req: 'Reach Level 50', check: (d, lvl) => lvl >= 50 },
+ { id: 'lvl_75', icon: '🔮', name: 'LEGENDARY SCHOLAR', req: 'Reach Level 75', check: (d, lvl) => lvl >= 75 },
+ { id: 'lvl_100', icon: '🌌', name: 'GRANDMASTER', req: 'Reach Level 100', check: (d, lvl) => lvl >= 100 }
+];
 
-function renderQuote() {
- const el = document.getElementById("dailyQuoteText");
- if (el) el.textContent = `"${wisdomQuotes[currentQuoteIndex]}"`;
+let previousLevel = 1;
+let toastTimeout = null;
+
+function showToast(title, desc, icon = '🏆') {
+ const box = document.getElementById("toastBox");
+ const tTitle = document.getElementById("toastTitle");
+ const tDesc = document.getElementById("toastDesc");
+ const tIcon = document.getElementById("toastIcon");
+
+ if (!box) return;
+ tTitle.textContent = title;
+ tDesc.textContent = desc;
+ tIcon.textContent = icon;
+
+ box.classList.add("active");
+ if (toastTimeout) clearTimeout(toastTimeout);
+ toastTimeout = setTimeout(() => {
+  box.classList.remove("active");
+ }, 3000);
 }
 
 /* =====================================================
-   SUBTLE SOUND ENGINE
+   TACTILE & LEVEL-UP SOUND ENGINE
 ===================================================== */
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx = null;
@@ -1256,28 +1426,56 @@ function initAudio() {
 function playSound(type) {
  try {
   initAudio();
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
   const now = audioCtx.currentTime;
 
   if (type === 'click') {
-   osc.type = 'sine';
-   osc.frequency.setValueAtTime(360, now);
-   osc.frequency.exponentialRampToValueAtTime(180, now + 0.04);
-   gain.gain.setValueAtTime(0.06, now);
-   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-   osc.start(now);
-   osc.stop(now + 0.04);
+   const osc1 = audioCtx.createOscillator();
+   const osc2 = audioCtx.createOscillator();
+   const gain = audioCtx.createGain();
+
+   osc1.type = 'sine';
+   osc2.type = 'triangle';
+   osc1.frequency.setValueAtTime(480, now);
+   osc1.frequency.exponentialRampToValueAtTime(240, now + 0.05);
+   osc2.frequency.setValueAtTime(240, now);
+   osc2.frequency.exponentialRampToValueAtTime(120, now + 0.05);
+
+   gain.gain.setValueAtTime(0.18, now);
+   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+   osc1.connect(gain);
+   osc2.connect(gain);
+   gain.connect(audioCtx.destination);
+
+   osc1.start(now);
+   osc2.start(now);
+   osc1.stop(now + 0.05);
+   osc2.stop(now + 0.05);
   } else if (type === 'check') {
+   const osc = audioCtx.createOscillator();
+   const gain = audioCtx.createGain();
    osc.type = 'triangle';
    osc.frequency.setValueAtTime(523.25, now);
    osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.08);
-   gain.gain.setValueAtTime(0.08, now);
+   gain.gain.setValueAtTime(0.15, now);
    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+   osc.connect(gain);
+   gain.connect(audioCtx.destination);
    osc.start(now);
    osc.stop(now + 0.08);
+  } else if (type === 'levelup') {
+   [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(freq, now + (i * 0.07));
+    g.gain.setValueAtTime(0.2, now + (i * 0.07));
+    g.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.07) + 0.25);
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    o.start(now + (i * 0.07));
+    o.stop(now + (i * 0.07) + 0.25);
+   });
   }
  } catch (e) {}
 }
@@ -1294,6 +1492,11 @@ function getDefaultData() {
   subjects: [],
   tasks: [],
   habits: [],
+  unlockedBadges: [],
+  studyLogs: {},
+  streak: 0,
+  lastCheckInDate: null,
+  hasComeback: false,
   avatar: 'av1',
   displayName: ''
  };
@@ -1304,7 +1507,45 @@ let isGuest = false;
 let activeUsername = 'User';
 
 /* =====================================================
-   THEME, PROFILE & AVATARS
+   STREAK & DAILY STUDY CHECK-IN
+===================================================== */
+function renderStudyChecklist() {
+ const chk = document.getElementById("dailyStudyCheckbox");
+ const today = todayStr();
+ const isChecked = data.lastCheckInDate === today;
+
+ if (chk) chk.checked = isChecked;
+
+ const streakVal = data.streak || 0;
+ const cardStreak = document.getElementById("cardStreakValue");
+ if (cardStreak) cardStreak.textContent = streakVal;
+}
+
+async function toggleDailyStudyCheck() {
+ const chk = document.getElementById("dailyStudyCheckbox");
+ const today = todayStr();
+ const yesterday = yesterdayStr();
+
+ if (chk.checked) {
+  playSound('check');
+  if (data.lastCheckInDate === yesterday) {
+   data.streak = (data.streak || 0) + 1;
+  } else if (data.lastCheckInDate !== today) {
+   data.streak = 1;
+  }
+  data.lastCheckInDate = today;
+  showToast("STREAK UP", `${data.streak} Day Study Streak!`, "⚡");
+ } else {
+  playSound('click');
+  data.streak = Math.max(0, (data.streak || 0) - 1);
+  data.lastCheckInDate = null;
+ }
+
+ await save();
+}
+
+/* =====================================================
+   THEME, PROFILE, AVATARS & 3D BADGES
 ===================================================== */
 function applyTheme(theme) {
  if (theme === "dark") {
@@ -1348,6 +1589,53 @@ function renderUserProfile() {
  if (nameInput && document.activeElement !== nameInput) nameInput.value = data.displayName || '';
 
  renderAvatarPresets();
+ renderBadgeCollection();
+}
+
+function renderBadgeCollection() {
+ const grid = document.getElementById("badgeCollectionGrid");
+ const countPill = document.getElementById("badgeCountPill");
+ if (!grid) return;
+
+ if (!data.unlockedBadges) data.unlockedBadges = [];
+
+ const totalBadges = badgeDefinitions.length;
+ const unlockedCount = data.unlockedBadges.length;
+
+ if (countPill) countPill.textContent = `🏆 ${unlockedCount}/${totalBadges} Unlocked`;
+
+ grid.innerHTML = badgeDefinitions.map(b => {
+  const isUnlocked = data.unlockedBadges.includes(b.id);
+  return `
+   <div class="badge-item ${isUnlocked ? 'unlocked' : ''}" onclick="openBadge3dModal('${b.id}')">
+    <div class="badge-icon">${b.icon}</div>
+    <div class="badge-name">${esc(b.name)}</div>
+    <div class="badge-req">${b.req}</div>
+   </div>
+  `;
+ }).join("");
+}
+
+function openBadge3dModal(badgeId) {
+ const badge = badgeDefinitions.find(b => b.id === badgeId);
+ if (!badge) return;
+
+ playSound('click');
+ const isUnlocked = (data.unlockedBadges || []).includes(badgeId);
+
+ document.getElementById("badge3dIcon").textContent = badge.icon;
+ document.getElementById("badge3dTitle").textContent = badge.name;
+ document.getElementById("badge3dReq").textContent = badge.req;
+ document.getElementById("badge3dStatus").textContent = isUnlocked 
+   ? "Unlocked and synchronized to your account profile!" 
+   : "Locked. Complete requirements to unlock this 3D trophy.";
+
+ document.getElementById("badge3dModal").classList.add("active");
+}
+
+function closeBadge3dModal() {
+ playSound('click');
+ document.getElementById("badge3dModal").classList.remove("active");
 }
 
 function renderAvatarPresets() {
@@ -1388,21 +1676,136 @@ function closeProfileModal() {
 }
 
 /* =====================================================
-   XP SYSTEM & PROGRESS RINGS
+   PROGRESSIVE XP & LEVELING CURVE ENGINE
 ===================================================== */
-function updateXP() {
+function todayStr() {
+ const d = new Date();
+ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+async function logStudyTime() {
+ playSound('click');
+ const hrsInput = document.getElementById("logHoursInput");
+ const minsInput = document.getElementById("logMinsInput");
+
+ const hrs = parseFloat(hrsInput.value) || 0;
+ const mins = parseFloat(minsInput.value) || 0;
+
+ if (hrs <= 0 && mins <= 0) return;
+
+ const totalDecimalHours = hrs + (mins / 60);
+ const today = todayStr();
+
+ if (!data.studyLogs) data.studyLogs = {};
+ data.studyLogs[today] = (data.studyLogs[today] || 0) + totalDecimalHours;
+
+ hrsInput.value = "";
+ minsInput.value = "";
+ await save();
+}
+
+function formatHoursAndMins(decimalHours) {
+ const totalMins = Math.round(decimalHours * 60);
+ const h = Math.floor(totalMins / 60);
+ const m = totalMins % 60;
+
+ if (h > 0 && m > 0) return `${h}h ${m}m`;
+ if (h > 0) return `${h} hrs`;
+ return `${m} mins`;
+}
+
+function calculateAnalytics() {
+ if (!data.studyLogs) data.studyLogs = {};
+ const today = todayStr();
+ const now = new Date();
+
+ let todayHours = data.studyLogs[today] || 0;
+ let weekHours = 0;
+ let monthHours = 0;
+ let totalHours = 0;
+
+ Object.keys(data.studyLogs).forEach(dateStr => {
+  const logHrs = data.studyLogs[dateStr] || 0;
+  totalHours += logHrs;
+
+  const logDate = new Date(dateStr);
+  const diffDays = Math.floor((now - logDate) / (1000 * 60 * 60 * 24));
+
+  if (diffDays >= 0 && diffDays < 7) weekHours += logHrs;
+  if (diffDays >= 0 && diffDays < 30) monthHours += logHrs;
+ });
+
+ const elToday = document.getElementById("statToday");
+ const elWeek = document.getElementById("statWeek");
+ const elMonth = document.getElementById("statMonth");
+ const elTotal = document.getElementById("statTotal");
+
+ if (elToday) elToday.textContent = formatHoursAndMins(todayHours);
+ if (elWeek) elWeek.textContent = formatHoursAndMins(weekHours);
+ if (elMonth) elMonth.textContent = formatHoursAndMins(monthHours);
+ if (elTotal) elTotal.textContent = formatHoursAndMins(totalHours);
+}
+
+function calculateTotalXP() {
  const topics = data.subjects.flatMap(s => s.topics || []);
  const topicsDone = topics.filter(t => t.done).length;
  const tasksDone = data.tasks.filter(t => t.done).length;
  const habitsDone = (data.habits || []).reduce((acc, h) => acc + (h.streak || 0), 0);
 
- const totalXP = (topicsDone * 15) + (tasksDone * 10) + (habitsDone * 5);
- const level = Math.floor(totalXP / 100) + 1;
- const currentXP = totalXP % 100;
+ let studyMins = 0;
+ if (data.studyLogs) {
+  Object.values(data.studyLogs).forEach(hrs => { studyMins += Math.round((hrs || 0) * 60); });
+ }
 
- document.getElementById("levelLabel").textContent = `Level ${level} Scholar`;
- document.getElementById("xpLabel").textContent = `${currentXP} / 100 XP`;
- document.getElementById("xpFill").style.width = `${currentXP}%`;
+ return (topicsDone * 30) + (tasksDone * 20) + (habitsDone * 15) + (studyMins * 2);
+}
+
+function getXpForLevel(level) {
+ return Math.floor(100 * Math.pow(level, 1.25));
+}
+
+function calculateProgressiveLevel(totalXP) {
+ let level = 1;
+ let xpForNext = getXpForLevel(level);
+
+ while (totalXP >= xpForNext && level < 100) {
+  totalXP -= xpForNext;
+  level++;
+  xpForNext = getXpForLevel(level);
+ }
+
+ return { level, currentXP: totalXP, xpForNext };
+}
+
+function updateXP() {
+ const totalXP = calculateTotalXP();
+ const prog = calculateProgressiveLevel(totalXP);
+
+ if (prog.level > previousLevel) {
+  playSound('levelup');
+  showToast("LEVEL UP", `Level ${prog.level}`, "⚡");
+  previousLevel = prog.level;
+ }
+
+ const pct = Math.min(100, Math.round((prog.currentXP / prog.xpForNext) * 100));
+
+ document.getElementById("levelLabel").textContent = `Level ${prog.level} Scholar`;
+ document.getElementById("xpLabel").textContent = `${prog.currentXP} / ${prog.xpForNext} XP`;
+ document.getElementById("xpFill").style.width = `${pct}%`;
+
+ evaluateBadges(prog.level);
+}
+
+function evaluateBadges(currentLevel) {
+ if (!data.unlockedBadges) data.unlockedBadges = [];
+
+ badgeDefinitions.forEach(b => {
+  if (!data.unlockedBadges.includes(b.id) && b.check(data, currentLevel)) {
+   data.unlockedBadges.push(b.id);
+   showToast("UNLOCKED", b.name, b.icon);
+   playSound('levelup');
+  }
+ });
 }
 
 function setRingProgress(id, pct) {
@@ -1416,11 +1819,6 @@ function setRingProgress(id, pct) {
 /* =====================================================
    HABITS WITH INDIVIDUAL STREAKS
 ===================================================== */
-function todayStr() {
- const d = new Date();
- return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-
 function yesterdayStr() {
  const d = new Date();
  d.setDate(d.getDate() - 1);
@@ -1704,6 +2102,9 @@ async function loadCloudData() {
    if (!Array.isArray(data.subjects)) data.subjects = [];
    if (!Array.isArray(data.tasks)) data.tasks = [];
    if (!Array.isArray(data.habits)) data.habits = [];
+   if (!Array.isArray(data.unlockedBadges)) data.unlockedBadges = [];
+   if (!data.studyLogs) data.studyLogs = {};
+   if (typeof data.streak !== 'number') data.streak = 0;
    if (!data.avatar) data.avatar = 'av1';
    if (!data.displayName) data.displayName = '';
   } else {
@@ -1743,6 +2144,8 @@ function render() {
  setRingProgress("ringTasks", data.tasks.length ? Math.round((t.tasksDone / data.tasks.length) * 100) : 0);
 
  updateXP();
+ calculateAnalytics();
+ renderStudyChecklist();
  renderDashboardSubjects();
  renderSubjects();
  renderTasks();
@@ -1882,7 +2285,11 @@ async function toggleTopic(sid, tid) {
  if (!topic) return;
 
  topic.done = !topic.done;
- playSound(topic.done ? 'check' : 'click');
+ if (topic.done) {
+  playSound('check');
+ } else {
+  playSound('click');
+ }
  await save();
 }
 
@@ -1955,8 +2362,17 @@ async function addTask() {
 async function toggleTask(id) {
  const task = data.tasks.find(t => t.id === id);
  if (!task) return;
+
+ const wasUnfinished = data.tasks.some(other => !other.done && other.id !== id);
  task.done = !task.done;
- playSound(task.done ? 'check' : 'click');
+
+ if (task.done) {
+  if (wasUnfinished) data.hasComeback = true;
+  playSound('check');
+ } else {
+  playSound('click');
+ }
+
  await save();
 }
 
@@ -1971,7 +2387,7 @@ async function deleteTask(id) {
 ===================================================== */
 function showSection(id, button) {
  playSound('click');
- ["dashboard", "subjects", "tasks", "habits"].forEach(section => {
+ ["dashboard", "subjects", "tasks", "habits", "statsPage"].forEach(section => {
   const el = document.getElementById(section);
   if (el) el.style.display = section === id ? "block" : "none";
  });
@@ -2001,11 +2417,11 @@ async function resetData() {
 
 document.addEventListener("keydown", function(e) {
  if (e.key === "Enter" && document.activeElement?.id === "loginPassword") login();
+ if (e.key === "Enter" && (document.activeElement?.id === "logHoursInput" || document.activeElement?.id === "logMinsInput")) logStudyTime();
 });
 
 document.addEventListener("DOMContentLoaded", function() {
  initTheme();
- initDailyQuote();
  checkSession();
 });
 </script>
