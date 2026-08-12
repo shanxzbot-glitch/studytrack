@@ -13,47 +13,47 @@
 
 <style>
 :root {
- --bg: #ebebeb;
- --text: #060606;
+ --bg: #f4f5f7;
+ --bg-gradient: radial-gradient(circle at 50% 0%, rgba(45, 190, 95, 0.08), transparent 70%), #f4f5f7;
+ --text: #090a0f;
  --card-bg: #ffffff;
- --card-border: #e0e0e0;
- --card-shadow: rgba(6, 6, 6, 0.04);
- --ink: #060606;
- --ink-text: #ffffff;
+ --card-border: rgba(0, 0, 0, 0.08);
+ --card-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+ --ink: #090a0f;
  --accent: #2dbe5f;
- --accent-soft: rgba(45, 190, 95, 0.12);
- --accent-hover: #25a350;
+ --accent-gradient: linear-gradient(135deg, #2dbe5f 0%, #1ea64f 100%);
+ --accent-soft: rgba(45, 190, 95, 0.1);
+ --accent-hover: #23a851;
  --danger-bg: #fee2e2;
  --danger-text: #dc2626;
- --muted: #666666;
- --track: #e0e0e0;
- --border: #e8e8e8;
- --input-border: #d1d1d1;
+ --muted: #626875;
+ --track: #e5e7eb;
+ --border: #f0f1f4;
+ --input-border: #d1d5db;
  --input-bg: #ffffff;
- --nav-border: #e0e0e0;
- --done-text: #999999;
+ --done-text: #9ca3af;
 }
 
 [data-theme="dark"] {
- --bg: #060606;
- --text: #ebebeb;
- --card-bg: #121212;
- --card-border: #222222;
- --card-shadow: rgba(0, 0, 0, 0.5);
- --ink: #ebebeb;
- --ink-text: #060606;
+ --bg: #07080a;
+ --bg-gradient: radial-gradient(circle at 50% 0%, rgba(45, 190, 95, 0.12), transparent 70%), #07080a;
+ --text: #f0f2f5;
+ --card-bg: #111318;
+ --card-border: rgba(255, 255, 255, 0.08);
+ --card-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.5), 0 6px 16px -2px rgba(0, 0, 0, 0.3);
+ --ink: #f0f2f5;
  --accent: #2dbe5f;
- --accent-soft: rgba(45, 190, 95, 0.18);
- --accent-hover: #34d369;
+ --accent-gradient: linear-gradient(135deg, #32d66b 0%, #25b357 100%);
+ --accent-soft: rgba(45, 190, 95, 0.16);
+ --accent-hover: #37e373;
  --danger-bg: #2a1212;
  --danger-text: #f87171;
- --muted: #888888;
- --track: #222222;
- --border: #1e1e1e;
- --input-border: #333333;
- --input-bg: #181818;
- --nav-border: #222222;
- --done-text: #555555;
+ --muted: #8e95a5;
+ --track: #1c1f26;
+ --border: #181b22;
+ --input-border: #282c37;
+ --input-bg: #151820;
+ --done-text: #4b5262;
 }
 
 * {
@@ -66,9 +66,10 @@ html { scroll-behavior: smooth; }
 body {
  margin: 0;
  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
- background: var(--bg);
+ background: var(--bg-gradient);
  color: var(--text);
- transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+ transition: background 0.4s ease, color 0.4s ease;
+ min-height: 100vh;
 }
 
 button, input, select { font: inherit; }
@@ -76,23 +77,23 @@ button, input, select { font: inherit; }
 button {
  cursor: pointer;
  border: 0;
- transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+ transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-button:active { transform: scale(0.95); }
+button:active { transform: scale(0.96); }
 
 .app {
- max-width: 1000px;
+ max-width: 960px;
  margin: auto;
- padding: 20px 20px calc(96px + env(safe-area-inset-bottom));
- animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+ padding: 20px 20px calc(100px + env(safe-area-inset-bottom));
+ animation: flowFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 header {
  display: flex;
  justify-content: space-between;
  align-items: center;
- margin-bottom: 20px;
+ margin-bottom: 24px;
  gap: 12px;
 }
 
@@ -123,8 +124,8 @@ header {
  padding: 5px 14px 5px 6px;
  border-radius: 30px;
  cursor: pointer;
- box-shadow: 0 2px 8px var(--card-shadow);
- transition: all 0.2s ease;
+ box-shadow: var(--card-shadow);
+ transition: all 0.25s ease;
 }
 
 .header-user-badge:hover {
@@ -165,21 +166,20 @@ header {
  border: 1px solid var(--card-border);
  border-radius: 24px;
  padding: 24px;
- box-shadow: 0 4px 20px var(--card-shadow);
- transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+ box-shadow: var(--card-shadow);
+ transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
  position: relative;
  overflow: hidden;
  margin-bottom: 20px;
 }
 
 .card:hover {
- transform: translateY(-2px);
- box-shadow: 0 8px 30px var(--card-shadow);
+ border-color: rgba(45, 190, 95, 0.25);
 }
 
-@keyframes slideUp {
- from { opacity: 0; transform: translateY(16px); }
- to { opacity: 1; transform: translateY(0); }
+@keyframes flowFade {
+ from { opacity: 0; transform: translateY(18px) scale(0.99); }
+ to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes popIn {
@@ -188,26 +188,75 @@ header {
 }
 
 .hero {
- background: var(--text);
+ background: var(--ink);
  color: var(--bg);
- border-radius: 24px;
+ border-radius: 26px;
  padding: 28px;
- margin-bottom: 16px;
+ margin-bottom: 20px;
  position: relative;
+ box-shadow: var(--card-shadow);
+ overflow: hidden;
+}
+
+.hero::after {
+ content: "";
+ position: absolute;
+ top: -50%;
+ right: -20%;
+ width: 200px;
+ height: 200px;
+ background: var(--accent);
+ opacity: 0.15;
+ filter: blur(60px);
+ border-radius: 50%;
+ pointer-events: none;
 }
 
 .hero-content h1 {
- margin: 0 0 8px;
+ margin: 0 0 6px;
  font-size: 28px;
  font-weight: 800;
  letter-spacing: -0.02em;
 }
 
 .hero-content p {
- margin: 0;
+ margin: 0 0 18px;
  opacity: 0.8;
- font-size: 15px;
+ font-size: 14px;
  font-weight: 500;
+}
+
+/* XP Level Bar */
+.xp-container {
+ background: rgba(255, 255, 255, 0.08);
+ border-radius: 14px;
+ padding: 12px 16px;
+ border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.xp-header {
+ display: flex;
+ justify-content: space-between;
+ font-size: 12px;
+ font-weight: 700;
+ text-transform: uppercase;
+ letter-spacing: 0.05em;
+ margin-bottom: 6px;
+ opacity: 0.9;
+}
+
+.xp-bar {
+ height: 8px;
+ background: rgba(255, 255, 255, 0.15);
+ border-radius: 20px;
+ overflow: hidden;
+}
+
+.xp-fill {
+ height: 100%;
+ background: var(--accent-gradient);
+ width: 0%;
+ transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .wisdom-ticker {
@@ -220,7 +269,8 @@ header {
  border-radius: 18px;
  margin-bottom: 20px;
  cursor: pointer;
- transition: all 0.2s ease;
+ box-shadow: var(--card-shadow);
+ transition: all 0.25s ease;
 }
 
 .wisdom-ticker:hover {
@@ -248,9 +298,10 @@ header {
  background: var(--card-bg);
  border: 1px solid var(--card-border);
  border-radius: 20px;
- padding: 12px;
+ padding: 10px;
  margin-bottom: 20px;
  overflow: hidden;
+ box-shadow: var(--card-shadow);
 }
 
 .spotify-card iframe {
@@ -268,23 +319,43 @@ header {
 }
 
 .stat {
- text-align: left;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
  padding: 20px;
  margin-bottom: 0;
 }
 
-.stat b {
+.stat-info b {
  display: block;
- font-size: 32px;
+ font-size: 28px;
  font-weight: 800;
- margin-top: 6px;
+ margin-top: 4px;
  color: var(--text);
  letter-spacing: -0.02em;
 }
 
+/* Ring Progress */
+.progress-ring {
+ width: 48px;
+ height: 48px;
+ flex-shrink: 0;
+}
+
+.progress-ring circle {
+ fill: transparent;
+ stroke-width: 5;
+ transition: stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+ transform: rotate(-90deg);
+ transform-origin: 50% 50%;
+}
+
+.progress-ring .bg { stroke: var(--track); }
+.progress-ring .fill { stroke: var(--accent); stroke-linecap: round; }
+
 .label {
- font-size: 13px;
- font-weight: 600;
+ font-size: 12px;
+ font-weight: 700;
  color: var(--muted);
  text-transform: uppercase;
  letter-spacing: 0.05em;
@@ -298,14 +369,14 @@ header {
 }
 
 h2 {
- font-size: 20px;
- font-weight: 700;
+ font-size: 19px;
+ font-weight: 800;
  margin: 0;
  letter-spacing: -0.02em;
 }
 
 .progress {
- height: 10px;
+ height: 8px;
  background: var(--track);
  border-radius: 20px;
  overflow: hidden;
@@ -313,7 +384,7 @@ h2 {
 
 .progress div {
  height: 100%;
- background: var(--accent);
+ background: var(--accent-gradient);
  border-radius: 20px;
  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -321,7 +392,7 @@ h2 {
 .subject {
  padding: 18px 0;
  border-bottom: 1px solid var(--border);
- animation: slideUp 0.3s ease;
+ animation: flowFade 0.3s ease;
 }
 
 .subject:last-child { border-bottom: 0; }
@@ -352,17 +423,10 @@ h2 {
  margin-top: 4px;
 }
 
-.actions {
- display: flex;
- gap: 10px;
- flex-wrap: wrap;
- align-items: center;
-}
-
 .btn {
  padding: 12px 20px;
  border-radius: 14px;
- background: var(--text);
+ background: var(--ink);
  color: var(--bg);
  font-weight: 700;
  font-size: 14px;
@@ -371,16 +435,18 @@ h2 {
  align-items: center;
  justify-content: center;
  gap: 8px;
+ box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .btn:hover {
- opacity: 0.9;
+ opacity: 0.92;
  transform: translateY(-1px);
 }
 
 .btn.primary-accent {
- background: var(--accent);
+ background: var(--accent-gradient);
  color: #ffffff;
+ box-shadow: 0 6px 16px rgba(45, 190, 95, 0.25);
 }
 
 .btn.primary-accent:hover { background: var(--accent-hover); }
@@ -388,11 +454,13 @@ h2 {
 .btn.secondary {
  background: var(--accent-soft);
  color: var(--accent);
+ box-shadow: none;
 }
 
 .btn.danger {
  background: var(--danger-bg);
  color: var(--danger-text);
+ box-shadow: none;
 }
 
 .btn.smallbtn {
@@ -402,80 +470,69 @@ h2 {
  border-radius: 10px;
 }
 
-.streak-card {
- margin-bottom: 20px;
- background: var(--card-bg);
+/* Streak & Habit Grid */
+.habit-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+ gap: 14px;
+ margin-top: 14px;
 }
 
-.streak-row {
+.habit-card {
+ background: var(--card-bg);
+ border: 1px solid var(--card-border);
+ padding: 16px 18px;
+ border-radius: 18px;
  display: flex;
  align-items: center;
  justify-content: space-between;
- gap: 16px;
- margin-top: 6px;
- flex-wrap: wrap;
+ transition: all 0.25s ease;
 }
 
-.streak-left {
- display: flex;
- align-items: center;
- gap: 12px;
+.habit-card:hover {
+ border-color: var(--accent);
+ transform: translateY(-2px);
 }
 
-.streak-icon-box {
- width: 48px;
- height: 48px;
- border-radius: 16px;
- background: var(--accent-soft);
- color: var(--accent);
- display: flex;
- align-items: center;
- justify-content: center;
-}
-
-.streak-details {
+.habit-left {
  display: flex;
  flex-direction: column;
+ gap: 2px;
 }
 
-#streakNumber {
- font-size: 28px;
- font-weight: 800;
- line-height: 1.1;
+.habit-title {
+ font-size: 15px;
+ font-weight: 700;
  color: var(--text);
 }
 
-.streak-count-label {
- font-size: 13px;
- color: var(--muted);
- font-weight: 600;
-}
-
-.streak-check {
+.habit-streak-badge {
+ font-size: 12px;
+ font-weight: 800;
+ color: var(--accent);
  display: inline-flex;
  align-items: center;
- gap: 10px;
- background: var(--accent-soft);
- padding: 10px 18px;
- border-radius: 14px;
- cursor: pointer;
- font-weight: 700;
- font-size: 14px;
- color: var(--accent);
- min-height: 46px;
- transition: all 0.2s ease;
- border: 1px solid transparent;
+ gap: 4px;
 }
 
-.streak-check:hover { border-color: var(--accent); }
-
-.streak-check input[type=checkbox] {
- width: 20px;
- height: 20px;
+.habit-check {
+ width: 36px;
+ height: 36px;
+ border-radius: 12px;
+ border: 2px solid var(--input-border);
+ background: var(--input-bg);
  cursor: pointer;
- accent-color: var(--accent);
- flex-shrink: 0;
- border-radius: 6px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ transition: all 0.2s ease;
+ color: transparent;
+}
+
+.habit-check.done {
+ background: var(--accent-gradient);
+ border-color: var(--accent);
+ color: #ffffff;
 }
 
 input, select {
@@ -486,7 +543,7 @@ input, select {
  outline: none;
  background: var(--input-bg);
  color: var(--text);
- font-size: 15px;
+ font-size: 14.5px;
  font-weight: 500;
  min-height: 48px;
  transition: all 0.2s ease;
@@ -509,16 +566,24 @@ input:focus, select:focus {
  min-width: 160px;
 }
 
+/* Swipeable Task Items */
+.task-wrapper {
+ overflow: hidden;
+ border-bottom: 1px solid var(--border);
+ touch-action: pan-y;
+}
+
+.task-wrapper:last-child { border-bottom: 0; }
+
 .task {
  display: flex;
  align-items: center;
  gap: 12px;
  padding: 14px 6px;
- border-bottom: 1px solid var(--border);
- animation: slideUp 0.25s ease;
+ transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+ background: var(--card-bg);
+ user-select: none;
 }
-
-.task:last-child { border-bottom: 0; }
 
 .task input[type=checkbox] {
  width: 22px;
@@ -553,48 +618,6 @@ input:focus, select:focus {
 .priority-medium { background: rgba(217, 119, 6, 0.12); color: #d97706; }
 .priority-low { background: var(--accent-soft); color: var(--accent); }
 
-/* Group Chat Styling */
-.chat-messages {
- max-height: 320px;
- overflow-y: auto;
- display: flex;
- flex-direction: column;
- gap: 12px;
- margin: 16px 0;
- padding-right: 4px;
-}
-
-.chat-bubble {
- background: var(--bg);
- padding: 12px 16px;
- border-radius: 16px;
- max-width: 85%;
- font-size: 14px;
- line-height: 1.4;
- align-self: flex-start;
- border: 1px solid var(--border);
-}
-
-.chat-bubble.mine {
- background: var(--accent-soft);
- border-color: rgba(45, 190, 95, 0.3);
- align-self: flex-end;
-}
-
-.chat-author {
- font-size: 11px;
- font-weight: 800;
- color: var(--accent);
- margin-bottom: 2px;
-}
-
-.chat-time {
- font-size: 10px;
- color: var(--muted);
- margin-top: 4px;
- text-align: right;
-}
-
 .empty {
  padding: 24px 0;
  text-align: center;
@@ -609,17 +632,17 @@ nav {
  transform: translateX(-50%);
  bottom: 18px;
  width: calc(100% - 36px);
- max-width: 520px;
+ max-width: 480px;
  display: flex;
  justify-content: space-around;
  align-items: center;
  background: var(--card-bg);
  border: 1px solid var(--card-border);
  padding: 6px;
- border-radius: 20px;
+ border-radius: 22px;
  z-index: 50;
- box-shadow: 0 10px 30px rgba(0,0,0,0.12);
- backdrop-filter: blur(12px);
+ box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+ backdrop-filter: blur(16px);
 }
 
 nav button {
@@ -632,7 +655,7 @@ nav button {
  background: transparent;
  color: var(--muted);
  padding: 8px 12px;
- border-radius: 14px;
+ border-radius: 16px;
  min-height: 52px;
  font-size: 11px;
  font-weight: 700;
@@ -657,15 +680,15 @@ nav button.active {
  left: 0;
  right: 0;
  bottom: 0;
- background: rgba(0,0,0,0.4);
- backdrop-filter: blur(4px);
+ background: rgba(0,0,0,0.45);
+ backdrop-filter: blur(6px);
  z-index: 100;
  display: flex;
  align-items: center;
  justify-content: center;
  opacity: 0;
  pointer-events: none;
- transition: opacity 0.2s ease;
+ transition: opacity 0.25s ease;
 }
 
 .modal-overlay.active {
@@ -680,7 +703,7 @@ nav button.active {
  width: 90%;
  max-width: 420px;
  padding: 24px;
- box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+ box-shadow: var(--card-shadow);
  transform: scale(0.92);
  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
  max-height: 90vh;
@@ -733,7 +756,7 @@ nav button.active {
  overflow: hidden;
  border: 3px solid var(--accent);
  background: var(--card-bg);
- box-shadow: 0 4px 12px var(--card-shadow);
+ box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .modal-avatar-preview svg {
@@ -752,7 +775,7 @@ nav button.active {
 }
 
 .avatar-selector-title {
- font-size: 13px;
+ font-size: 12px;
  font-weight: 700;
  color: var(--muted);
  margin-bottom: 12px;
@@ -912,8 +935,9 @@ footer {
  .app { padding: 16px 16px calc(96px + env(safe-area-inset-bottom)); }
  .stats { grid-template-columns: repeat(3, 1fr); gap: 10px; }
  .stat { padding: 14px; }
- .stat b { font-size: 22px; }
- .hero { padding: 20px; }
+ .stat-info b { font-size: 20px; }
+ .progress-ring { width: 38px; height: 38px; }
+ .hero { padding: 22px; }
  .hero h1 { font-size: 22px; }
  .card { padding: 18px; border-radius: 20px; }
  .header-name { max-width: 80px; }
@@ -1011,11 +1035,11 @@ footer {
   </button>
   <button onclick="showSection('tasks',this)">
    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 11 3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-   Tasks
+   To-Do
   </button>
-  <button onclick="showSection('chat',this)">
-   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-   Group Chat
+  <button onclick="showSection('habits',this)">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+   Habits
   </button>
  </nav>
 
@@ -1024,7 +1048,18 @@ footer {
   <div class="hero">
    <div class="hero-content">
     <h1>Keep learning.</h1>
-    <p>Track your daily progress and master your subjects.</p>
+    <p>Track your study routine and level up every day.</p>
+   </div>
+
+   <!-- XP Progress -->
+   <div class="xp-container">
+    <div class="xp-header">
+     <span id="levelLabel">Level 1 Scholar</span>
+     <span id="xpLabel">0 / 100 XP</span>
+    </div>
+    <div class="xp-bar">
+     <div class="xp-fill" id="xpFill"></div>
+    </div>
    </div>
   </div>
 
@@ -1039,37 +1074,27 @@ footer {
    <iframe src="https://open.spotify.com/embed/playlist/5sY8P5fDxDYJwItM7ayOnu?utm_source=generator&theme=0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
   </div>
 
-  <div class="card streak-card">
-   <div class="streak-row">
-    <div class="streak-left">
-     <div class="streak-icon-box">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
-     </div>
-     <div class="streak-details">
-      <span id="streakNumber">0</span>
-      <span class="streak-count-label">Day Streak</span>
-     </div>
-    </div>
-
-    <label class="streak-check">
-     <input type="checkbox" id="streakCheckbox" onchange="toggleStreak()">
-     <span>Studied Today</span>
-    </label>
-   </div>
-  </div>
-
   <div class="stats">
    <div class="card stat">
-    <span class="label">Progress</span>
-    <b id="overall">0%</b>
+    <div class="stat-info">
+     <span class="label">Progress</span>
+     <b id="overall">0%</b>
+    </div>
+    <svg class="progress-ring"><circle class="bg" cx="24" cy="24" r="18"/><circle class="fill" id="ringOverall" cx="24" cy="24" r="18" stroke-dasharray="113" stroke-dashoffset="113"/></svg>
    </div>
    <div class="card stat">
-    <span class="label">Topics</span>
-    <b id="topicsDone">0</b>
+    <div class="stat-info">
+     <span class="label">Topics</span>
+     <b id="topicsDone">0</b>
+    </div>
+    <svg class="progress-ring"><circle class="bg" cx="24" cy="24" r="18"/><circle class="fill" id="ringTopics" cx="24" cy="24" r="18" stroke-dasharray="113" stroke-dashoffset="113"/></svg>
    </div>
    <div class="card stat">
-    <span class="label">Tasks</span>
-    <b id="tasksDone">0</b>
+    <div class="stat-info">
+     <span class="label">Tasks</span>
+     <b id="tasksDone">0</b>
+    </div>
+    <svg class="progress-ring"><circle class="bg" cx="24" cy="24" r="18"/><circle class="fill" id="ringTasks" cx="24" cy="24" r="18" stroke-dasharray="113" stroke-dashoffset="113"/></svg>
    </div>
   </div>
 
@@ -1097,11 +1122,11 @@ footer {
   </div>
  </section>
 
- <!-- TASKS -->
+ <!-- TO-DO -->
  <section id="tasks" style="display:none">
   <div class="card">
    <div class="section-title">
-    <h2>Tasks & Homework</h2>
+    <h2>To-Do Items</h2>
    </div>
    <div class="form">
     <input id="taskInput" placeholder="Task details...">
@@ -1116,37 +1141,22 @@ footer {
   </div>
  </section>
 
- <!-- GROUP CHAT -->
- <section id="chat" style="display:none">
+ <!-- HABITS -->
+ <section id="habits" style="display:none">
   <div class="card">
    <div class="section-title">
-    <h2 id="chatHeaderTitle">Group Study Chat</h2>
-    <button class="btn smallbtn secondary" id="leaveGroupBtn" style="display:none" onclick="leaveGroup()">Leave Group</button>
+    <h2>Habits & Routines</h2>
    </div>
-
-   <!-- Setup Group Form -->
-   <div id="chatSetupBox">
-    <p class="small" style="margin-bottom: 16px;">Create a study room or join an existing group with a password.</p>
-    <div class="form">
-     <input id="groupNameInput" placeholder="Group Name (e.g. Commerce Squad)">
-     <input id="groupPassInput" type="password" placeholder="Group Password">
-     <button class="btn primary-accent" onclick="createOrJoinGroup()">Enter Group</button>
-    </div>
+   <div class="form">
+    <input id="habitInput" placeholder="New habit (e.g. Read 20 mins, Workout)">
+    <button class="btn primary-accent" onclick="addHabit()">Add Habit</button>
    </div>
-
-   <!-- Active Chat Box -->
-   <div id="chatRoomBox" style="display:none">
-    <div class="chat-messages" id="chatMessageList"></div>
-    <div class="form">
-     <input id="chatMessageInput" placeholder="Type a message...">
-     <button class="btn primary-accent" onclick="sendChatMessage()">Send</button>
-    </div>
-   </div>
+   <div class="habit-grid" id="habitList"></div>
   </div>
  </section>
 
  <footer>
-  Padikya v3.2 • Mindful Learning Platform<br>by shnoi
+  Padikya v4.0 • Mindful Learning Platform<br>by shnoi
  </footer>
 </div>
 
@@ -1233,7 +1243,7 @@ function renderQuote() {
 }
 
 /* =====================================================
-   SOUND ENGINE
+   SUBTLE SOUND ENGINE
 ===================================================== */
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx = null;
@@ -1254,9 +1264,9 @@ function playSound(type) {
 
   if (type === 'click') {
    osc.type = 'sine';
-   osc.frequency.setValueAtTime(400, now);
-   osc.frequency.exponentialRampToValueAtTime(200, now + 0.04);
-   gain.gain.setValueAtTime(0.08, now);
+   osc.frequency.setValueAtTime(360, now);
+   osc.frequency.exponentialRampToValueAtTime(180, now + 0.04);
+   gain.gain.setValueAtTime(0.06, now);
    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
    osc.start(now);
    osc.stop(now + 0.04);
@@ -1264,24 +1274,10 @@ function playSound(type) {
    osc.type = 'triangle';
    osc.frequency.setValueAtTime(523.25, now);
    osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.08);
-   gain.gain.setValueAtTime(0.12, now);
+   gain.gain.setValueAtTime(0.08, now);
    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
    osc.start(now);
    osc.stop(now + 0.08);
-  } else if (type === 'streak') {
-   [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.connect(g);
-    g.connect(audioCtx.destination);
-    const start = now + (i * 0.06);
-    o.type = 'sine';
-    o.frequency.setValueAtTime(freq, start);
-    g.gain.setValueAtTime(0.1, start);
-    g.gain.exponentialRampToValueAtTime(0.001, start + 0.3);
-    o.start(start);
-    o.stop(start + 0.3);
-   });
   }
  } catch (e) {}
 }
@@ -1297,13 +1293,9 @@ function getDefaultData() {
  return {
   subjects: [],
   tasks: [],
-  studyMinutes: 0,
-  dailyGoal: 60,
-  streak: 0,
-  lastStudyDate: null,
+  habits: [],
   avatar: 'av1',
-  displayName: '',
-  groupChat: { name: '', pass: '', messages: [] }
+  displayName: ''
  };
 }
 
@@ -1396,93 +1388,121 @@ function closeProfileModal() {
 }
 
 /* =====================================================
-   GROUP CHAT LOGIC
+   XP SYSTEM & PROGRESS RINGS
 ===================================================== */
-function renderChat() {
- if (!data.groupChat) data.groupChat = { name: '', pass: '', messages: [] };
+function updateXP() {
+ const topics = data.subjects.flatMap(s => s.topics || []);
+ const topicsDone = topics.filter(t => t.done).length;
+ const tasksDone = data.tasks.filter(t => t.done).length;
+ const habitsDone = (data.habits || []).reduce((acc, h) => acc + (h.streak || 0), 0);
 
- const setupBox = document.getElementById("chatSetupBox");
- const roomBox = document.getElementById("chatRoomBox");
- const headerTitle = document.getElementById("chatHeaderTitle");
- const leaveBtn = document.getElementById("leaveGroupBtn");
+ const totalXP = (topicsDone * 15) + (tasksDone * 10) + (habitsDone * 5);
+ const level = Math.floor(totalXP / 100) + 1;
+ const currentXP = totalXP % 100;
 
- if (data.groupChat.name) {
-  setupBox.style.display = "none";
-  roomBox.style.display = "block";
-  leaveBtn.style.display = "inline-flex";
-  headerTitle.textContent = "Group: " + data.groupChat.name;
-
-  const msgList = document.getElementById("chatMessageList");
-  const authorName = data.displayName || activeUsername;
-
-  if (!data.groupChat.messages || !data.groupChat.messages.length) {
-   msgList.innerHTML = '<div class="empty">No messages yet. Start the conversation!</div>';
-  } else {
-   msgList.innerHTML = data.groupChat.messages.map(m => `
-    <div class="chat-bubble ${m.author === authorName ? 'mine' : ''}">
-     <div class="chat-author">${esc(m.author)}</div>
-     <div>${esc(m.text)}</div>
-     <div class="chat-time">${m.time}</div>
-    </div>
-   `).join("");
-   msgList.scrollTop = msgList.scrollHeight;
-  }
- } else {
-  setupBox.style.display = "block";
-  roomBox.style.display = "none";
-  leaveBtn.style.display = "none";
-  headerTitle.textContent = "Group Study Chat";
- }
+ document.getElementById("levelLabel").textContent = `Level ${level} Scholar`;
+ document.getElementById("xpLabel").textContent = `${currentXP} / 100 XP`;
+ document.getElementById("xpFill").style.width = `${currentXP}%`;
 }
 
-async function createOrJoinGroup() {
- playSound('click');
- const nameInput = document.getElementById("groupNameInput").value.trim();
- const passInput = document.getElementById("groupPassInput").value;
+function setRingProgress(id, pct) {
+ const circle = document.getElementById(id);
+ if (!circle) return;
+ const max = 113;
+ const offset = max - (pct / 100) * max;
+ circle.style.strokeDashoffset = offset;
+}
 
- if (!nameInput || !passInput) {
-  alert("Enter both Group Name and Password.");
+/* =====================================================
+   HABITS WITH INDIVIDUAL STREAKS
+===================================================== */
+function todayStr() {
+ const d = new Date();
+ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+function yesterdayStr() {
+ const d = new Date();
+ d.setDate(d.getDate() - 1);
+ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+function renderHabits() {
+ const grid = document.getElementById("habitList");
+ if (!data.habits) data.habits = [];
+
+ if (!data.habits.length) {
+  grid.innerHTML = '<div class="empty" style="grid-column: 1/-1;">No habits created yet. Add one above!</div>';
   return;
  }
 
- if (!data.groupChat) data.groupChat = { name: '', pass: '', messages: [] };
- data.groupChat.name = nameInput;
- data.groupChat.pass = passInput;
- if (!data.groupChat.messages) data.groupChat.messages = [];
+ const today = todayStr();
 
- await save();
- renderChat();
+ grid.innerHTML = data.habits.map(h => {
+  const isDoneToday = h.lastDoneDate === today;
+  return `
+  <div class="habit-card">
+   <div class="habit-left">
+    <div class="habit-title">${esc(h.name)}</div>
+    <div class="habit-streak-badge">⚡ ${h.streak || 0} day streak</div>
+   </div>
+   <div style="display:flex; align-items:center; gap:8px;">
+    <button class="habit-check ${isDoneToday ? 'done' : ''}" onclick="toggleHabit(${h.id})">✓</button>
+    <button class="btn danger smallbtn" onclick="deleteHabit(${h.id})" style="padding: 6px 10px;">×</button>
+   </div>
+  </div>`;
+ }).join("");
 }
 
-async function sendChatMessage() {
- const input = document.getElementById("chatMessageInput");
- const text = input.value.trim();
- if (!text) return;
-
+async function addHabit() {
  playSound('click');
- const now = new Date();
- const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+ const input = document.getElementById("habitInput");
+ const name = input.value.trim();
+ if (!name) return;
 
- data.groupChat.messages.push({
-  author: data.displayName || activeUsername,
-  text: text,
-  time: timeStr
+ if (!data.habits) data.habits = [];
+ data.habits.push({
+  id: Date.now(),
+  name: name,
+  streak: 0,
+  lastDoneDate: null
  });
 
  input.value = "";
  await save();
- renderChat();
 }
 
-async function leaveGroup() {
- playSound('click');
- data.groupChat = { name: '', pass: '', messages: [] };
+async function toggleHabit(id) {
+ const habit = data.habits.find(h => h.id === id);
+ if (!habit) return;
+
+ const today = todayStr();
+ const yesterday = yesterdayStr();
+
+ if (habit.lastDoneDate === today) {
+  playSound('click');
+  habit.streak = Math.max(0, (habit.streak || 0) - 1);
+  habit.lastDoneDate = null;
+ } else {
+  playSound('check');
+  if (habit.lastDoneDate === yesterday) {
+   habit.streak = (habit.streak || 0) + 1;
+  } else {
+   habit.streak = 1;
+  }
+  habit.lastDoneDate = today;
+ }
  await save();
- renderChat();
+}
+
+async function deleteHabit(id) {
+ playSound('click');
+ data.habits = data.habits.filter(h => h.id !== id);
+ await save();
 }
 
 /* =====================================================
-   AUTH & APP INITIALIZATION
+   AUTH UI
 ===================================================== */
 function showSignup() {
  playSound('click');
@@ -1646,6 +1666,9 @@ async function checkSession() {
  } catch (e) {}
 }
 
+/* =====================================================
+   CLOUD SAVE & LOAD
+===================================================== */
 async function saveCloudData() {
  if (isGuest) return true;
  try {
@@ -1680,10 +1703,9 @@ async function loadCloudData() {
    data = response.data.data;
    if (!Array.isArray(data.subjects)) data.subjects = [];
    if (!Array.isArray(data.tasks)) data.tasks = [];
-   if (typeof data.streak !== "number") data.streak = 0;
+   if (!Array.isArray(data.habits)) data.habits = [];
    if (!data.avatar) data.avatar = 'av1';
    if (!data.displayName) data.displayName = '';
-   if (!data.groupChat) data.groupChat = { name: '', pass: '', messages: [] };
   } else {
    data = getDefaultData();
    await saveCloudData();
@@ -1716,50 +1738,16 @@ function render() {
  document.getElementById("topicsDone").textContent = t.done;
  document.getElementById("tasksDone").textContent = t.tasksDone;
 
+ setRingProgress("ringOverall", t.total);
+ setRingProgress("ringTopics", t.topics.length ? Math.round((t.done / t.topics.length) * 100) : 0);
+ setRingProgress("ringTasks", data.tasks.length ? Math.round((t.tasksDone / data.tasks.length) * 100) : 0);
+
+ updateXP();
  renderDashboardSubjects();
  renderSubjects();
  renderTasks();
- renderStreak();
+ renderHabits();
  renderUserProfile();
- renderChat();
-}
-
-function todayStr() {
- const d = new Date();
- return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-
-function yesterdayStr() {
- const d = new Date();
- d.setDate(d.getDate() - 1);
- return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-
-function renderStreak() {
- const streak = data.streak || 0;
- document.getElementById("streakNumber").textContent = streak;
- const box = document.getElementById("streakCheckbox");
- if (box) box.checked = data.lastStudyDate === todayStr();
-}
-
-async function toggleStreak() {
- const box = document.getElementById("streakCheckbox");
- const today = todayStr();
-
- if (box.checked) {
-  playSound('streak');
-  if (data.lastStudyDate !== today) {
-   data.streak = (data.lastStudyDate === yesterdayStr()) ? (data.streak || 0) + 1 : 1;
-   data.lastStudyDate = today;
-  }
- } else {
-  playSound('click');
-  if (data.lastStudyDate === today) {
-   data.streak = Math.max(0, (data.streak || 0) - 1);
-   data.lastStudyDate = null;
-  }
- }
- await save();
 }
 
 function getDaysUntil(dateStr) {
@@ -1789,7 +1777,7 @@ function renderDashboardSubjects() {
    <div class="row">
     <div>
      <b>${esc(s.name)}</b>
-     ${daysLeft !== null ? `<br><span class="exam-tag">📅 ${daysLeft > 0 ? daysLeft + ' days until exam' : (daysLeft === 0 ? 'Exam today!' : 'Exam passed')}</span>` : ''}
+     ${daysLeft !== null ? `<br><span class="exam-tag">📅 ${daysLeft > 0 ? daysLeft + ' days left' : (daysLeft === 0 ? 'Exam today!' : 'Exam passed')}</span>` : ''}
     </div>
     <span class="small">${done}/${total} • ${pct}%</span>
    </div>
@@ -1906,23 +1894,44 @@ async function deleteTopic(sid, tid) {
  await save();
 }
 
+/* =====================================================
+   SWIPE-ENABLED TO-DO TASKS
+===================================================== */
 function renderTasks() {
  const el = document.getElementById("taskList");
  if (!data.tasks.length) {
-  el.innerHTML = '<div class="empty">No tasks yet. Add homework or revision goals above.</div>';
+  el.innerHTML = '<div class="empty">No tasks yet. Add homework or goals above.</div>';
   return;
  }
 
  el.innerHTML = data.tasks.map(t => {
   const priority = t.priority || 'medium';
   return `
-  <div class="task ${t.done ? "done" : ""}">
-   <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTask(${t.id})">
-   <span style="flex:1">${esc(t.name)}</span>
-   <span class="priority-badge priority-${priority}">${priority}</span>
-   <button class="btn danger smallbtn" onclick="deleteTask(${t.id})">Delete</button>
+  <div class="task-wrapper">
+   <div class="task ${t.done ? "done" : ""}" id="task-${t.id}">
+    <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTask(${t.id})">
+    <span style="flex:1">${esc(t.name)}</span>
+    <span class="priority-badge priority-${priority}">${priority}</span>
+    <button class="btn danger smallbtn" onclick="deleteTask(${t.id})">Delete</button>
+   </div>
   </div>`;
  }).join("");
+
+ setupSwipeEvents();
+}
+
+function setupSwipeEvents() {
+ data.tasks.forEach(t => {
+  const card = document.getElementById(`task-${t.id}`);
+  if (!card) return;
+
+  let startX = 0;
+  card.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  card.addEventListener('touchend', e => {
+   let diff = e.changedTouches[0].clientX - startX;
+   if (diff > 80) toggleTask(t.id);
+  }, { passive: true });
+ });
 }
 
 async function addTask() {
@@ -1957,9 +1966,12 @@ async function deleteTask(id) {
  await save();
 }
 
+/* =====================================================
+   NAVIGATION
+===================================================== */
 function showSection(id, button) {
  playSound('click');
- ["dashboard", "subjects", "tasks", "chat"].forEach(section => {
+ ["dashboard", "subjects", "tasks", "habits"].forEach(section => {
   const el = document.getElementById(section);
   if (el) el.style.display = section === id ? "block" : "none";
  });
@@ -1989,7 +2001,6 @@ async function resetData() {
 
 document.addEventListener("keydown", function(e) {
  if (e.key === "Enter" && document.activeElement?.id === "loginPassword") login();
- if (e.key === "Enter" && document.activeElement?.id === "chatMessageInput") sendChatMessage();
 });
 
 document.addEventListener("DOMContentLoaded", function() {
