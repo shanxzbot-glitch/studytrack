@@ -61,9 +61,7 @@
  -webkit-tap-highlight-color: transparent;
 }
 
-html {
- scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
  margin: 0;
@@ -73,9 +71,7 @@ body {
  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-button, input {
- font: inherit;
-}
+button, input, select { font: inherit; }
 
 button {
  cursor: pointer;
@@ -83,9 +79,7 @@ button {
  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-button:active {
- transform: scale(0.95);
-}
+button:active { transform: scale(0.95); }
 
 .app {
  max-width: 1000px;
@@ -98,7 +92,7 @@ header {
  display: flex;
  justify-content: space-between;
  align-items: center;
- margin-bottom: 24px;
+ margin-bottom: 20px;
  gap: 12px;
 }
 
@@ -112,9 +106,7 @@ header {
  gap: 6px;
 }
 
-.logo span {
- color: var(--accent);
-}
+.logo span { color: var(--accent); }
 
 .header-right {
  display: flex;
@@ -123,8 +115,8 @@ header {
 }
 
 .profile-btn {
- width: 44px;
- height: 44px;
+ width: 46px;
+ height: 46px;
  border-radius: 50%;
  background: var(--card-bg);
  border: 1px solid var(--card-border);
@@ -134,11 +126,18 @@ header {
  justify-content: center;
  box-shadow: 0 2px 8px var(--card-shadow);
  position: relative;
+ overflow: hidden;
+ padding: 0;
 }
 
 .profile-btn:hover {
  border-color: var(--accent);
- color: var(--accent);
+}
+
+.profile-btn svg, .profile-btn img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
 }
 
 .card {
@@ -150,6 +149,7 @@ header {
  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
  position: relative;
  overflow: hidden;
+ margin-bottom: 20px;
 }
 
 .card:hover {
@@ -158,19 +158,12 @@ header {
 }
 
 @keyframes slideUp {
- from {
-  opacity: 0;
-  transform: translateY(16px);
- }
- to {
-  opacity: 1;
-  transform: translateY(0);
- }
+ from { opacity: 0; transform: translateY(16px); }
+ to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes popIn {
- 0% { transform: scale(0.9); opacity: 0; }
- 70% { transform: scale(1.03); }
+ 0% { transform: scale(0.92); opacity: 0; }
  100% { transform: scale(1); opacity: 1; }
 }
 
@@ -179,12 +172,8 @@ header {
  color: var(--bg);
  border-radius: 24px;
  padding: 28px;
- margin-bottom: 20px;
- display: flex;
- justify-content: space-between;
- align-items: center;
+ margin-bottom: 16px;
  position: relative;
- overflow: hidden;
 }
 
 .hero-content h1 {
@@ -201,6 +190,84 @@ header {
  font-weight: 500;
 }
 
+/* Wisdom Ticker */
+.wisdom-ticker {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ background: var(--card-bg);
+ border: 1px solid var(--card-border);
+ padding: 14px 20px;
+ border-radius: 18px;
+ margin-bottom: 20px;
+ cursor: pointer;
+ transition: all 0.2s ease;
+}
+
+.wisdom-ticker:hover {
+ border-color: var(--accent);
+ transform: translateY(-1px);
+}
+
+.wisdom-icon {
+ color: var(--accent);
+ display: flex;
+ align-items: center;
+ flex-shrink: 0;
+}
+
+.wisdom-text {
+ margin: 0;
+ font-size: 14px;
+ font-weight: 600;
+ color: var(--text);
+ font-style: italic;
+ flex: 1;
+}
+
+/* Audio Player Box */
+.lofi-card {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ background: var(--accent-soft);
+ border: 1px solid transparent;
+ padding: 16px 20px;
+ border-radius: 20px;
+ margin-bottom: 20px;
+ gap: 12px;
+}
+
+.lofi-info {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+}
+
+.lofi-icon {
+ width: 38px;
+ height: 38px;
+ border-radius: 12px;
+ background: var(--accent);
+ color: #ffffff;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-shrink: 0;
+}
+
+.lofi-title {
+ font-size: 14px;
+ font-weight: 700;
+ color: var(--text);
+}
+
+.lofi-sub {
+ font-size: 12px;
+ color: var(--muted);
+ font-weight: 500;
+}
+
 .stats {
  display: grid;
  grid-template-columns: repeat(3, 1fr);
@@ -211,6 +278,7 @@ header {
 .stat {
  text-align: left;
  padding: 20px;
+ margin-bottom: 0;
 }
 
 .stat b {
@@ -264,9 +332,7 @@ h2 {
  animation: slideUp 0.3s ease;
 }
 
-.subject:last-child {
- border-bottom: 0;
-}
+.subject:last-child { border-bottom: 0; }
 
 .row {
  display: flex;
@@ -279,6 +345,19 @@ h2 {
  font-size: 13px;
  color: var(--muted);
  font-weight: 500;
+}
+
+.exam-tag {
+ display: inline-flex;
+ align-items: center;
+ gap: 4px;
+ padding: 4px 10px;
+ border-radius: 8px;
+ background: var(--accent-soft);
+ color: var(--accent);
+ font-size: 12px;
+ font-weight: 700;
+ margin-top: 4px;
 }
 
 .actions {
@@ -312,9 +391,7 @@ h2 {
  color: #ffffff;
 }
 
-.btn.primary-accent:hover {
- background: var(--accent-hover);
-}
+.btn.primary-accent:hover { background: var(--accent-hover); }
 
 .btn.secondary {
  background: var(--accent-soft);
@@ -333,7 +410,7 @@ h2 {
  border-radius: 10px;
 }
 
-/* Perfect Aligned Streak Card */
+/* Streak Card */
 .streak-card {
  margin-bottom: 20px;
  background: var(--card-bg);
@@ -344,7 +421,7 @@ h2 {
  align-items: center;
  justify-content: space-between;
  gap: 16px;
- margin-top: 10px;
+ margin-top: 6px;
  flex-wrap: wrap;
 }
 
@@ -399,9 +476,7 @@ h2 {
  border: 1px solid transparent;
 }
 
-.streak-check:hover {
- border-color: var(--accent);
-}
+.streak-check:hover { border-color: var(--accent); }
 
 .streak-check input[type=checkbox] {
  width: 20px;
@@ -412,7 +487,7 @@ h2 {
  border-radius: 6px;
 }
 
-input {
+input, select {
  width: 100%;
  padding: 12px 16px;
  border: 1px solid var(--input-border);
@@ -426,7 +501,7 @@ input {
  transition: all 0.2s ease;
 }
 
-input:focus {
+input:focus, select:focus {
  border-color: var(--accent);
  box-shadow: 0 0 0 4px var(--accent-soft);
 }
@@ -438,23 +513,22 @@ input:focus {
  margin-top: 14px;
 }
 
-.form input {
+.form input, .form select {
  flex: 1;
- min-width: 180px;
+ min-width: 160px;
 }
 
+/* Task Priority Labels */
 .task {
  display: flex;
  align-items: center;
- gap: 14px;
+ gap: 12px;
  padding: 14px 6px;
  border-bottom: 1px solid var(--border);
  animation: slideUp 0.25s ease;
 }
 
-.task:last-child {
- border-bottom: 0;
-}
+.task:last-child { border-bottom: 0; }
 
 .task input[type=checkbox] {
  width: 22px;
@@ -474,6 +548,20 @@ input:focus {
  text-decoration: line-through;
  color: var(--done-text);
 }
+
+.priority-badge {
+ font-size: 11px;
+ font-weight: 800;
+ padding: 4px 8px;
+ border-radius: 6px;
+ text-transform: uppercase;
+ letter-spacing: 0.04em;
+ flex-shrink: 0;
+}
+
+.priority-high { background: rgba(220, 38, 38, 0.12); color: #dc2626; }
+.priority-medium { background: rgba(217, 119, 6, 0.12); color: #d97706; }
+.priority-low { background: var(--accent-soft); color: var(--accent); }
 
 .empty {
  padding: 24px 0;
@@ -524,16 +612,14 @@ nav button svg {
  transition: transform 0.2s ease;
 }
 
-nav button:hover svg {
- transform: translateY(-2px);
-}
+nav button:hover svg { transform: translateY(-2px); }
 
 nav button.active {
  background: var(--accent-soft);
  color: var(--accent);
 }
 
-/* Profile Modal & Dropdown */
+/* Profile Modal & Avatar Grid */
 .modal-overlay {
  position: fixed;
  top: 0;
@@ -561,16 +647,16 @@ nav button.active {
  border: 1px solid var(--card-border);
  border-radius: 28px;
  width: 90%;
- max-width: 380px;
+ max-width: 420px;
  padding: 24px;
  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
  transform: scale(0.92);
  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+ max-height: 90vh;
+ overflow-y: auto;
 }
 
-.modal-overlay.active .modal-card {
- transform: scale(1);
-}
+.modal-overlay.active .modal-card { transform: scale(1); }
 
 .modal-header {
  display: flex;
@@ -595,6 +681,54 @@ nav button.active {
  align-items: center;
  justify-content: center;
  font-weight: 700;
+}
+
+.avatar-selector-title {
+ font-size: 13px;
+ font-weight: 700;
+ color: var(--muted);
+ margin-bottom: 12px;
+ text-transform: uppercase;
+ letter-spacing: 0.05em;
+}
+
+.avatar-grid {
+ display: grid;
+ grid-template-columns: repeat(4, 1fr);
+ gap: 12px;
+ margin-bottom: 20px;
+}
+
+.avatar-item {
+ width: 100%;
+ aspect-ratio: 1;
+ border-radius: 18px;
+ border: 2px solid var(--card-border);
+ background: var(--bg);
+ cursor: pointer;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ transition: all 0.2s ease;
+ overflow: hidden;
+ padding: 4px;
+}
+
+.avatar-item:hover {
+ border-color: var(--accent);
+ transform: scale(1.05);
+}
+
+.avatar-item.active {
+ border-color: var(--accent);
+ background: var(--accent-soft);
+ box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.avatar-item svg {
+ width: 100%;
+ height: 100%;
+ border-radius: 14px;
 }
 
 .modal-body {
@@ -626,6 +760,7 @@ nav button.active {
  width: 100%;
  max-width: 400px;
  animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+ margin-bottom: 0;
 }
 
 .auth-logo {
@@ -657,9 +792,7 @@ nav button.active {
  color: var(--text);
 }
 
-.auth-form input {
- margin-top: 6px;
-}
+.auth-form input { margin-top: 6px; }
 
 .auth-message {
  min-height: 20px;
@@ -704,6 +837,7 @@ footer {
  color: var(--muted);
  font-size: 12px;
  font-weight: 600;
+ line-height: 1.6;
 }
 
 @media(max-width: 700px) {
@@ -791,8 +925,8 @@ footer {
 
   <div class="header-right">
    <span id="userDisplay" class="small"></span>
-   <button class="profile-btn" onclick="openProfileModal()" title="Settings & Profile">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+   <button class="profile-btn" onclick="openProfileModal()" title="Settings & Profile" id="headerProfileBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
    </button>
   </div>
  </header>
@@ -822,12 +956,34 @@ footer {
    </div>
   </div>
 
+  <!-- WISDOM TICKER -->
+  <div class="wisdom-ticker" onclick="cycleQuote()" title="Tap for another quote">
+   <div class="wisdom-icon">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"></path></svg>
+   </div>
+   <p class="wisdom-text" id="dailyQuoteText">"Consistency over perfection, every single day."</p>
+  </div>
+
+  <!-- LOFI AUDIO AMBIENT PLAYER -->
+  <div class="lofi-card">
+   <div class="lofi-info">
+    <div class="lofi-icon">
+     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+    </div>
+    <div>
+     <div class="lofi-title" id="lofiTrackTitle">Focus Atmosphere</div>
+     <div class="lofi-sub" id="lofiTrackSub">Ambient audio generator</div>
+    </div>
+   </div>
+   <button class="btn smallbtn secondary" onclick="toggleLofiAudio()" id="lofiBtn">Play Rain</button>
+  </div>
+
   <!-- STREAK CARD -->
   <div class="card streak-card">
    <div class="streak-row">
     <div class="streak-left">
      <div class="streak-icon-box">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
      </div>
      <div class="streak-details">
       <span id="streakNumber">0</span>
@@ -875,7 +1031,8 @@ footer {
     <h2>Subjects & Topics</h2>
    </div>
    <div class="form">
-    <input id="subjectInput" placeholder="e.g. Accountancy, Computer Science">
+    <input id="subjectInput" placeholder="Subject Name (e.g. Accountancy)">
+    <input id="examDateInput" type="date" title="Exam Target Date">
     <button class="btn primary-accent" onclick="addSubject()">Add Subject</button>
    </div>
    <div id="subjectList"></div>
@@ -889,14 +1046,21 @@ footer {
     <h2>Tasks & Homework</h2>
    </div>
    <div class="form">
-    <input id="taskInput" placeholder="e.g. Solve C++ array questions">
+    <input id="taskInput" placeholder="Task details...">
+    <select id="taskPrioritySelect" style="max-width: 140px;">
+     <option value="low">Low Priority</option>
+     <option value="medium" selected>Medium</option>
+     <option value="high">High</option>
+    </select>
     <button class="btn primary-accent" onclick="addTask()">Add Task</button>
    </div>
    <div id="taskList"></div>
   </div>
  </section>
 
- <footer>Padikya • Mindful Learning Platform</footer>
+ <footer>
+  Padikya v3.2 • Mindful Learning Platform<br>by shnoi
+ </footer>
 </div>
 
 <!-- PROFILE & SETTINGS MODAL -->
@@ -906,6 +1070,12 @@ footer {
    <h3>Settings & Profile</h3>
    <button class="close-btn" onclick="closeProfileModal()">✕</button>
   </div>
+
+  <div class="avatar-selector-title">Choose Your 3D Avatar</div>
+  <div class="avatar-grid" id="avatarGrid">
+   <!-- Generated via JavaScript for full clarity -->
+  </div>
+
   <div class="modal-body">
    <div class="settings-item">
     <span>Dark Mode</span>
@@ -923,10 +1093,62 @@ footer {
 
 <script>
 /* =====================================================
-   SOUND ENGINE (Embedded Web Audio API Synthesizer)
+   CURATED HIGH-CLARITY VECTOR AVATARS
+===================================================== */
+const avatarPresets = [
+ { id: 'av1', bg: '#2dbe5f', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#2dbe5f"/><circle cx="50" cy="40" r="20" fill="#ffffff"/><path d="M20 85c0-18 14-30 30-30s30 12 30 30" fill="#ffffff"/></svg>` },
+ { id: 'av2', bg: '#2563eb', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#2563eb"/><rect x="28" y="28" width="44" height="44" rx="12" fill="#ffffff"/><circle cx="50" cy="50" r="12" fill="#2563eb"/></svg>` },
+ { id: 'av3', bg: '#d97706', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#d97706"/><path d="M50 20 L80 80 L20 80 Z" fill="#ffffff"/></svg>` },
+ { id: 'av4', bg: '#7c3aed', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#7c3aed"/><circle cx="50" cy="50" r="26" fill="#ffffff"/></svg>` },
+ { id: 'av5', bg: '#059669', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#059669"/><path d="M30 30 L70 30 L70 70 L30 70 Z" fill="#ffffff"/></svg>` },
+ { id: 'av6', bg: '#dc2626', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#dc2626"/><polygon points="50,15 63,40 90,40 68,57 76,85 50,68 24,85 32,57 10,40 37,40" fill="#ffffff"/></svg>` },
+ { id: 'av7', bg: '#0891b2', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#0891b2"/><path d="M50 22 C35 22 22 35 22 50 C22 65 35 78 50 78 C65 78 78 65 78 50" stroke="#ffffff" stroke-width="12" fill="none" stroke-linecap="round"/></svg>` },
+ { id: 'av8', bg: '#4b5563', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#4b5563"/><rect x="25" y="42" width="50" height="16" rx="8" fill="#ffffff"/></svg>` }
+];
+
+/* =====================================================
+   WISDOM QUOTES BANK
+===================================================== */
+const wisdomQuotes = [
+ "Consistency over perfection, every single day.",
+ "Focus is a muscle. The more you practice, the easier it gets.",
+ "Small daily improvements over time lead to stunning results.",
+ "Discipline is choosing between what you want now and what you want most.",
+ "Action precedes motivation. Start first, inspiration follows.",
+ "Mastery requires patience and relentless repetition.",
+ "Your future self will thank you for today's effort."
+];
+
+let currentQuoteIndex = 0;
+
+function initDailyQuote() {
+ const today = new Date().toISOString().slice(0, 10);
+ let hash = 0;
+ for (let i = 0; i < today.length; i++) {
+  hash = today.charCodeAt(i) + ((hash << 5) - hash);
+ }
+ currentQuoteIndex = Math.abs(hash) % wisdomQuotes.length;
+ renderQuote();
+}
+
+function cycleQuote() {
+ playSound('click');
+ currentQuoteIndex = (currentQuoteIndex + 1) % wisdomQuotes.length;
+ renderQuote();
+}
+
+function renderQuote() {
+ const el = document.getElementById("dailyQuoteText");
+ if (el) el.textContent = `"${wisdomQuotes[currentQuoteIndex]}"`;
+}
+
+/* =====================================================
+   SOUND ENGINE & LOFI AUDIO GENERATOR
 ===================================================== */
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx = null;
+let noiseNode = null;
+let isPlayingRain = false;
 
 function initAudio() {
  if (!audioCtx) audioCtx = new AudioCtx();
@@ -940,7 +1162,6 @@ function playSound(type) {
   const gain = audioCtx.createGain();
   osc.connect(gain);
   gain.connect(audioCtx.destination);
-
   const now = audioCtx.currentTime;
 
   if (type === 'click') {
@@ -953,14 +1174,13 @@ function playSound(type) {
    osc.stop(now + 0.04);
   } else if (type === 'check') {
    osc.type = 'triangle';
-   osc.frequency.setValueAtTime(523.25, now); // C5
-   osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.08); // E5
+   osc.frequency.setValueAtTime(523.25, now);
+   osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.08);
    gain.gain.setValueAtTime(0.12, now);
    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
    osc.start(now);
    osc.stop(now + 0.08);
   } else if (type === 'streak') {
-   // Classy harmonic chime sequence
    [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
     const o = audioCtx.createOscillator();
     const g = audioCtx.createGain();
@@ -975,8 +1195,55 @@ function playSound(type) {
     o.stop(start + 0.3);
    });
   }
- } catch (e) {
-  console.warn("Audio playback not supported or blocked");
+ } catch (e) {}
+}
+
+function toggleLofiAudio() {
+ initAudio();
+ const btn = document.getElementById("lofiBtn");
+ const sub = document.getElementById("lofiTrackSub");
+
+ if (!isPlayingRain) {
+  // Generate Ambient Pink Noise (Rain effect)
+  const bufferSize = audioCtx.sampleRate * 2;
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+  let b0=0, b1=0, b2=0, b3=0, b4=0, b5=0, b6=0;
+  for (let i = 0; i < bufferSize; i++) {
+   let white = Math.random() * 2 - 1;
+   b0 = 0.99886 * b0 + white * 0.0555179;
+   b1 = 0.99332 * b1 + white * 0.0750759;
+   b2 = 0.96900 * b2 + white * 0.1538520;
+   b3 = 0.86650 * b3 + white * 0.3104856;
+   b4 = 0.55000 * b4 + white * 0.5329522;
+   b5 = -0.7616 * b5 - white * 0.0168980;
+   data[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+   data[i] *= 0.03;
+   b6 = white * 0.115926;
+  }
+
+  noiseNode = audioCtx.createBufferSource();
+  noiseNode.buffer = buffer;
+  noiseNode.loop = true;
+  
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(800, audioCtx.currentTime);
+
+  noiseNode.connect(filter);
+  filter.connect(audioCtx.destination);
+  noiseNode.start();
+
+  isPlayingRain = true;
+  btn.textContent = "Pause Rain";
+  btn.className = "btn smallbtn primary-accent";
+  sub.textContent = "Playing • Soft Rain Ambient";
+ } else {
+  if (noiseNode) { noiseNode.stop(); noiseNode = null; }
+  isPlayingRain = false;
+  btn.textContent = "Play Rain";
+  btn.className = "btn smallbtn secondary";
+  sub.textContent = "Ambient audio generator";
  }
 }
 
@@ -994,7 +1261,8 @@ function getDefaultData() {
   studyMinutes: 0,
   dailyGoal: 60,
   streak: 0,
-  lastStudyDate: null
+  lastStudyDate: null,
+  avatar: 'av1'
  };
 }
 
@@ -1002,7 +1270,7 @@ let data = getDefaultData();
 let isGuest = false;
 
 /* =====================================================
-   THEME
+   THEME & AVATARS
 ===================================================== */
 function applyTheme(theme) {
  if (theme === "dark") {
@@ -1029,11 +1297,31 @@ function initTheme() {
  applyTheme(saved);
 }
 
-/* =====================================================
-   PROFILE MODAL
-===================================================== */
+function renderAvatarPresets() {
+ const grid = document.getElementById("avatarGrid");
+ if (!grid) return;
+
+ grid.innerHTML = avatarPresets.map(a => `
+  <div class="avatar-item ${data.avatar === a.id ? 'active' : ''}" onclick="selectAvatar('${a.id}')">
+   ${a.svg}
+  </div>
+ `).join("");
+
+ const headerBtn = document.getElementById("headerProfileBtn");
+ const currentPreset = avatarPresets.find(a => a.id === data.avatar) || avatarPresets[0];
+ if (headerBtn) headerBtn.innerHTML = currentPreset.svg;
+}
+
+async function selectAvatar(id) {
+ playSound('click');
+ data.avatar = id;
+ renderAvatarPresets();
+ await save();
+}
+
 function openProfileModal() {
  playSound('click');
+ renderAvatarPresets();
  document.getElementById("profileModal").classList.add("active");
 }
 
@@ -1082,9 +1370,6 @@ function usernameToEmail(username) {
  return username.trim().toLowerCase().replace(/\s+/g, "") + "@padikya.local";
 }
 
-/* =====================================================
-   SIGN UP & LOGIN
-===================================================== */
 async function signup() {
  playSound('click');
  const username = document.getElementById("signupUsername").value.trim();
@@ -1146,9 +1431,6 @@ async function login() {
  }
 }
 
-/* =====================================================
-   ENTER & GUEST PREVIEW
-===================================================== */
 function enterApp(username) {
  isGuest = false;
  document.getElementById("authScreen").style.display = "none";
@@ -1227,11 +1509,7 @@ async function saveCloudData() {
    .from("studyhub_data")
    .upsert({ id: user.id, data: data, updated_at: new Date().toISOString() }, { onConflict: "id" });
 
-  if (response.error) {
-   alert("Could not save data. Check Supabase table setup.");
-   return false;
-  }
-  return true;
+  return !response.error;
  } catch (e) {
   return false;
  }
@@ -1255,7 +1533,7 @@ async function loadCloudData() {
    if (!Array.isArray(data.subjects)) data.subjects = [];
    if (!Array.isArray(data.tasks)) data.tasks = [];
    if (typeof data.streak !== "number") data.streak = 0;
-   if (!("lastStudyDate" in data)) data.lastStudyDate = null;
+   if (!data.avatar) data.avatar = 'av1';
   } else {
    data = getDefaultData();
    await saveCloudData();
@@ -1279,7 +1557,6 @@ function totals() {
  const done = topics.filter(t => t.done).length;
  const tasksDone = data.tasks.filter(t => t.done).length;
  const total = topics.length ? Math.round((done / topics.length) * 100) : 0;
-
  return { topics, done, tasksDone, total };
 }
 
@@ -1293,6 +1570,7 @@ function render() {
  renderSubjects();
  renderTasks();
  renderStreak();
+ renderAvatarPresets();
 }
 
 function todayStr() {
@@ -1334,8 +1612,17 @@ async function toggleStreak() {
 }
 
 /* =====================================================
-   DASHBOARD & SUBJECT RENDER
+   DASHBOARD & SUBJECT RENDER WITH EXAM COUNTDOWN
 ===================================================== */
+function getDaysUntil(dateStr) {
+ if (!dateStr) return null;
+ const target = new Date(dateStr);
+ const now = new Date();
+ const diffTime = target - now;
+ const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+ return diffDays;
+}
+
 function renderDashboardSubjects() {
  const el = document.getElementById("dashboardSubjects");
  if (!data.subjects.length) {
@@ -1348,11 +1635,15 @@ function renderDashboardSubjects() {
   const done = topics.filter(t => t.done).length;
   const total = topics.length;
   const pct = total ? Math.round((done / total) * 100) : 0;
+  const daysLeft = getDaysUntil(s.examDate);
 
   return `
   <div class="subject">
    <div class="row">
-    <b>${esc(s.name)}</b>
+    <div>
+     <b>${esc(s.name)}</b>
+     ${daysLeft !== null ? `<br><span class="exam-tag">📅 ${daysLeft > 0 ? daysLeft + ' days until exam' : (daysLeft === 0 ? 'Exam today!' : 'Exam passed')}</span>` : ''}
+    </div>
     <span class="small">${done}/${total} • ${pct}%</span>
    </div>
    <div class="progress" style="margin-top:10px">
@@ -1374,12 +1665,14 @@ function renderSubjects() {
   const done = topics.filter(t => t.done).length;
   const total = topics.length;
   const pct = total ? Math.round((done / total) * 100) : 0;
+  const daysLeft = getDaysUntil(s.examDate);
 
   return `
   <div class="subject">
    <div class="row">
     <div>
      <b>${esc(s.name)}</b>
+     ${daysLeft !== null ? `<br><span class="exam-tag">📅 ${daysLeft > 0 ? daysLeft + ' days left' : 'Exam active'}</span>` : ''}
      <div class="small">${done}/${total} topics completed</div>
     </div>
     <button class="btn danger smallbtn" onclick="deleteSubject(${s.id})">Delete</button>
@@ -1408,11 +1701,19 @@ function renderSubjects() {
 async function addSubject() {
  playSound('click');
  const input = document.getElementById("subjectInput");
+ const dateInput = document.getElementById("examDateInput");
  const name = input.value.trim();
  if (!name) return;
 
- data.subjects.push({ id: Date.now(), name: name, topics: [] });
+ data.subjects.push({
+  id: Date.now(),
+  name: name,
+  examDate: dateInput.value || null,
+  topics: []
+ });
+
  input.value = "";
+ dateInput.value = "";
  await save();
 }
 
@@ -1459,7 +1760,7 @@ async function deleteTopic(sid, tid) {
 }
 
 /* =====================================================
-   TASKS
+   TASKS WITH PRIORITY LABELS
 ===================================================== */
 function renderTasks() {
  const el = document.getElementById("taskList");
@@ -1468,22 +1769,32 @@ function renderTasks() {
   return;
  }
 
- el.innerHTML = data.tasks.map(t => `
+ el.innerHTML = data.tasks.map(t => {
+  const priority = t.priority || 'medium';
+  return `
   <div class="task ${t.done ? "done" : ""}">
    <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTask(${t.id})">
    <span style="flex:1">${esc(t.name)}</span>
+   <span class="priority-badge priority-${priority}">${priority}</span>
    <button class="btn danger smallbtn" onclick="deleteTask(${t.id})">Delete</button>
-  </div>
- `).join("");
+  </div>`;
+ }).join("");
 }
 
 async function addTask() {
  playSound('click');
  const input = document.getElementById("taskInput");
+ const prioritySelect = document.getElementById("taskPrioritySelect");
  const name = input.value.trim();
  if (!name) return;
 
- data.tasks.push({ id: Date.now(), name: name, done: false });
+ data.tasks.push({
+  id: Date.now(),
+  name: name,
+  priority: prioritySelect.value || 'medium',
+  done: false
+ });
+
  input.value = "";
  await save();
 }
@@ -1541,6 +1852,7 @@ document.addEventListener("keydown", function(e) {
 
 document.addEventListener("DOMContentLoaded", function() {
  initTheme();
+ initDailyQuote();
  checkSession();
 });
 </script>
