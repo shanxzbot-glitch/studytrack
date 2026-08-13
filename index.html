@@ -16,46 +16,48 @@
  --bg: #f8f6f4;
  --bg-gradient: radial-gradient(circle at 50% 0%, rgba(255, 87, 34, 0.06), transparent 70%), #f8f6f4;
  --text: #1a1614;
- --card-bg: #ffffff;
- --card-border: rgba(0, 0, 0, 0.07);
- --card-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.02);
+ --card-bg: rgba(255, 255, 255, 0.75);
+ --card-border: rgba(255, 255, 255, 0.6);
+ --card-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.06), 0 6px 16px -2px rgba(0, 0, 0, 0.03);
  --ink: #1a1614;
  --accent: #ff5722;
  --accent-gradient: linear-gradient(135deg, #ff5722 0%, #e64a19 100%);
  --accent-soft: rgba(255, 87, 34, 0.08);
- --accent-card-gradient: linear-gradient(135deg, rgba(255, 87, 34, 0.1) 0%, rgba(255, 87, 34, 0.02) 100%);
+ --accent-card-gradient: linear-gradient(135deg, rgba(255, 87, 34, 0.12) 0%, rgba(255, 87, 34, 0.03) 100%);
  --accent-hover: #f4511e;
  --danger-bg: #fee2e2;
  --danger-text: #dc2626;
  --muted: #786f6b;
  --track: #e7e2dc;
- --border: #f0eae4;
+ --border: rgba(0, 0, 0, 0.06);
  --input-border: #d4ccc4;
- --input-bg: #ffffff;
+ --input-bg: rgba(255, 255, 255, 0.85);
  --done-text: #a8a09b;
+ --backdrop-blur: blur(20px);
 }
 
 [data-theme="dark"] {
  --bg: #12100e;
- --bg-gradient: radial-gradient(circle at 50% 0%, rgba(255, 87, 34, 0.1), transparent 70%), #12100e;
+ --bg-gradient: radial-gradient(circle at 50% 0%, rgba(255, 87, 34, 0.12), transparent 70%), #12100e;
  --text: #f4f0ec;
- --card-bg: #1a1614;
- --card-border: rgba(255, 255, 255, 0.06);
- --card-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.5), 0 6px 16px -2px rgba(0, 0, 0, 0.3);
+ --card-bg: rgba(26, 22, 20, 0.72);
+ --card-border: rgba(255, 255, 255, 0.08);
+ --card-shadow: 0 20px 45px -4px rgba(0, 0, 0, 0.6), 0 8px 20px -2px rgba(0, 0, 0, 0.4);
  --ink: #f4f0ec;
  --accent: #ff5722;
  --accent-gradient: linear-gradient(135deg, #ff7043 0%, #f4511e 100%);
- --accent-soft: rgba(255, 87, 34, 0.15);
- --accent-card-gradient: linear-gradient(135deg, rgba(255, 87, 34, 0.2) 0%, rgba(255, 87, 34, 0.04) 100%);
+ --accent-soft: rgba(255, 87, 34, 0.18);
+ --accent-card-gradient: linear-gradient(135deg, rgba(255, 87, 34, 0.22) 0%, rgba(255, 87, 34, 0.05) 100%);
  --accent-hover: #ff7043;
  --danger-bg: #2a1212;
  --danger-text: #f87171;
  --muted: #a09690;
  --track: #26211e;
- --border: #211c19;
+ --border: rgba(255, 255, 255, 0.06);
  --input-border: #332c28;
- --input-bg: #181412;
+ --input-bg: rgba(24, 20, 18, 0.85);
  --done-text: #5e544f;
+ --backdrop-blur: blur(24px);
 }
 
 * {
@@ -72,6 +74,7 @@ body {
  color: var(--text);
  transition: background 0.4s ease, color 0.4s ease;
  min-height: 100vh;
+ background-attachment: fixed;
 }
 
 button, input, select { font: inherit; }
@@ -122,6 +125,8 @@ header {
  align-items: center;
  gap: 10px;
  background: var(--card-bg);
+ backdrop-filter: var(--backdrop-blur);
+ -webkit-backdrop-filter: var(--backdrop-blur);
  border: 1px solid var(--card-border);
  padding: 5px 14px 5px 6px;
  border-radius: 30px;
@@ -163,18 +168,20 @@ header {
  text-overflow: ellipsis;
 }
 
-/* Minimalist Toast Notification */
+/* Minimalist Toast Notification with Frosted Glass */
 .toast-notification {
  position: fixed;
  top: 16px;
  left: 50%;
  transform: translateX(-50%) translateY(-80px);
  background: var(--card-bg);
+ backdrop-filter: var(--backdrop-blur);
+ -webkit-backdrop-filter: var(--backdrop-blur);
  border: 1px solid var(--card-border);
  color: var(--text);
  padding: 8px 16px;
  border-radius: 30px;
- box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+ box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
  z-index: 1000;
  display: flex;
  align-items: center;
@@ -182,7 +189,6 @@ header {
  opacity: 0;
  pointer-events: none;
  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
- backdrop-filter: blur(10px);
  max-width: 90%;
 }
 
@@ -199,9 +205,11 @@ header {
 /* Daily Study Checklist Card */
 .study-checklist-card {
  background: var(--accent-card-gradient);
+ backdrop-filter: var(--backdrop-blur);
+ -webkit-backdrop-filter: var(--backdrop-blur);
  border: 1px solid rgba(255, 87, 34, 0.25);
- border-radius: 20px;
- padding: 16px 20px;
+ border-radius: 24px;
+ padding: 18px 22px;
  margin-bottom: 20px;
  display: flex;
  align-items: center;
@@ -235,10 +243,13 @@ header {
  cursor: pointer;
 }
 
+/* Frosted Glass Card Design */
 .card {
  background: var(--card-bg);
+ backdrop-filter: var(--backdrop-blur);
+ -webkit-backdrop-filter: var(--backdrop-blur);
  border: 1px solid var(--card-border);
- border-radius: 24px;
+ border-radius: 26px;
  padding: 24px;
  box-shadow: var(--card-shadow);
  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
@@ -248,7 +259,7 @@ header {
 }
 
 .card:hover {
- border-color: rgba(255, 87, 34, 0.25);
+ border-color: rgba(255, 87, 34, 0.3);
 }
 
 @keyframes flowFade {
@@ -264,7 +275,7 @@ header {
 .hero {
  background: var(--ink);
  color: var(--bg);
- border-radius: 26px;
+ border-radius: 28px;
  padding: 28px;
  margin-bottom: 20px;
  position: relative;
@@ -280,7 +291,7 @@ header {
  width: 200px;
  height: 200px;
  background: var(--accent);
- opacity: 0.15;
+ opacity: 0.18;
  filter: blur(60px);
  border-radius: 50%;
  pointer-events: none;
@@ -302,9 +313,9 @@ header {
 
 .xp-container {
  background: rgba(255, 255, 255, 0.08);
- border-radius: 14px;
+ border-radius: 16px;
  padding: 12px 16px;
- border: 1px solid rgba(255, 255, 255, 0.1);
+ border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .xp-header {
@@ -357,7 +368,7 @@ header {
 }
 
 .badge-item {
- background: var(--bg);
+ background: var(--input-bg);
  border: 1px solid var(--border);
  border-radius: 18px;
  padding: 14px 8px;
@@ -388,12 +399,13 @@ header {
 .badge-name { font-size: 11px; font-weight: 800; color: var(--text); line-height: 1.2; }
 .badge-req { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
 
-/* POLISHED 3D GLASS TROPHY & EMBLEM MODAL */
+/* 3D GLASS TROPHY & EMBLEM MODAL */
 .badge-3d-overlay {
  position: fixed;
  top: 0; left: 0; right: 0; bottom: 0;
- background: rgba(5, 7, 12, 0.88);
- backdrop-filter: blur(14px);
+ background: rgba(5, 7, 12, 0.82);
+ backdrop-filter: blur(16px);
+ -webkit-backdrop-filter: blur(16px);
  z-index: 200;
  display: flex;
  align-items: center;
@@ -410,6 +422,8 @@ header {
 
 .badge-3d-card {
  background: var(--card-bg);
+ backdrop-filter: var(--backdrop-blur);
+ -webkit-backdrop-filter: var(--backdrop-blur);
  border: 1px solid var(--card-border);
  border-radius: 32px;
  padding: 36px 28px;
@@ -564,7 +578,7 @@ h2 { font-size: 19px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
 .btn.primary-accent:hover { background: var(--accent-hover); }
 .btn.secondary { background: var(--accent-soft); color: var(--accent); box-shadow: none; }
 .btn.danger { background: var(--danger-bg); color: var(--danger-text); box-shadow: none; }
-.btn.smallbtn { padding: 8px 14px; font-size: 13px; min-height: 38px; border-radius: 10px; }
+.btn.smallbtn { padding: 8px 14px; font-size: 13px; min-height: 38px; border-radius: 12px; }
 
 .analytics-grid {
  display: grid;
@@ -574,7 +588,7 @@ h2 { font-size: 19px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
 }
 
 .analytics-card {
- background: var(--bg);
+ background: var(--input-bg);
  border: 1px solid var(--border);
  padding: 18px;
  border-radius: 18px;
@@ -613,7 +627,7 @@ input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px v
  gap: 12px;
  padding: 14px 6px;
  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
- background: var(--card-bg);
+ background: transparent;
  user-select: none;
 }
 
@@ -648,12 +662,13 @@ nav {
  justify-content: space-around;
  align-items: center;
  background: var(--card-bg);
+ backdrop-filter: var(--backdrop-blur);
+ -webkit-backdrop-filter: var(--backdrop-blur);
  border: 1px solid var(--card-border);
  padding: 6px;
- border-radius: 22px;
+ border-radius: 24px;
  z-index: 50;
- box-shadow: 0 12px 32px rgba(0,0,0,0.15);
- backdrop-filter: blur(16px);
+ box-shadow: 0 16px 36px rgba(0,0,0,0.18);
 }
 
 nav button {
@@ -679,8 +694,9 @@ nav button.active { background: var(--accent-soft); color: var(--accent); }
 .modal-overlay {
  position: fixed;
  top: 0; left: 0; right: 0; bottom: 0;
- background: rgba(0,0,0,0.45);
- backdrop-filter: blur(6px);
+ background: rgba(0,0,0,0.5);
+ backdrop-filter: blur(12px);
+ -webkit-backdrop-filter: blur(12px);
  z-index: 100;
  display: flex;
  align-items: center;
@@ -694,11 +710,13 @@ nav button.active { background: var(--accent-soft); color: var(--accent); }
 
 .modal-card {
  background: var(--card-bg);
+ backdrop-filter: var(--backdrop-blur);
+ -webkit-backdrop-filter: var(--backdrop-blur);
  border: 1px solid var(--card-border);
- border-radius: 28px;
+ border-radius: 30px;
  width: 90%;
  max-width: 440px;
- padding: 24px;
+ padding: 26px;
  box-shadow: var(--card-shadow);
  transform: scale(0.92);
  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -728,10 +746,11 @@ nav button.active { background: var(--accent-soft); color: var(--accent); }
  align-items: center;
  text-align: center;
  padding: 18px;
- background: var(--bg);
+ background: var(--input-bg);
  border-radius: 20px;
  margin-bottom: 20px;
  gap: 12px;
+ border: 1px solid var(--border);
 }
 
 .modal-avatar-preview {
@@ -763,7 +782,7 @@ nav button.active { background: var(--accent-soft); color: var(--accent); }
  aspect-ratio: 1;
  border-radius: 18px;
  border: 2px solid var(--card-border);
- background: var(--bg);
+ background: var(--input-bg);
  cursor: pointer;
  display: flex;
  align-items: center;
@@ -778,7 +797,7 @@ nav button.active { background: var(--accent-soft); color: var(--accent); }
 .avatar-item svg { width: 100%; height: 100%; border-radius: 14px; }
 
 .modal-body { display: flex; flex-direction: column; gap: 12px; }
-.settings-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--bg); border-radius: 16px; font-weight: 600; font-size: 14px; }
+.settings-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 16px; font-weight: 600; font-size: 14px; }
 
 .auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
 .auth-card { width: 100%; max-width: 400px; animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); margin-bottom: 0; }
@@ -806,7 +825,7 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
  .progress-ring { width: 38px; height: 38px; }
  .hero { padding: 22px; }
  .hero h1 { font-size: 22px; }
- .card { padding: 18px; border-radius: 20px; }
+ .card { padding: 18px; border-radius: 22px; }
  .header-name { max-width: 80px; }
 }
 </style>
@@ -903,10 +922,6 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
    Dashboard
   </button>
-  <button onclick="showSection('exams',this)">
-   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-   Exams
-  </button>
   <button onclick="showSection('subjects',this)">
    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
    Subjects
@@ -926,7 +941,7 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
   <div class="hero">
    <div class="hero-content">
     <h1>Keep learning.</h1>
-    <p>Track your daily exams, routine, and level up every day.</p>
+    <p>Track your study routine and level up every day.</p>
    </div>
 
    <div class="xp-container">
@@ -951,37 +966,33 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
    </div>
   </div>
 
-  <!-- Quick Log Daily Exam Mark Card -->
+  <!-- Dual Hours & Minutes Study Log -->
   <div class="card">
    <div class="section-title">
-    <h2>Log Today's Exam Mark</h2>
-    <button class="btn smallbtn secondary" onclick="showSectionById('exams')">All Exams</button>
+    <h2>Log Today's Study Time</h2>
+    <button class="btn smallbtn secondary" onclick="showSectionById('statsPage')">View Stats</button>
    </div>
    <div class="form">
-    <select id="quickExamSubjectSelect" style="flex: 1.2;">
-     <option value="" disabled selected>Select Subject</option>
-    </select>
-    <input id="quickExamDateInput" type="date" title="Exam Date">
-    <input id="quickExamScoreInput" type="number" step="0.5" min="0" placeholder="Score (e.g. 42)">
-    <input id="quickExamTotalInput" type="number" step="0.5" min="1" placeholder="Out Of (e.g. 50)">
-    <button class="btn primary-accent" onclick="logQuickExam()">Save Mark</button>
+    <input id="logHoursInput" type="number" min="0" placeholder="Hours (e.g. 1)">
+    <input id="logMinsInput" type="number" min="0" max="59" placeholder="Minutes (e.g. 9 or 45)">
+    <button class="btn primary-accent" onclick="logStudyTime()">Log Time</button>
    </div>
   </div>
 
   <div class="stats">
    <div class="card stat">
     <div class="stat-info">
-     <span class="label">Overall Avg</span>
-     <b id="overallExamAvg">0%</b>
+     <span class="label">Progress</span>
+     <b id="overall">0%</b>
     </div>
     <svg class="progress-ring"><circle class="bg" cx="24" cy="24" r="18"/><circle class="fill" id="ringOverall" cx="24" cy="24" r="18" stroke-dasharray="113" stroke-dashoffset="113"/></svg>
    </div>
    <div class="card stat">
     <div class="stat-info">
-     <span class="label">Exams Taken</span>
-     <b id="totalExamsTaken">0</b>
+     <span class="label">Topics</span>
+     <b id="topicsDone">0</b>
     </div>
-    <svg class="progress-ring"><circle class="bg" cx="24" cy="24" r="18"/><circle class="fill" id="ringExams" cx="24" cy="24" r="18" stroke-dasharray="113" stroke-dashoffset="113"/></svg>
+    <svg class="progress-ring"><circle class="bg" cx="24" cy="24" r="18"/><circle class="fill" id="ringTopics" cx="24" cy="24" r="18" stroke-dasharray="113" stroke-dashoffset="113"/></svg>
    </div>
    <div class="card stat">
     <div class="stat-info">
@@ -994,80 +1005,42 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
 
   <section class="card">
    <div class="section-title">
-    <h2>Recent Daily Exams</h2>
-    <button class="btn smallbtn secondary" onclick="showSectionById('exams')">View All</button>
+    <h2>Subject Progress</h2>
+    <button class="btn smallbtn secondary" onclick="showSectionById('subjects')">Manage</button>
    </div>
-   <div id="dashboardExamList"></div>
+   <div id="dashboardSubjects"></div>
   </section>
  </main>
-
- <!-- EXAMS TRACKING PAGE -->
- <section id="exams" style="display:none">
-  <div class="card">
-   <div class="section-title">
-    <h2>Daily Exam Mark Tracker</h2>
-   </div>
-   <div class="form">
-    <select id="examSubjectSelect" style="flex: 1.2;">
-     <option value="" disabled selected>Select Subject</option>
-    </select>
-    <input id="examTitleInput" placeholder="Exam Topic / Title (e.g. Chapter 4 Test)">
-    <input id="examDateInput" type="date" title="Exam Written Date">
-    <input id="examScoreInput" type="number" step="0.5" min="0" placeholder="Score">
-    <input id="examTotalInput" type="number" step="0.5" min="1" placeholder="Out Of">
-    <button class="btn primary-accent" onclick="addExamResult()">Log Result</button>
-   </div>
-   <div id="examResultList"></div>
-  </div>
- </section>
 
  <!-- STATS & ANALYTICS -->
  <section id="statsPage" style="display:none">
   <div class="card">
    <div class="section-title">
-    <h2>Performance Statistics</h2>
+    <h2>Study Time Analytics</h2>
    </div>
 
-   <div class="analytics-grid" style="margin-bottom: 24px;">
+   <div class="analytics-grid">
     <div class="analytics-card">
-     <span class="label">Overall Percentage</span>
-     <b id="statOverallPct">0%</b>
-     <span class="small">Across all logged daily exams</span>
+     <span class="label">Today</span>
+     <b id="statToday">0 hrs</b>
+     <span class="small">Hours & mins logged today</span>
     </div>
     <div class="analytics-card">
-     <span class="label">Total Exams</span>
-     <b id="statTotalExams">0</b>
-     <span class="small">Tests recorded</span>
+     <span class="label">This Week</span>
+     <b id="statWeek">0 hrs</b>
+     <span class="small">Last 7 days total</span>
     </div>
     <div class="analytics-card">
-     <span class="label">Highest Score %</span>
-     <b id="statHighestScore">0%</b>
-     <span class="small">Best performance</span>
+     <span class="label">This Month</span>
+     <b id="statMonth">0 hrs</b>
+     <span class="small">Last 30 days total</span>
     </div>
     <div class="analytics-card">
-     <span class="label">Study Streak</span>
-     <b id="statStreakDays">0 days</b>
-     <span class="small">Consistent check-ins</span>
+     <span class="label">All Time</span>
+     <b id="statTotal">0 hrs</b>
+     <span class="small">Total study investment</span>
     </div>
    </div>
-
-   <!-- WEEKLY STATS -->
-   <div class="section-title" style="margin-top: 24px;">
-    <h2>Weekly Breakdown (Last 4 Weeks)</h2>
-   </div>
-   <div id="weeklyStatsContainer"></div>
-
-   <!-- MONTHLY STATS -->
-   <div class="section-title" style="margin-top: 28px;">
-    <h2>Monthly Breakdown</h2>
-   </div>
-   <div id="monthlyStatsContainer"></div>
-
-   <!-- INDIVIDUAL SUBJECT STATS -->
-   <div class="section-title" style="margin-top: 28px;">
-    <h2>Individual Subject Statistics</h2>
-   </div>
-   <div id="individualSubjectStatsContainer"></div>
   </div>
  </section>
 
@@ -1075,11 +1048,11 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
  <section id="subjects" style="display:none">
   <div class="card">
    <div class="section-title">
-    <h2>Subjects Management</h2>
+    <h2>Subjects & Topics</h2>
    </div>
    <div class="form">
-    <input id="subjectInput" placeholder="Subject Name (e.g. Accounts, Law)">
-    <input id="examTargetDateInput" type="date" title="Exam Target Date">
+    <input id="subjectInput" placeholder="Subject Name (e.g. Accountancy, Law)">
+    <input id="examDateInput" type="date" title="Exam Target Date">
     <button class="btn primary-accent" onclick="addSubject()">Add Subject</button>
    </div>
    <div id="subjectList"></div>
@@ -1278,8 +1251,8 @@ const badgeDefinitions = [
  { id: 'task_1', icon: '🎯', name: 'FIRST STEP', req: '1 Task Done', check: d => (d.tasks.filter(t => t.done).length >= 1) },
  { id: 'task_5', icon: '⚡', name: 'MOMENTUM', req: '5 Tasks Done', check: d => (d.tasks.filter(t => t.done).length >= 5) },
  { id: 'task_10', icon: '🔥', name: 'ON FIRE', req: '10 Tasks Done', check: d => (d.tasks.filter(t => t.done).length >= 10) },
- { id: 'exam_1', icon: '📝', name: 'TESTED', req: '1 Exam Logged', check: d => ((d.examResults || []).length >= 1) },
- { id: 'exam_5', icon: '🎯', name: 'SHARPSHOOTER', req: '5 Exams Logged', check: d => ((d.examResults || []).length >= 5) },
+ { id: 'task_25', icon: '🏅', name: 'TASK MASTER', req: '25 Tasks Done', check: d => (d.tasks.filter(t => t.done).length >= 25) },
+ { id: 'task_50', icon: '🚀', name: 'UNSTOPPABLE', req: '50 Tasks Done', check: d => (d.tasks.filter(t => t.done).length >= 50) },
  { id: 'clean_slate', icon: '✨', name: 'CLEAN SLATE', req: 'Clear All Tasks', check: d => (d.tasks.length > 0 && d.tasks.every(t => t.done)) },
  { id: 'comeback', icon: '⚔️', name: 'COMEBACK', req: 'Finish Overdue Task', check: d => (d.hasComeback === true) },
  { id: 'consistent_3', icon: '📈', name: 'CONSISTENT', req: '3 Day Streak', check: d => ((d.streak || 0) >= 3) },
@@ -1393,8 +1366,9 @@ function getDefaultData() {
  return {
   subjects: [],
   tasks: [],
-  examResults: [],
+  habits: [],
   unlockedBadges: [],
+  studyLogs: {},
   streak: 0,
   lastCheckInDate: null,
   hasComeback: false,
@@ -1577,386 +1551,88 @@ function closeProfileModal() {
 }
 
 /* =====================================================
-   DAILY EXAMS & STATISTICS ENGINE
+   PROGRESSIVE XP & LEVELING CURVE ENGINE
 ===================================================== */
 function todayStr() {
  const d = new Date();
  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
 
-async function logQuickExam() {
+async function logStudyTime() {
  playSound('click');
- const subjectSelect = document.getElementById("quickExamSubjectSelect");
- const dateInput = document.getElementById("quickExamDateInput");
- const scoreInput = document.getElementById("quickExamScoreInput");
- const totalInput = document.getElementById("quickExamTotalInput");
+ const hrsInput = document.getElementById("logHoursInput");
+ const minsInput = document.getElementById("logMinsInput");
 
- const subjectName = subjectSelect.value;
- const examDate = dateInput.value || todayStr();
- const score = parseFloat(scoreInput.value);
- const total = parseFloat(totalInput.value);
+ const hrs = parseFloat(hrsInput.value) || 0;
+ const mins = parseFloat(minsInput.value) || 0;
 
- if (!subjectName) {
-  showToast("SELECT SUBJECT", "Please select a subject.", "⚠️");
-  return;
- }
- if (isNaN(score) || isNaN(total) || total <= 0) {
-  showToast("INVALID INPUT", "Enter a valid score and out-of mark.", "⚠️");
-  return;
- }
- if (score > total) {
-  showToast("INVALID SCORE", "Score cannot exceed total marks.", "⚠️");
-  return;
- }
+ if (hrs <= 0 && mins <= 0) return;
 
- if (!data.examResults) data.examResults = [];
- data.examResults.unshift({
-  id: Date.now(),
-  subject: subjectName,
-  title: "Daily Assessment",
-  score: score,
-  total: total,
-  date: examDate
- });
+ const totalDecimalHours = hrs + (mins / 60);
+ const today = todayStr();
 
- scoreInput.value = "";
- totalInput.value = "";
- dateInput.value = "";
- subjectSelect.selectedIndex = 0;
- playSound('check');
- showToast("SAVED", "Daily exam mark recorded!", "📝");
+ if (!data.studyLogs) data.studyLogs = {};
+ data.studyLogs[today] = (data.studyLogs[today] || 0) + totalDecimalHours;
+
+ hrsInput.value = "";
+ minsInput.value = "";
  await save();
 }
 
-async function addExamResult() {
- playSound('click');
- const subjectSelect = document.getElementById("examSubjectSelect");
- const titleInput = document.getElementById("examTitleInput");
- const dateInput = document.getElementById("examDateInput");
- const scoreInput = document.getElementById("examScoreInput");
- const totalInput = document.getElementById("examTotalInput");
+function formatHoursAndMins(decimalHours) {
+ const totalMins = Math.round(decimalHours * 60);
+ const h = Math.floor(totalMins / 60);
+ const m = totalMins % 60;
 
- const subjectName = subjectSelect.value;
- const title = titleInput.value.trim() || "Daily Assessment";
- const examDate = dateInput.value || todayStr();
- const score = parseFloat(scoreInput.value);
- const total = parseFloat(totalInput.value);
-
- if (!subjectName) {
-  showToast("SELECT SUBJECT", "Please select a subject.", "⚠️");
-  return;
- }
- if (!dateInput.value) {
-  showToast("DATE REQUIRED", "Please select the date the exam was written.", "⚠️");
-  return;
- }
- if (isNaN(score) || isNaN(total) || total <= 0) {
-  showToast("INVALID INPUT", "Enter a valid score and out-of mark.", "⚠️");
-  return;
- }
- if (score > total) {
-  showToast("INVALID SCORE", "Score cannot exceed total marks.", "⚠️");
-  return;
- }
-
- if (!data.examResults) data.examResults = [];
- data.examResults.unshift({
-  id: Date.now(),
-  subject: subjectName,
-  title: title,
-  score: score,
-  total: total,
-  date: examDate
- });
-
- titleInput.value = "";
- dateInput.value = "";
- scoreInput.value = "";
- totalInput.value = "";
- subjectSelect.selectedIndex = 0;
- playSound('check');
- showToast("SAVED", "Exam mark logged successfully!", "📝");
- await save();
-}
-
-async function deleteExamResult(id) {
- playSound('click');
- if (!confirm("Delete this exam result?")) return;
- data.examResults = (data.examResults || []).filter(e => e.id !== id);
- await save();
-}
-
-function updateSubjectDropdowns() {
- const quickSelect = document.getElementById("quickExamSubjectSelect");
- const mainSelect = document.getElementById("examSubjectSelect");
- 
- const optionsHtml = '<option value="" disabled selected>Select Subject</option>' + 
-  (data.subjects || []).map(s => `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('');
-
- if (quickSelect) quickSelect.innerHTML = optionsHtml;
- if (mainSelect) mainSelect.innerHTML = optionsHtml;
-}
-
-function renderDashboardExams() {
- const el = document.getElementById("dashboardExamList");
- const results = data.examResults || [];
- 
- if (!results.length) {
-  el.innerHTML = '<div class="empty">No daily exams logged yet. Log your first mark above!</div>';
-  return;
- }
-
- el.innerHTML = results.slice(0, 5).map(e => {
-  const pct = Math.round((e.score / e.total) * 100);
-  return `
-  <div class="subject">
-   <div class="row">
-    <div>
-     <b>${esc(e.subject)}</b>
-     <br><span class="small">${esc(e.title)} • Written on: ${e.date}</span>
-    </div>
-    <div style="text-align: right;">
-     <b>${e.score} / ${e.total}</b>
-     <br><span class="exam-tag">${pct}%</span>
-    </div>
-   </div>
-  </div>`;
- }).join("");
-}
-
-function renderExamResultsList() {
- const el = document.getElementById("examResultList");
- const results = data.examResults || [];
-
- if (!results.length) {
-  el.innerHTML = '<div class="empty">No exam records found. Add one above.</div>';
-  return;
- }
-
- el.innerHTML = results.map(e => {
-  const pct = Math.round((e.score / e.total) * 100);
-  return `
-  <div class="subject">
-   <div class="row">
-    <div>
-     <b>${esc(e.subject)}</b>
-     <br><span class="small">${esc(e.title)} • Written on: ${e.date}</span>
-    </div>
-    <div style="display: flex; align-items: center; gap: 12px;">
-     <div style="text-align: right;">
-      <b>${e.score} / ${e.total}</b>
-      <br><span class="exam-tag">${pct}%</span>
-     </div>
-     <button class="btn danger smallbtn" onclick="deleteExamResult(${e.id})">Delete</button>
-    </div>
-   </div>
-  </div>`;
- }).join("");
+ if (h > 0 && m > 0) return `${h}h ${m}m`;
+ if (h > 0) return `${h} hrs`;
+ return `${m} mins`;
 }
 
 function calculateAnalytics() {
- const results = data.examResults || [];
- 
- let totalScoreSum = 0;
- let totalOutSum = 0;
- let highestPct = 0;
+ if (!data.studyLogs) data.studyLogs = {};
+ const today = todayStr();
+ const now = new Date();
 
- results.forEach(e => {
-  totalScoreSum += e.score;
-  totalOutSum += e.total;
-  const pct = (e.score / e.total) * 100;
-  if (pct > highestPct) highestPct = pct;
+ let todayHours = data.studyLogs[today] || 0;
+ let weekHours = 0;
+ let monthHours = 0;
+ let totalHours = 0;
+
+ Object.keys(data.studyLogs).forEach(dateStr => {
+  const logHrs = data.studyLogs[dateStr] || 0;
+  totalHours += logHrs;
+
+  const logDate = new Date(dateStr);
+  const diffDays = Math.floor((now - logDate) / (1000 * 60 * 60 * 24));
+
+  if (diffDays >= 0 && diffDays < 7) weekHours += logHrs;
+  if (diffDays >= 0 && diffDays < 30) monthHours += logHrs;
  });
 
- const overallPct = totalOutSum > 0 ? Math.round((totalScoreSum / totalOutSum) * 100) : 0;
+ const elToday = document.getElementById("statToday");
+ const elWeek = document.getElementById("statWeek");
+ const elMonth = document.getElementById("statMonth");
+ const elTotal = document.getElementById("statTotal");
 
- const elOverall = document.getElementById("statOverallPct");
- const elTotalExams = document.getElementById("statTotalExams");
- const elHighest = document.getElementById("statHighestScore");
- const elStreak = document.getElementById("statStreakDays");
-
- if (elOverall) elOverall.textContent = overallPct + "%";
- if (elTotalExams) elTotalExams.textContent = results.length;
- if (elHighest) elHighest.textContent = Math.round(highestPct) + "%";
- if (elStreak) elStreak.textContent = (data.streak || 0) + " days";
-
- // Dashboard stats
- const elDashAvg = document.getElementById("overallExamAvg");
- const elDashTotal = document.getElementById("totalExamsTaken");
- if (elDashAvg) elDashAvg.textContent = overallPct + "%";
- if (elDashTotal) elDashTotal.textContent = results.length;
-
- setRingProgress("ringOverall", overallPct);
- setRingProgress("ringExams", Math.min(100, results.length * 10));
-
- renderWeeklyStats();
- renderMonthlyStats();
- renderIndividualSubjectStats();
-}
-
-function getWeekNumber(d) {
- const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
- const dayNum = date.getUTCDay() || 7;
- date.setUTCDate(date.getUTCDate() + 4 - dayNum);
- const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
- const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
- return { year: date.getUTCFullYear(), week: weekNo };
-}
-
-function renderWeeklyStats() {
- const container = document.getElementById("weeklyStatsContainer");
- if (!container) return;
-
- const results = data.examResults || [];
- if (!results.length) {
-  container.innerHTML = '<div class="empty">No exam data for weekly stats yet.</div>';
-  return;
- }
-
- // Group by Year-Week
- const weeksMap = {};
- results.forEach(e => {
-  if (!e.date) return;
-  const d = new Date(e.date);
-  const wn = getWeekNumber(d);
-  const key = `${wn.year}-W${String(wn.week).padStart(2, '0')}`;
-  if (!weeksMap[key]) weeksMap[key] = { score: 0, total: 0, count: 0, label: `Week ${wn.week}, ${wn.year}` };
-  weeksMap[key].score += e.score;
-  weeksMap[key].total += e.total;
-  weeksMap[key].count += 1;
- });
-
- const sortedKeys = Object.keys(weeksMap).sort().reverse().slice(0, 4); // Last 4 weeks
-
- if (!sortedKeys.length) {
-  container.innerHTML = '<div class="empty">No valid dated weekly exams found.</div>';
-  return;
- }
-
- container.innerHTML = sortedKeys.map(k => {
-  const w = weeksMap[k];
-  const pct = w.total > 0 ? Math.round((w.score / w.total) * 100) : 0;
-  return `
-  <div class="card" style="margin-bottom: 12px; padding: 18px;">
-   <div class="row">
-    <div>
-     <h3 style="font-size: 15px; font-weight: 800; margin: 0 0 2px;">${w.label}</h3>
-     <span class="small">${w.count} exam${w.count === 1 ? '' : 's'} recorded</span>
-    </div>
-    <div style="text-align: right;">
-     <b style="font-size: 18px;">${pct}%</b>
-     <br><span class="small">${w.score} / ${w.total} marks</span>
-    </div>
-   </div>
-   <div class="progress" style="margin-top: 10px;">
-    <div style="width: ${pct}%"></div>
-   </div>
-  </div>`;
- }).join("");
-}
-
-function renderMonthlyStats() {
- const container = document.getElementById("monthlyStatsContainer");
- if (!container) return;
-
- const results = data.examResults || [];
- if (!results.length) {
-  container.innerHTML = '<div class="empty">No exam data for monthly stats yet.</div>';
-  return;
- }
-
- // Group by Year-Month (e.g. "2026-06")
- const monthsMap = {};
- const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
- results.forEach(e => {
-  if (!e.date) return;
-  const d = new Date(e.date);
-  const ymKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-  const label = `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
-  if (!monthsMap[ymKey]) monthsMap[ymKey] = { score: 0, total: 0, count: 0, label: label };
-  monthsMap[ymKey].score += e.score;
-  monthsMap[ymKey].total += e.total;
-  monthsMap[ymKey].count += 1;
- });
-
- const sortedKeys = Object.keys(monthsMap).sort().reverse();
-
- if (!sortedKeys.length) {
-  container.innerHTML = '<div class="empty">No valid dated monthly exams found.</div>';
-  return;
- }
-
- container.innerHTML = sortedKeys.map(k => {
-  const m = monthsMap[k];
-  const pct = m.total > 0 ? Math.round((m.score / m.total) * 100) : 0;
-  return `
-  <div class="card" style="margin-bottom: 12px; padding: 18px;">
-   <div class="row">
-    <div>
-     <h3 style="font-size: 15px; font-weight: 800; margin: 0 0 2px;">${m.label}</h3>
-     <span class="small">${m.count} exam${m.count === 1 ? '' : 's'} recorded</span>
-    </div>
-    <div style="text-align: right;">
-     <b style="font-size: 18px;">${pct}%</b>
-     <br><span class="small">${m.score} / ${m.total} marks</span>
-    </div>
-   </div>
-   <div class="progress" style="margin-top: 10px;">
-    <div style="width: ${pct}%"></div>
-   </div>
-  </div>`;
- }).join("");
-}
-
-function renderIndividualSubjectStats() {
- const container = document.getElementById("individualSubjectStatsContainer");
- if (!container) return;
-
- const subjects = data.subjects || [];
- const results = data.examResults || [];
-
- if (!subjects.length) {
-  container.innerHTML = '<div class="empty">No subjects added yet. Add subjects in the Subjects tab to view breakdown.</div>';
-  return;
- }
-
- container.innerHTML = subjects.map(s => {
-  const subResults = results.filter(e => e.subject.toLowerCase() === s.name.toLowerCase());
-  const count = subResults.length;
-
-  let subScoreSum = 0;
-  let subOutSum = 0;
-  subResults.forEach(e => {
-   subScoreSum += e.score;
-   subOutSum += e.total;
-  });
-
-  const subPct = subOutSum > 0 ? Math.round((subScoreSum / subOutSum) * 100) : 0;
-
-  return `
-  <div class="card" style="margin-bottom: 12px; padding: 18px;">
-   <div class="row">
-    <div>
-     <h3 style="font-size: 16px; font-weight: 800; margin: 0 0 4px;">${esc(s.name)}</h3>
-     <span class="small">${count} exam${count === 1 ? '' : 's'} recorded</span>
-    </div>
-    <div style="text-align: right;">
-     <b style="font-size: 20px;">${subPct}%</b>
-     <br><span class="small">${subScoreSum} / ${subOutSum} total marks</span>
-    </div>
-   </div>
-   <div class="progress" style="margin-top: 12px;">
-    <div style="width: ${subPct}%"></div>
-   </div>
-  </div>`;
- }).join("");
+ if (elToday) elToday.textContent = formatHoursAndMins(todayHours);
+ if (elWeek) elWeek.textContent = formatHoursAndMins(weekHours);
+ if (elMonth) elMonth.textContent = formatHoursAndMins(monthHours);
+ if (elTotal) elTotal.textContent = formatHoursAndMins(totalHours);
 }
 
 function calculateTotalXP() {
- const results = data.examResults || [];
+ const topics = data.subjects.flatMap(s => s.topics || []);
+ const topicsDone = topics.filter(t => t.done).length;
  const tasksDone = data.tasks.filter(t => t.done).length;
- return (results.length * 40) + (tasksDone * 20);
+ const habitsDone = (data.habits || []).reduce((acc, h) => acc + (h.streak || 0), 0);
+
+ let studyMins = 0;
+ if (data.studyLogs) {
+  Object.values(data.studyLogs).forEach(hrs => { studyMins += Math.round((hrs || 0) * 60); });
+ }
+
+ return (topicsDone * 30) + (tasksDone * 20) + (habitsDone * 15) + (studyMins * 2);
 }
 
 function getXpForLevel(level) {
@@ -2015,6 +1691,9 @@ function setRingProgress(id, pct) {
  circle.style.strokeDashoffset = offset;
 }
 
+/* =====================================================
+   HABITS WITH INDIVIDUAL STREAKS
+===================================================== */
 function yesterdayStr() {
  const d = new Date();
  d.setDate(d.getDate() - 1);
@@ -2223,8 +1902,9 @@ async function loadCloudData() {
    data = response.data.data;
    if (!Array.isArray(data.subjects)) data.subjects = [];
    if (!Array.isArray(data.tasks)) data.tasks = [];
-   if (!Array.isArray(data.examResults)) data.examResults = [];
+   if (!Array.isArray(data.habits)) data.habits = [];
    if (!Array.isArray(data.unlockedBadges)) data.unlockedBadges = [];
+   if (!data.studyLogs) data.studyLogs = {};
    if (typeof data.streak !== 'number') data.streak = 0;
    if (!data.avatar) data.avatar = 'av1';
    if (!data.displayName) data.displayName = '';
@@ -2247,24 +1927,28 @@ function esc(value) {
 }
 
 function totals() {
+ const topics = data.subjects.flatMap(s => s.topics || []);
+ const done = topics.filter(t => t.done).length;
  const tasksDone = data.tasks.filter(t => t.done).length;
- return { tasksDone };
+ const total = topics.length ? Math.round((done / topics.length) * 100) : 0;
+ return { topics, done, tasksDone, total };
 }
 
 function render() {
  const t = totals();
+ document.getElementById("overall").textContent = t.total + "%";
+ document.getElementById("topicsDone").textContent = t.done;
  document.getElementById("tasksDone").textContent = t.tasksDone;
 
+ setRingProgress("ringOverall", t.total);
+ setRingProgress("ringTopics", t.topics.length ? Math.round((t.done / t.topics.length) * 100) : 0);
  setRingProgress("ringTasks", data.tasks.length ? Math.round((t.tasksDone / data.tasks.length) * 100) : 0);
 
  updateXP();
- updateSubjectDropdowns();
  calculateAnalytics();
  renderStudyChecklist();
  renderDashboardSubjects();
- renderDashboardExams();
  renderSubjects();
- renderExamResultsList();
  renderTasks();
  renderUserProfile();
 }
@@ -2280,16 +1964,16 @@ function getDaysUntil(dateStr) {
 function renderDashboardSubjects() {
  const el = document.getElementById("dashboardSubjects");
  if (!data.subjects.length) {
-  el.innerHTML = '<div class="empty">No subjects added yet. Add subjects like Accounts, Law, etc.</div>';
+  el.innerHTML = '<div class="empty">No subjects added yet.</div>';
   return;
  }
 
  el.innerHTML = data.subjects.map(s => {
+  const topics = s.topics || [];
+  const done = topics.filter(t => t.done).length;
+  const total = topics.length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
   const daysLeft = getDaysUntil(s.examDate);
-  const subResults = (data.examResults || []).filter(e => e.subject.toLowerCase() === s.name.toLowerCase());
-  let subScoreSum = 0, subOutSum = 0;
-  subResults.forEach(e => { subScoreSum += e.score; subOutSum += e.total; });
-  const subPct = subOutSum > 0 ? Math.round((subScoreSum / subOutSum) * 100) : 0;
 
   return `
   <div class="subject">
@@ -2298,10 +1982,10 @@ function renderDashboardSubjects() {
      <b>${esc(s.name)}</b>
      ${daysLeft !== null ? `<br><span class="exam-tag">📅 ${daysLeft > 0 ? daysLeft + ' days left' : (daysLeft === 0 ? 'Exam today!' : 'Exam passed')}</span>` : ''}
     </div>
-    <span class="small">${subResults.length} exams • ${subPct}% avg</span>
+    <span class="small">${done}/${total} • ${pct}%</span>
    </div>
    <div class="progress" style="margin-top:10px">
-    <div style="width:${subPct}%"></div>
+    <div style="width:${pct}%"></div>
    </div>
   </div>`;
  }).join("");
@@ -2310,16 +1994,16 @@ function renderDashboardSubjects() {
 function renderSubjects() {
  const el = document.getElementById("subjectList");
  if (!data.subjects.length) {
-  el.innerHTML = '<div class="empty">Add your first subject above (e.g. Accounts, Law, Other).</div>';
+  el.innerHTML = '<div class="empty">Add your first subject above.</div>';
   return;
  }
 
  el.innerHTML = data.subjects.map(s => {
+  const topics = s.topics || [];
+  const done = topics.filter(t => t.done).length;
+  const total = topics.length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
   const daysLeft = getDaysUntil(s.examDate);
-  const subResults = (data.examResults || []).filter(e => e.subject.toLowerCase() === s.name.toLowerCase());
-  let subScoreSum = 0, subOutSum = 0;
-  subResults.forEach(e => { subScoreSum += e.score; subOutSum += e.total; });
-  const subPct = subOutSum > 0 ? Math.round((subScoreSum / subOutSum) * 100) : 0;
 
   return `
   <div class="subject">
@@ -2327,12 +2011,26 @@ function renderSubjects() {
     <div>
      <b>${esc(s.name)}</b>
      ${daysLeft !== null ? `<br><span class="exam-tag">📅 ${daysLeft > 0 ? daysLeft + ' days left' : 'Exam active'}</span>` : ''}
-     <div class="small">${subResults.length} daily exams logged • Average: ${subPct}%</div>
+     <div class="small">${done}/${total} topics completed</div>
     </div>
     <button class="btn danger smallbtn" onclick="deleteSubject(${s.id})">Delete</button>
    </div>
+
    <div class="progress" style="margin:12px 0">
-    <div style="width:${subPct}%"></div>
+    <div style="width:${pct}%"></div>
+   </div>
+
+   ${topics.map(t => `
+    <div class="task ${t.done ? "done" : ""}">
+     <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTopic(${s.id},${t.id})">
+     <span style="flex:1">${esc(t.name)}</span>
+     <button class="btn danger smallbtn" onclick="deleteTopic(${s.id},${t.id})">×</button>
+    </div>
+   `).join("")}
+
+   <div class="form">
+    <input id="topic-${s.id}" placeholder="Add a chapter or topic">
+    <button class="btn smallbtn secondary" onclick="addTopic(${s.id})">Add topic</button>
    </div>
   </div>`;
  }).join("");
@@ -2341,14 +2039,15 @@ function renderSubjects() {
 async function addSubject() {
  playSound('click');
  const input = document.getElementById("subjectInput");
- const dateInput = document.getElementById("examTargetDateInput");
+ const dateInput = document.getElementById("examDateInput");
  const name = input.value.trim();
  if (!name) return;
 
  data.subjects.push({
   id: Date.now(),
   name: name,
-  examDate: dateInput.value || null
+  examDate: dateInput.value || null,
+  topics: []
  });
 
  input.value = "";
@@ -2358,8 +2057,47 @@ async function addSubject() {
 
 async function deleteSubject(id) {
  playSound('click');
- if (!confirm("Delete this subject?")) return;
+ if (!confirm("Delete this subject and its topics?")) return;
  data.subjects = data.subjects.filter(s => s.id !== id);
+ await save();
+}
+
+async function addTopic(id) {
+ playSound('click');
+ const input = document.getElementById("topic-" + id);
+ if (!input) return;
+ const name = input.value.trim();
+ if (!name) return;
+
+ const subject = data.subjects.find(s => s.id === id);
+ if (!subject) return;
+ if (!subject.topics) subject.topics = [];
+
+ subject.topics.push({ id: Date.now(), name: name, done: false });
+ input.value = "";
+ await save();
+}
+
+async function toggleTopic(sid, tid) {
+ const subject = data.subjects.find(s => s.id === sid);
+ if (!subject) return;
+ const topic = (subject.topics || []).find(t => t.id === tid);
+ if (!topic) return;
+
+ topic.done = !topic.done;
+ if (topic.done) {
+  playSound('check');
+ } else {
+  playSound('click');
+ }
+ await save();
+}
+
+async function deleteTopic(sid, tid) {
+ playSound('click');
+ const subject = data.subjects.find(s => s.id === sid);
+ if (!subject) return;
+ subject.topics = (subject.topics || []).filter(t => t.id !== tid);
  await save();
 }
 
@@ -2369,7 +2107,7 @@ async function deleteSubject(id) {
 function renderTasks() {
  const el = document.getElementById("taskList");
  if (!data.tasks.length) {
-  el.innerHTML = '<div class="empty">No tasks yet. Add study homework or goals above.</div>';
+  el.innerHTML = '<div class="empty">No tasks yet. Add homework or goals above.</div>';
   return;
  }
 
@@ -2449,7 +2187,7 @@ async function deleteTask(id) {
 ===================================================== */
 function showSection(id, button) {
  playSound('click');
- ["dashboard", "exams", "subjects", "tasks", "statsPage"].forEach(section => {
+ ["dashboard", "subjects", "tasks", "statsPage"].forEach(section => {
   const el = document.getElementById(section);
   if (el) el.style.display = section === id ? "block" : "none";
  });
@@ -2479,7 +2217,7 @@ async function resetData() {
 
 document.addEventListener("keydown", function(e) {
  if (e.key === "Enter" && document.activeElement?.id === "loginPassword") login();
- if (e.key === "Enter" && (document.activeElement?.id === "quickExamScoreInput" || document.activeElement?.id === "quickExamTotalInput")) logQuickExam();
+ if (e.key === "Enter" && (document.activeElement?.id === "logHoursInput" || document.activeElement?.id === "logMinsInput")) logStudyTime();
 });
 
 document.addEventListener("DOMContentLoaded", function() {
