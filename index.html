@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#2dbe5f">
+<meta name="theme-color" content="#ff5722">
 <title>Padikya</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -13,49 +13,49 @@
 
 <style>
 :root {
- --bg: #f4f5f7;
- --bg-gradient: radial-gradient(circle at 50% 0%, rgba(45, 190, 95, 0.08), transparent 70%), #f4f5f7;
- --text: #090a0f;
+ --bg: #f8f6f4;
+ --bg-gradient: radial-gradient(circle at 50% 0%, rgba(255, 87, 34, 0.06), transparent 70%), #f8f6f4;
+ --text: #1a1614;
  --card-bg: #ffffff;
- --card-border: rgba(0, 0, 0, 0.08);
- --card-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
- --ink: #090a0f;
- --accent: #2dbe5f;
- --accent-gradient: linear-gradient(135deg, #2dbe5f 0%, #1ea64f 100%);
- --accent-soft: rgba(45, 190, 95, 0.1);
- --accent-card-gradient: linear-gradient(135deg, rgba(45, 190, 95, 0.12) 0%, rgba(45, 190, 95, 0.03) 100%);
- --accent-hover: #23a851;
+ --card-border: rgba(0, 0, 0, 0.07);
+ --card-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.02);
+ --ink: #1a1614;
+ --accent: #ff5722;
+ --accent-gradient: linear-gradient(135deg, #ff5722 0%, #e64a19 100%);
+ --accent-soft: rgba(255, 87, 34, 0.08);
+ --accent-card-gradient: linear-gradient(135deg, rgba(255, 87, 34, 0.1) 0%, rgba(255, 87, 34, 0.02) 100%);
+ --accent-hover: #f4511e;
  --danger-bg: #fee2e2;
  --danger-text: #dc2626;
- --muted: #626875;
- --track: #e5e7eb;
- --border: #f0f1f4;
- --input-border: #d1d5db;
+ --muted: #786f6b;
+ --track: #e7e2dc;
+ --border: #f0eae4;
+ --input-border: #d4ccc4;
  --input-bg: #ffffff;
- --done-text: #9ca3af;
+ --done-text: #a8a09b;
 }
 
 [data-theme="dark"] {
- --bg: #07080a;
- --bg-gradient: radial-gradient(circle at 50% 0%, rgba(45, 190, 95, 0.12), transparent 70%), #07080a;
- --text: #f0f2f5;
- --card-bg: #111318;
- --card-border: rgba(255, 255, 255, 0.08);
+ --bg: #12100e;
+ --bg-gradient: radial-gradient(circle at 50% 0%, rgba(255, 87, 34, 0.1), transparent 70%), #12100e;
+ --text: #f4f0ec;
+ --card-bg: #1a1614;
+ --card-border: rgba(255, 255, 255, 0.06);
  --card-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.5), 0 6px 16px -2px rgba(0, 0, 0, 0.3);
- --ink: #f0f2f5;
- --accent: #2dbe5f;
- --accent-gradient: linear-gradient(135deg, #32d66b 0%, #25b357 100%);
- --accent-soft: rgba(45, 190, 95, 0.16);
- --accent-card-gradient: linear-gradient(135deg, rgba(45, 190, 95, 0.22) 0%, rgba(45, 190, 95, 0.05) 100%);
- --accent-hover: #37e373;
+ --ink: #f4f0ec;
+ --accent: #ff5722;
+ --accent-gradient: linear-gradient(135deg, #ff7043 0%, #f4511e 100%);
+ --accent-soft: rgba(255, 87, 34, 0.15);
+ --accent-card-gradient: linear-gradient(135deg, rgba(255, 87, 34, 0.2) 0%, rgba(255, 87, 34, 0.04) 100%);
+ --accent-hover: #ff7043;
  --danger-bg: #2a1212;
  --danger-text: #f87171;
- --muted: #8e95a5;
- --track: #1c1f26;
- --border: #181b22;
- --input-border: #282c37;
- --input-bg: #151820;
- --done-text: #4b5262;
+ --muted: #a09690;
+ --track: #26211e;
+ --border: #211c19;
+ --input-border: #332c28;
+ --input-bg: #181412;
+ --done-text: #5e544f;
 }
 
 * {
@@ -199,7 +199,7 @@ header {
 /* Daily Study Checklist Card */
 .study-checklist-card {
  background: var(--accent-card-gradient);
- border: 1px solid rgba(45, 190, 95, 0.25);
+ border: 1px solid rgba(255, 87, 34, 0.25);
  border-radius: 20px;
  padding: 16px 20px;
  margin-bottom: 20px;
@@ -248,7 +248,7 @@ header {
 }
 
 .card:hover {
- border-color: rgba(45, 190, 95, 0.25);
+ border-color: rgba(255, 87, 34, 0.25);
 }
 
 @keyframes flowFade {
@@ -346,7 +346,7 @@ header {
  background: var(--accent-soft);
  padding: 4px 10px;
  border-radius: 20px;
- border: 1px solid rgba(45, 190, 95, 0.2);
+ border: 1px solid rgba(255, 87, 34, 0.2);
 }
 
 .badge-collection-grid {
@@ -377,7 +377,7 @@ header {
  filter: grayscale(0);
  border-color: var(--accent);
  background: var(--card-bg);
- box-shadow: 0 4px 14px rgba(45, 190, 95, 0.15);
+ box-shadow: 0 4px 14px rgba(255, 87, 34, 0.15);
 }
 
 .badge-item.unlocked:hover {
@@ -460,7 +460,7 @@ header {
  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 100%);
  backdrop-filter: blur(8px);
  border: 3px solid rgba(255,255,255,0.6);
- box-shadow: 0 12px 30px rgba(45, 190, 95, 0.35), inset 0 2px 12px rgba(255,255,255,0.8);
+ box-shadow: 0 12px 30px rgba(255, 87, 34, 0.35), inset 0 2px 12px rgba(255,255,255,0.8);
  transform: translateZ(0px);
 }
 
@@ -468,7 +468,7 @@ header {
  position: absolute;
  inset: 12px;
  border-radius: 20px 20px 48px 48px;
- background: linear-gradient(135deg, #2dbe5f 0%, #1ea64f 100%);
+ background: linear-gradient(135deg, #ff5722 0%, #e64a19 100%);
  border: 2px solid rgba(255,255,255,0.5);
  display: flex;
  align-items: center;
@@ -482,7 +482,7 @@ header {
  position: absolute;
  width: 100px;
  height: 100px;
- background: #2dbe5f;
+ background: #ff5722;
  filter: blur(35px);
  opacity: 0.45;
  border-radius: 50%;
@@ -560,7 +560,7 @@ h2 { font-size: 19px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
 }
 
 .btn:hover { opacity: 0.92; transform: translateY(-1px); }
-.btn.primary-accent { background: var(--accent-gradient); color: #ffffff; box-shadow: 0 6px 16px rgba(45, 190, 95, 0.25); }
+.btn.primary-accent { background: var(--accent-gradient); color: #ffffff; box-shadow: 0 6px 16px rgba(255, 87, 34, 0.25); }
 .btn.primary-accent:hover { background: var(--accent-hover); }
 .btn.secondary { background: var(--accent-soft); color: var(--accent); box-shadow: none; }
 .btn.danger { background: var(--danger-bg); color: var(--danger-text); box-shadow: none; }
@@ -584,45 +584,6 @@ h2 { font-size: 19px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
 }
 
 .analytics-card b { font-size: 26px; font-weight: 800; color: var(--text); }
-
-.habit-grid {
- display: grid;
- grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
- gap: 14px;
- margin-top: 14px;
-}
-
-.habit-card {
- background: var(--card-bg);
- border: 1px solid var(--card-border);
- padding: 16px 18px;
- border-radius: 18px;
- display: flex;
- align-items: center;
- justify-content: space-between;
- transition: all 0.25s ease;
-}
-
-.habit-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-.habit-left { display: flex; flex-direction: column; gap: 2px; }
-.habit-title { font-size: 15px; font-weight: 700; color: var(--text); }
-.habit-streak-badge { font-size: 12px; font-weight: 800; color: var(--accent); display: inline-flex; align-items: center; gap: 4px; }
-
-.habit-check {
- width: 36px;
- height: 36px;
- border-radius: 12px;
- border: 2px solid var(--input-border);
- background: var(--input-bg);
- cursor: pointer;
- display: flex;
- align-items: center;
- justify-content: center;
- transition: all 0.2s ease;
- color: transparent;
-}
-
-.habit-check.done { background: var(--accent-gradient); border-color: var(--accent); color: #ffffff; }
 
 input, select {
  width: 100%;
@@ -1000,6 +961,7 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
     <select id="quickExamSubjectSelect" style="flex: 1.2;">
      <option value="" disabled selected>Select Subject</option>
     </select>
+    <input id="quickExamDateInput" type="date" title="Exam Date">
     <input id="quickExamScoreInput" type="number" step="0.5" min="0" placeholder="Score (e.g. 42)">
     <input id="quickExamTotalInput" type="number" step="0.5" min="1" placeholder="Out Of (e.g. 50)">
     <button class="btn primary-accent" onclick="logQuickExam()">Save Mark</button>
@@ -1050,6 +1012,7 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
      <option value="" disabled selected>Select Subject</option>
     </select>
     <input id="examTitleInput" placeholder="Exam Topic / Title (e.g. Chapter 4 Test)">
+    <input id="examDateInput" type="date" title="Exam Written Date">
     <input id="examScoreInput" type="number" step="0.5" min="0" placeholder="Score">
     <input id="examTotalInput" type="number" step="0.5" min="1" placeholder="Out Of">
     <button class="btn primary-accent" onclick="addExamResult()">Log Result</button>
@@ -1088,7 +1051,20 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
     </div>
    </div>
 
+   <!-- WEEKLY STATS -->
    <div class="section-title" style="margin-top: 24px;">
+    <h2>Weekly Breakdown (Last 4 Weeks)</h2>
+   </div>
+   <div id="weeklyStatsContainer"></div>
+
+   <!-- MONTHLY STATS -->
+   <div class="section-title" style="margin-top: 28px;">
+    <h2>Monthly Breakdown</h2>
+   </div>
+   <div id="monthlyStatsContainer"></div>
+
+   <!-- INDIVIDUAL SUBJECT STATS -->
+   <div class="section-title" style="margin-top: 28px;">
     <h2>Individual Subject Statistics</h2>
    </div>
    <div id="individualSubjectStatsContainer"></div>
@@ -1103,7 +1079,7 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
    </div>
    <div class="form">
     <input id="subjectInput" placeholder="Subject Name (e.g. Accounts, Law)">
-    <input id="examDateInput" type="date" title="Exam Target Date">
+    <input id="examTargetDateInput" type="date" title="Exam Target Date">
     <button class="btn primary-accent" onclick="addSubject()">Add Subject</button>
    </div>
    <div id="subjectList"></div>
@@ -1207,19 +1183,19 @@ const avatarPresets = [
       <stop offset="100%" stop-color="#d19c67"/>
      </radialGradient>
      <linearGradient id="visorGrad1" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#ff007f"/>
-      <stop offset="50%" stop-color="#7928ca"/>
-      <stop offset="100%" stop-color="#00dfd8"/>
+      <stop offset="0%" stop-color="#ff5722"/>
+      <stop offset="50%" stop-color="#e64a19"/>
+      <stop offset="100%" stop-color="#ff7043"/>
      </linearGradient>
     </defs>
-    <circle cx="50" cy="50" r="50" fill="#2dbe5f"/>
+    <circle cx="50" cy="50" r="50" fill="#ff5722"/>
     <ellipse cx="50" cy="55" rx="33" ry="31" fill="url(#headSkin1)"/>
-    <path d="M 20 48 Q 28 20 50 18 Q 72 20 80 48 Q 50 32 20 48 Z" fill="#ff2a5f"/>
-    <rect x="14" y="42" width="56" height="8" rx="4" fill="#d8113a"/>
+    <path d="M 20 48 Q 28 20 50 18 Q 72 20 80 48 Q 50 32 20 48 Z" fill="#d84315"/>
+    <rect x="14" y="42" width="56" height="8" rx="4" fill="#bf360c"/>
     <rect x="24" y="46" width="52" height="18" rx="9" fill="url(#visorGrad1)" stroke="#ffffff" stroke-width="2"/>
     <path d="M 28 48 Q 50 47 70 50" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.6" stroke-linecap="round"/>
     <path d="M 42 72 Q 50 80 58 72" stroke="#4a2c11" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <path d="M 46 75 Q 50 82 54 75 Z" fill="#ff4757"/>
+    <path d="M 46 75 Q 50 82 54 75 Z" fill="#ff7043"/>
    </svg>` 
  },
  { 
@@ -1232,16 +1208,16 @@ const avatarPresets = [
       <stop offset="100%" stop-color="#be8353"/>
      </radialGradient>
      <linearGradient id="visorGrad2" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#00f2fe"/>
-      <stop offset="100%" stop-color="#4facfe"/>
+      <stop offset="0%" stop-color="#ffb74d"/>
+      <stop offset="100%" stop-color="#ff9800"/>
      </linearGradient>
     </defs>
-    <circle cx="50" cy="50" r="50" fill="#7c3aed"/>
-    <path d="M 16 52 A 34 34 0 0 1 84 52" stroke="#ff007f" stroke-width="10" fill="none"/>
-    <rect x="10" y="44" width="14" height="20" rx="6" fill="#222" stroke="#ff007f" stroke-width="2"/>
-    <rect x="76" y="44" width="14" height="20" rx="6" fill="#222" stroke="#ff007f" stroke-width="2"/>
+    <circle cx="50" cy="50" r="50" fill="#4e342e"/>
+    <path d="M 16 52 A 34 34 0 0 1 84 52" stroke="#ff5722" stroke-width="10" fill="none"/>
+    <rect x="10" y="44" width="14" height="20" rx="6" fill="#222" stroke="#ff5722" stroke-width="2"/>
+    <rect x="76" y="44" width="14" height="20" rx="6" fill="#222" stroke="#ff5722" stroke-width="2"/>
     <ellipse cx="50" cy="55" rx="32" ry="30" fill="url(#headSkin2)"/>
-    <path d="M 22 42 L 30 20 L 40 32 L 50 14 L 60 32 L 70 20 L 78 42 Z" fill="#00d2ff"/>
+    <path d="M 22 42 L 30 20 L 40 32 L 50 14 L 60 32 L 70 20 L 78 42 Z" fill="#ff7043"/>
     <rect x="25" y="47" width="50" height="16" rx="8" fill="url(#visorGrad2)" stroke="#ffffff" stroke-width="2"/>
     <ellipse cx="38" cy="51" rx="8" ry="3" fill="#ffffff" opacity="0.6"/>
     <path d="M 43 72 Q 50 78 57 72" stroke="#3d2109" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -1257,14 +1233,14 @@ const avatarPresets = [
       <stop offset="100%" stop-color="#8d5524"/>
      </radialGradient>
     </defs>
-    <circle cx="50" cy="50" r="50" fill="#ff9900"/>
+    <circle cx="50" cy="50" r="50" fill="#3e2723"/>
     <circle cx="50" cy="38" r="28" fill="#1a1a1a"/>
     <circle cx="28" cy="44" r="16" fill="#1a1a1a"/>
     <circle cx="72" cy="44" r="16" fill="#1a1a1a"/>
     <ellipse cx="50" cy="56" rx="31" ry="29" fill="url(#headSkin3)"/>
-    <circle cx="36" cy="53" r="13" fill="#111" stroke="#2dbe5f" stroke-width="3"/>
-    <circle cx="64" cy="53" r="13" fill="#111" stroke="#2dbe5f" stroke-width="3"/>
-    <line x1="49" y1="53" x2="51" y2="53" stroke="#2dbe5f" stroke-width="3"/>
+    <circle cx="36" cy="53" r="13" fill="#111" stroke="#ff5722" stroke-width="3"/>
+    <circle cx="64" cy="53" r="13" fill="#111" stroke="#ff5722" stroke-width="3"/>
+    <line x1="49" y1="53" x2="51" y2="53" stroke="#ff5722" stroke-width="3"/>
     <circle cx="32" cy="49" r="4" fill="#ffffff" opacity="0.8"/>
     <circle cx="60" cy="49" r="4" fill="#ffffff" opacity="0.8"/>
     <path d="M 42 73 Q 50 82 58 73" stroke="#221100" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -1280,106 +1256,19 @@ const avatarPresets = [
       <stop offset="100%" stop-color="#e69ab0"/>
      </radialGradient>
     </defs>
-    <circle cx="50" cy="50" r="50" fill="#06b6d4"/>
-    <ellipse cx="34" cy="18" rx="9" ry="20" fill="#ff9a9e" transform="rotate(-12 34 18)"/>
-    <ellipse cx="66" cy="18" rx="9" ry="20" fill="#ff9a9e" transform="rotate(12 66 18)"/>
+    <circle cx="50" cy="50" r="50" fill="#795548"/>
+    <ellipse cx="34" cy="18" rx="9" ry="20" fill="#ffb74d" transform="rotate(-12 34 18)"/>
+    <ellipse cx="66" cy="18" rx="9" ry="20" fill="#ffb74d" transform="rotate(12 66 18)"/>
     <ellipse cx="34" cy="18" rx="5" ry="14" fill="#ffffff" transform="rotate(-12 34 18)"/>
     <ellipse cx="66" cy="18" rx="5" ry="14" fill="#ffffff" transform="rotate(12 66 18)"/>
     <ellipse cx="50" cy="56" rx="31" ry="29" fill="url(#headSkin4)"/>
-    <path d="M 20 54 Q 25 28 50 28 Q 75 28 80 54 Q 50 40 20 54 Z" fill="#ff69b4"/>
-    <rect x="25" y="48" width="22" height="15" rx="6" fill="#222" stroke="#ffb6c1" stroke-width="2.5"/>
-    <rect x="53" y="48" width="22" height="15" rx="6" fill="#222" stroke="#ffb6c1" stroke-width="2.5"/>
-    <line x1="47" y1="55" x2="53" y2="55" stroke="#ffb6c1" stroke-width="2.5"/>
+    <path d="M 20 54 Q 25 28 50 28 Q 75 28 80 54 Q 50 40 20 54 Z" fill="#ff7043"/>
+    <rect x="25" y="48" width="22" height="15" rx="6" fill="#222" stroke="#ffb74d" stroke-width="2.5"/>
+    <rect x="53" y="48" width="22" height="15" rx="6" fill="#222" stroke="#ffb74d" stroke-width="2.5"/>
+    <line x1="47" y1="55" x2="53" y2="55" stroke="#ffb74d" stroke-width="2.5"/>
     <ellipse cx="31" cy="52" rx="5" ry="2" fill="#ffffff" opacity="0.7"/>
     <ellipse cx="59" cy="52" rx="5" ry="2" fill="#ffffff" opacity="0.7"/>
-    <circle cx="50" cy="73" r="3.5" fill="#ff4757"/>
-   </svg>` 
- },
- { 
-   id: 'av5', 
-   svg: `<svg viewBox="0 0 100 100">
-    <defs>
-     <radialGradient id="headSkin5" cx="35%" cy="30%" r="65%">
-      <stop offset="0%" stop-color="#fff5e6"/>
-      <stop offset="65%" stop-color="#f3c59a"/>
-      <stop offset="100%" stop-color="#cf9461"/>
-     </radialGradient>
-    </defs>
-    <circle cx="50" cy="50" r="50" fill="#ec4899"/>
-    <ellipse cx="50" cy="55" rx="31" ry="29" fill="url(#headSkin5)"/>
-    <path d="M 20 44 Q 50 14 80 44 Z" fill="#3b82f6"/>
-    <rect x="18" y="38" width="64" height="10" rx="5" fill="#1d4ed8"/>
-    <rect x="25" y="48" width="22" height="15" rx="7" fill="#111" stroke="#ffffff" stroke-width="2.5"/>
-    <rect x="53" y="48" width="22" height="15" rx="7" fill="#111" stroke="#ffffff" stroke-width="2.5"/>
-    <line x1="47" y1="55" x2="53" y2="55" stroke="#ffffff" stroke-width="2.5"/>
-    <path d="M 28 50 L 42 60" stroke="#ffffff" stroke-width="2" opacity="0.5"/>
-    <path d="M 56 50 L 70 60" stroke="#ffffff" stroke-width="2" opacity="0.5"/>
-    <path d="M 42 72 Q 50 80 58 72" stroke="#3a200a" stroke-width="3" fill="none" stroke-linecap="round"/>
-   </svg>` 
- },
- { 
-   id: 'av6', 
-   svg: `<svg viewBox="0 0 100 100">
-    <defs>
-     <radialGradient id="headSkin6" cx="35%" cy="30%" r="65%">
-      <stop offset="0%" stop-color="#eec0a7"/>
-      <stop offset="65%" stop-color="#c58c85"/>
-      <stop offset="100%" stop-color="#9e5a52"/>
-     </radialGradient>
-    </defs>
-    <circle cx="50" cy="50" r="50" fill="#10b981"/>
-    <path d="M 42 12 L 58 12 L 54 38 L 46 38 Z" fill="#10b981"/>
-    <path d="M 40 20 L 60 20 L 56 38 L 44 38 Z" fill="#34d399"/>
-    <ellipse cx="50" cy="56" rx="31" ry="29" fill="url(#headSkin6)"/>
-    <rect x="25" y="48" width="22" height="15" rx="4" fill="#111" stroke="#ef4444" stroke-width="2.5"/>
-    <rect x="53" y="48" width="22" height="15" rx="4" fill="#111" stroke="#ef4444" stroke-width="2.5"/>
-    <line x1="47" y1="55" x2="53" y2="55" stroke="#ef4444" stroke-width="2.5"/>
-    <path d="M 43 71 Q 50 78 57 71" stroke="#2a1210" stroke-width="2.5" fill="none"/>
-    <path d="M 47 73 Q 50 81 53 73 Z" fill="#ef4444"/>
-   </svg>` 
- },
- { 
-   id: 'av7', 
-   svg: `<svg viewBox="0 0 100 100">
-    <defs>
-     <radialGradient id="headSkin7" cx="35%" cy="30%" r="65%">
-      <stop offset="0%" stop-color="#fff5e6"/>
-      <stop offset="65%" stop-color="#f2c9a1"/>
-      <stop offset="100%" stop-color="#d19c67"/>
-     </radialGradient>
-    </defs>
-    <circle cx="50" cy="50" r="50" fill="#f59e0b"/>
-    <circle cx="30" cy="30" r="14" fill="#facc15"/>
-    <circle cx="50" cy="24" r="16" fill="#facc15"/>
-    <circle cx="70" cy="30" r="14" fill="#facc15"/>
-    <path d="M 28 30 L 20 14 L 36 22 Z" fill="#ec4899"/>
-    <path d="M 72 30 L 80 14 L 64 22 Z" fill="#ec4899"/>
-    <ellipse cx="50" cy="56" rx="31" ry="29" fill="url(#headSkin7)"/>
-    <polygon points="37,45 40,53 48,53 42,58 44,65 37,60 30,65 32,58 26,53 34,53" fill="#111" stroke="#a855f7" stroke-width="2"/>
-    <polygon points="63,45 66,53 74,53 68,58 70,65 63,60 56,65 58,58 52,53 60,53" fill="#111" stroke="#a855f7" stroke-width="2"/>
-    <path d="M 42 73 Q 50 81 58 73" stroke="#3d2109" stroke-width="3" fill="none" stroke-linecap="round"/>
-   </svg>` 
- },
- { 
-   id: 'av8', 
-   svg: `<svg viewBox="0 0 100 100">
-    <defs>
-     <radialGradient id="headSkin8" cx="35%" cy="30%" r="65%">
-      <stop offset="0%" stop-color="#a06332"/>
-      <stop offset="70%" stop-color="#73421b"/>
-      <stop offset="100%" stop-color="#47260c"/>
-     </radialGradient>
-    </defs>
-    <circle cx="50" cy="50" r="50" fill="#64748b"/>
-    <ellipse cx="50" cy="56" rx="31" ry="29" fill="url(#headSkin8)"/>
-    <path d="M 12 38 Q 50 28 88 38 L 80 43 L 20 43 Z" fill="#1e293b"/>
-    <path d="M 28 38 Q 50 16 72 38 Z" fill="#0f172a"/>
-    <rect x="25" y="48" width="22" height="15" rx="5" fill="#111" stroke="#38bdf8" stroke-width="2.5"/>
-    <rect x="53" y="48" width="22" height="15" rx="5" fill="#111" stroke="#38bdf8" stroke-width="2.5"/>
-    <line x1="47" y1="55" x2="53" y2="55" stroke="#38bdf8" stroke-width="2.5"/>
-    <path d="M 28 50 L 42 60" stroke="#38bdf8" stroke-width="2" opacity="0.6"/>
-    <path d="M 56 50 L 70 60" stroke="#38bdf8" stroke-width="2" opacity="0.6"/>
-    <path d="M 42 72 Q 50 79 58 72" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="50" cy="73" r="3.5" fill="#ff5722"/>
    </svg>` 
  }
 ];
@@ -1698,10 +1587,12 @@ function todayStr() {
 async function logQuickExam() {
  playSound('click');
  const subjectSelect = document.getElementById("quickExamSubjectSelect");
+ const dateInput = document.getElementById("quickExamDateInput");
  const scoreInput = document.getElementById("quickExamScoreInput");
  const totalInput = document.getElementById("quickExamTotalInput");
 
  const subjectName = subjectSelect.value;
+ const examDate = dateInput.value || todayStr();
  const score = parseFloat(scoreInput.value);
  const total = parseFloat(totalInput.value);
 
@@ -1725,11 +1616,12 @@ async function logQuickExam() {
   title: "Daily Assessment",
   score: score,
   total: total,
-  date: todayStr()
+  date: examDate
  });
 
  scoreInput.value = "";
  totalInput.value = "";
+ dateInput.value = "";
  subjectSelect.selectedIndex = 0;
  playSound('check');
  showToast("SAVED", "Daily exam mark recorded!", "📝");
@@ -1740,16 +1632,22 @@ async function addExamResult() {
  playSound('click');
  const subjectSelect = document.getElementById("examSubjectSelect");
  const titleInput = document.getElementById("examTitleInput");
+ const dateInput = document.getElementById("examDateInput");
  const scoreInput = document.getElementById("examScoreInput");
  const totalInput = document.getElementById("examTotalInput");
 
  const subjectName = subjectSelect.value;
  const title = titleInput.value.trim() || "Daily Assessment";
+ const examDate = dateInput.value || todayStr();
  const score = parseFloat(scoreInput.value);
  const total = parseFloat(totalInput.value);
 
  if (!subjectName) {
   showToast("SELECT SUBJECT", "Please select a subject.", "⚠️");
+  return;
+ }
+ if (!dateInput.value) {
+  showToast("DATE REQUIRED", "Please select the date the exam was written.", "⚠️");
   return;
  }
  if (isNaN(score) || isNaN(total) || total <= 0) {
@@ -1768,10 +1666,11 @@ async function addExamResult() {
   title: title,
   score: score,
   total: total,
-  date: todayStr()
+  date: examDate
  });
 
  titleInput.value = "";
+ dateInput.value = "";
  scoreInput.value = "";
  totalInput.value = "";
  subjectSelect.selectedIndex = 0;
@@ -1814,7 +1713,7 @@ function renderDashboardExams() {
    <div class="row">
     <div>
      <b>${esc(e.subject)}</b>
-     <br><span class="small">${esc(e.title)} • ${e.date}</span>
+     <br><span class="small">${esc(e.title)} • Written on: ${e.date}</span>
     </div>
     <div style="text-align: right;">
      <b>${e.score} / ${e.total}</b>
@@ -1841,7 +1740,7 @@ function renderExamResultsList() {
    <div class="row">
     <div>
      <b>${esc(e.subject)}</b>
-     <br><span class="small">${esc(e.title)} • ${e.date}</span>
+     <br><span class="small">${esc(e.title)} • Written on: ${e.date}</span>
     </div>
     <div style="display: flex; align-items: center; gap: 12px;">
      <div style="text-align: right;">
@@ -1888,9 +1787,126 @@ function calculateAnalytics() {
  if (elDashTotal) elDashTotal.textContent = results.length;
 
  setRingProgress("ringOverall", overallPct);
- setRingProgress("ringExams", Math.min(100, results.length * 10)); // Scale for ring appearance
+ setRingProgress("ringExams", Math.min(100, results.length * 10));
 
+ renderWeeklyStats();
+ renderMonthlyStats();
  renderIndividualSubjectStats();
+}
+
+function getWeekNumber(d) {
+ const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+ const dayNum = date.getUTCDay() || 7;
+ date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+ const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+ const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
+ return { year: date.getUTCFullYear(), week: weekNo };
+}
+
+function renderWeeklyStats() {
+ const container = document.getElementById("weeklyStatsContainer");
+ if (!container) return;
+
+ const results = data.examResults || [];
+ if (!results.length) {
+  container.innerHTML = '<div class="empty">No exam data for weekly stats yet.</div>';
+  return;
+ }
+
+ // Group by Year-Week
+ const weeksMap = {};
+ results.forEach(e => {
+  if (!e.date) return;
+  const d = new Date(e.date);
+  const wn = getWeekNumber(d);
+  const key = `${wn.year}-W${String(wn.week).padStart(2, '0')}`;
+  if (!weeksMap[key]) weeksMap[key] = { score: 0, total: 0, count: 0, label: `Week ${wn.week}, ${wn.year}` };
+  weeksMap[key].score += e.score;
+  weeksMap[key].total += e.total;
+  weeksMap[key].count += 1;
+ });
+
+ const sortedKeys = Object.keys(weeksMap).sort().reverse().slice(0, 4); // Last 4 weeks
+
+ if (!sortedKeys.length) {
+  container.innerHTML = '<div class="empty">No valid dated weekly exams found.</div>';
+  return;
+ }
+
+ container.innerHTML = sortedKeys.map(k => {
+  const w = weeksMap[k];
+  const pct = w.total > 0 ? Math.round((w.score / w.total) * 100) : 0;
+  return `
+  <div class="card" style="margin-bottom: 12px; padding: 18px;">
+   <div class="row">
+    <div>
+     <h3 style="font-size: 15px; font-weight: 800; margin: 0 0 2px;">${w.label}</h3>
+     <span class="small">${w.count} exam${w.count === 1 ? '' : 's'} recorded</span>
+    </div>
+    <div style="text-align: right;">
+     <b style="font-size: 18px;">${pct}%</b>
+     <br><span class="small">${w.score} / ${w.total} marks</span>
+    </div>
+   </div>
+   <div class="progress" style="margin-top: 10px;">
+    <div style="width: ${pct}%"></div>
+   </div>
+  </div>`;
+ }).join("");
+}
+
+function renderMonthlyStats() {
+ const container = document.getElementById("monthlyStatsContainer");
+ if (!container) return;
+
+ const results = data.examResults || [];
+ if (!results.length) {
+  container.innerHTML = '<div class="empty">No exam data for monthly stats yet.</div>';
+  return;
+ }
+
+ // Group by Year-Month (e.g. "2026-06")
+ const monthsMap = {};
+ const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+ results.forEach(e => {
+  if (!e.date) return;
+  const d = new Date(e.date);
+  const ymKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  const label = `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+  if (!monthsMap[ymKey]) monthsMap[ymKey] = { score: 0, total: 0, count: 0, label: label };
+  monthsMap[ymKey].score += e.score;
+  monthsMap[ymKey].total += e.total;
+  monthsMap[ymKey].count += 1;
+ });
+
+ const sortedKeys = Object.keys(monthsMap).sort().reverse();
+
+ if (!sortedKeys.length) {
+  container.innerHTML = '<div class="empty">No valid dated monthly exams found.</div>';
+  return;
+ }
+
+ container.innerHTML = sortedKeys.map(k => {
+  const m = monthsMap[k];
+  const pct = m.total > 0 ? Math.round((m.score / m.total) * 100) : 0;
+  return `
+  <div class="card" style="margin-bottom: 12px; padding: 18px;">
+   <div class="row">
+    <div>
+     <h3 style="font-size: 15px; font-weight: 800; margin: 0 0 2px;">${m.label}</h3>
+     <span class="small">${m.count} exam${m.count === 1 ? '' : 's'} recorded</span>
+    </div>
+    <div style="text-align: right;">
+     <b style="font-size: 18px;">${pct}%</b>
+     <br><span class="small">${m.score} / ${m.total} marks</span>
+    </div>
+   </div>
+   <div class="progress" style="margin-top: 10px;">
+    <div style="width: ${pct}%"></div>
+   </div>
+  </div>`;
+ }).join("");
 }
 
 function renderIndividualSubjectStats() {
@@ -1940,8 +1956,6 @@ function renderIndividualSubjectStats() {
 function calculateTotalXP() {
  const results = data.examResults || [];
  const tasksDone = data.tasks.filter(t => t.done).length;
- const habitsDone = 0; // Habits removed
-
  return (results.length * 40) + (tasksDone * 20);
 }
 
@@ -2327,7 +2341,7 @@ function renderSubjects() {
 async function addSubject() {
  playSound('click');
  const input = document.getElementById("subjectInput");
- const dateInput = document.getElementById("examDateInput");
+ const dateInput = document.getElementById("examTargetDateInput");
  const name = input.value.trim();
  if (!name) return;
 
