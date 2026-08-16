@@ -9,9 +9,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
+/* =====================================================
+   THEME PALETTES & DESIGN SYSTEM
+===================================================== */
 :root {
  --bg: #f8f6f4;
  --bg-gradient: radial-gradient(circle at 50% 0%, rgba(255, 87, 34, 0.06), transparent 70%), #f8f6f4;
@@ -34,30 +37,111 @@
  --input-bg: rgba(255, 255, 255, 0.85);
  --done-text: #a8a09b;
  --backdrop-blur: blur(20px);
+ --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
 
-[data-theme="dark"] {
- --bg: #12100e;
- --bg-gradient: radial-gradient(circle at 50% 0%, rgba(255, 87, 34, 0.12), transparent 70%), #12100e;
- --text: #f4f0ec;
- --card-bg: rgba(26, 22, 20, 0.72);
- --card-border: rgba(255, 255, 255, 0.08);
- --card-shadow: 0 20px 45px -4px rgba(0, 0, 0, 0.6), 0 8px 20px -2px rgba(0, 0, 0, 0.4);
- --ink: #f4f0ec;
+/* 1. Padikya Warm Studio (Default Warm) */
+[data-theme="warm-studio"] {
+ --bg: #f8f6f4;
+ --bg-gradient: radial-gradient(circle at 50% 0%, rgba(255, 87, 34, 0.06), transparent 70%), #f8f6f4;
+ --text: #1a1614;
+ --card-bg: rgba(255, 255, 255, 0.75);
+ --card-border: rgba(255, 255, 255, 0.6);
+ --card-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.06), 0 6px 16px -2px rgba(0, 0, 0, 0.03);
+ --ink: #1a1614;
  --accent: #ff5722;
- --accent-gradient: linear-gradient(135deg, #ff7043 0%, #f4511e 100%);
- --accent-soft: rgba(255, 87, 34, 0.18);
- --accent-card-gradient: linear-gradient(135deg, rgba(255, 87, 34, 0.22) 0%, rgba(255, 87, 34, 0.05) 100%);
- --accent-hover: #ff7043;
+ --accent-gradient: linear-gradient(135deg, #ff5722 0%, #e64a19 100%);
+ --accent-soft: rgba(255, 87, 34, 0.08);
+ --accent-card-gradient: linear-gradient(135deg, rgba(255, 87, 34, 0.12) 0%, rgba(255, 87, 34, 0.03) 100%);
+ --accent-hover: #f4511e;
+ --danger-bg: #fee2e2;
+ --danger-text: #dc2626;
+ --muted: #786f6b;
+ --track: #e7e2dc;
+ --border: rgba(0, 0, 0, 0.06);
+ --input-border: #d4ccc4;
+ --input-bg: rgba(255, 255, 255, 0.85);
+ --done-text: #a8a09b;
+ --backdrop-blur: blur(20px);
+ --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* 2. Midnight OLED */
+[data-theme="midnight-oled"] {
+ --bg: #0d0e12;
+ --bg-gradient: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08), transparent 70%), #0d0e12;
+ --text: #f3f4f6;
+ --card-bg: rgba(22, 25, 34, 0.75);
+ --card-border: rgba(255, 255, 255, 0.08);
+ --card-shadow: 0 20px 45px -4px rgba(0, 0, 0, 0.7), 0 8px 20px -2px rgba(0, 0, 0, 0.5);
+ --ink: #f3f4f6;
+ --accent: #10b981;
+ --accent-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+ --accent-soft: rgba(16, 185, 129, 0.15);
+ --accent-card-gradient: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.03) 100%);
+ --accent-hover: #34d399;
  --danger-bg: #2a1212;
  --danger-text: #f87171;
- --muted: #a09690;
- --track: #26211e;
+ --muted: #9ca3af;
+ --track: #1f2430;
  --border: rgba(255, 255, 255, 0.06);
- --input-border: #332c28;
- --input-bg: rgba(24, 20, 18, 0.85);
- --done-text: #5e544f;
+ --input-border: #2e3648;
+ --input-bg: rgba(16, 19, 26, 0.85);
+ --done-text: #4b5563;
  --backdrop-blur: blur(24px);
+ --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* 3. Nordic Sage */
+[data-theme="nordic-sage"] {
+ --bg: #f4f1ea;
+ --bg-gradient: radial-gradient(circle at 50% 0%, rgba(45, 74, 62, 0.06), transparent 70%), #f4f1ea;
+ --text: #2d4a3e;
+ --card-bg: rgba(255, 254, 250, 0.8);
+ --card-border: rgba(45, 74, 62, 0.12);
+ --card-shadow: 0 16px 40px -4px rgba(45, 74, 62, 0.07), 0 6px 16px -2px rgba(45, 74, 62, 0.04);
+ --ink: #2d4a3e;
+ --accent: #5c8374;
+ --accent-gradient: linear-gradient(135deg, #5c8374 0%, #2d4a3e 100%);
+ --accent-soft: rgba(92, 131, 116, 0.12);
+ --accent-card-gradient: linear-gradient(135deg, rgba(92, 131, 116, 0.15) 0%, rgba(92, 131, 116, 0.03) 100%);
+ --accent-hover: #45695b;
+ --danger-bg: #fde8e8;
+ --danger-text: #c53030;
+ --muted: #6b7c73;
+ --track: #e3ded3;
+ --border: rgba(45, 74, 62, 0.08);
+ --input-border: #d0c8b6;
+ --input-bg: rgba(255, 255, 252, 0.9);
+ --done-text: #9aa8a1;
+ --backdrop-blur: blur(20px);
+ --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* 4. Tokyo Cyber Minimal */
+[data-theme="tokyo-cyber"] {
+ --bg: #09090b;
+ --bg-gradient: radial-gradient(circle at 50% 0%, rgba(132, 204, 22, 0.08), transparent 70%), #09090b;
+ --text: #fafafa;
+ --card-bg: rgba(18, 18, 23, 0.85);
+ --card-border: rgba(255, 255, 255, 0.1);
+ --card-shadow: 0 20px 45px -4px rgba(0, 0, 0, 0.8), 0 8px 20px -2px rgba(0, 0, 0, 0.6);
+ --ink: #fafafa;
+ --accent: #84cc16;
+ --accent-gradient: linear-gradient(135deg, #84cc16 0%, #65a30d 100%);
+ --accent-soft: rgba(132, 204, 22, 0.15);
+ --accent-card-gradient: linear-gradient(135deg, rgba(132, 204, 22, 0.18) 0%, rgba(132, 204, 22, 0.03) 100%);
+ --accent-hover: #a3e635;
+ --danger-bg: #2a1212;
+ --danger-text: #f87171;
+ --muted: #a1a1aa;
+ --track: #27272a;
+ --border: rgba(255, 255, 255, 0.08);
+ --input-border: #3f3f46;
+ --input-bg: rgba(24, 24, 29, 0.9);
+ --done-text: #52525b;
+ --backdrop-blur: blur(24px);
+ --font-main: 'JetBrains Mono', monospace;
 }
 
 * {
@@ -69,10 +153,10 @@ html { scroll-behavior: smooth; }
 
 body {
  margin: 0;
- font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+ font-family: var(--font-main);
  background: var(--bg-gradient);
  color: var(--text);
- transition: background 0.4s ease, color 0.4s ease;
+ transition: background 0.4s ease, color 0.4s ease, font-family 0.4s ease;
  min-height: 100vh;
  background-attachment: fixed;
 }
@@ -207,7 +291,7 @@ header {
  background: var(--accent-card-gradient);
  backdrop-filter: var(--backdrop-blur);
  -webkit-backdrop-filter: var(--backdrop-blur);
- border: 1px solid rgba(255, 87, 34, 0.25);
+ border: 1px solid var(--card-border);
  border-radius: 24px;
  padding: 18px 22px;
  margin-bottom: 20px;
@@ -259,7 +343,7 @@ header {
 }
 
 .card:hover {
- border-color: rgba(255, 87, 34, 0.3);
+ border-color: var(--card-border);
 }
 
 @keyframes flowFade {
@@ -357,7 +441,7 @@ header {
  background: var(--accent-soft);
  padding: 4px 10px;
  border-radius: 20px;
- border: 1px solid rgba(255, 87, 34, 0.2);
+ border: 1px solid var(--card-border);
 }
 
 .badge-collection-grid {
@@ -388,7 +472,7 @@ header {
  filter: grayscale(0);
  border-color: var(--accent);
  background: var(--card-bg);
- box-shadow: 0 4px 14px rgba(255, 87, 34, 0.15);
+ box-shadow: 0 4px 14px var(--accent-soft);
 }
 
 .badge-item.unlocked:hover {
@@ -474,7 +558,7 @@ header {
  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 100%);
  backdrop-filter: blur(8px);
  border: 3px solid rgba(255,255,255,0.6);
- box-shadow: 0 12px 30px rgba(255, 87, 34, 0.35), inset 0 2px 12px rgba(255,255,255,0.8);
+ box-shadow: 0 12px 30px var(--accent-soft), inset 0 2px 12px rgba(255,255,255,0.8);
  transform: translateZ(0px);
 }
 
@@ -482,7 +566,7 @@ header {
  position: absolute;
  inset: 12px;
  border-radius: 20px 20px 48px 48px;
- background: linear-gradient(135deg, #ff5722 0%, #e64a19 100%);
+ background: var(--accent-gradient);
  border: 2px solid rgba(255,255,255,0.5);
  display: flex;
  align-items: center;
@@ -496,7 +580,7 @@ header {
  position: absolute;
  width: 100px;
  height: 100px;
- background: #ff5722;
+ background: var(--accent);
  filter: blur(35px);
  opacity: 0.45;
  border-radius: 50%;
@@ -574,7 +658,7 @@ h2 { font-size: 19px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
 }
 
 .btn:hover { opacity: 0.92; transform: translateY(-1px); }
-.btn.primary-accent { background: var(--accent-gradient); color: #ffffff; box-shadow: 0 6px 16px rgba(255, 87, 34, 0.25); }
+.btn.primary-accent { background: var(--accent-gradient); color: var(--bg); box-shadow: 0 6px 16px var(--accent-soft); }
 .btn.primary-accent:hover { background: var(--accent-hover); }
 .btn.secondary { background: var(--accent-soft); color: var(--accent); box-shadow: none; }
 .btn.danger { background: var(--danger-bg); color: var(--danger-text); box-shadow: none; }
@@ -652,6 +736,54 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); box-sha
 
 .empty { padding: 24px 0; text-align: center; color: var(--muted); font-size: 14px; font-weight: 500; }
 
+/* LIVE THEME SELECTOR GRID */
+.theme-selector-grid {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ gap: 10px;
+ margin-bottom: 16px;
+}
+
+.theme-option-card {
+ background: var(--input-bg);
+ border: 2px solid var(--border);
+ border-radius: 16px;
+ padding: 14px;
+ cursor: pointer;
+ text-align: left;
+ display: flex;
+ flex-direction: column;
+ gap: 6px;
+ transition: all 0.2s ease;
+}
+
+.theme-option-card:hover {
+ border-color: var(--accent);
+ transform: translateY(-2px);
+}
+
+.theme-option-card.active {
+ border-color: var(--accent);
+ background: var(--accent-soft);
+ box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.theme-option-title {
+ font-size: 13px;
+ font-weight: 800;
+ color: var(--text);
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+}
+
+.theme-option-desc {
+ font-size: 11px;
+ color: var(--muted);
+ font-weight: 500;
+ line-height: 1.3;
+}
+
 /* AI CHATBOT STYLES */
 .chat-container {
  display: flex;
@@ -684,9 +816,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); box-sha
 .chat-bubble.user {
  align-self: flex-end;
  background: var(--accent-gradient);
- color: #ffffff;
+ color: var(--bg);
  border-bottom-right-radius: 4px;
- box-shadow: 0 4px 12px rgba(255, 87, 34, 0.2);
+ box-shadow: 0 4px 12px var(--accent-soft);
 }
 
 .chat-bubble.ai {
@@ -1169,7 +1301,7 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
  </footer>
 </div>
 
-<!-- PROFILE & SETTINGS MODAL WITH BADGE SHOWCASE -->
+<!-- PROFILE & SETTINGS MODAL WITH LIVE THEME SWITCHER -->
 <div class="modal-overlay" id="profileModal">
  <div class="modal-card">
   <div class="modal-header">
@@ -1185,8 +1317,29 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
    </div>
   </div>
 
+  <!-- Live Theme Switcher -->
+  <div class="avatar-selector-title" style="margin-bottom: 12px;">Live Theme Studio</div>
+  <div class="theme-selector-grid" id="themeSelectorGrid">
+   <div class="theme-option-card" onclick="setAppTheme('warm-studio')" id="theme-warm-studio">
+    <div class="theme-option-title">🍊 Warm Studio</div>
+    <div class="theme-option-desc">Cream sand & vibrant signal orange.</div>
+   </div>
+   <div class="theme-option-card" onclick="setAppTheme('midnight-oled')" id="theme-midnight-oled">
+    <div class="theme-option-title">🌌 Midnight OLED</div>
+    <div class="theme-option-desc">Deep graphite & emerald focus.</div>
+   </div>
+   <div class="theme-option-card" onclick="setAppTheme('nordic-sage')" id="theme-nordic-sage">
+    <div class="theme-option-title">🌲 Nordic Sage</div>
+    <div class="theme-option-desc">Calming stone beige & low-stress sage.</div>
+   </div>
+   <div class="theme-option-card" onclick="setAppTheme('tokyo-cyber')" id="theme-tokyo-cyber">
+    <div class="theme-option-title">⚡ Tokyo Cyber</div>
+    <div class="theme-option-desc">Monochrome precision & acid lime.</div>
+   </div>
+  </div>
+
   <!-- Badge Showcase with Progress Tracker -->
-  <div class="badge-header-row">
+  <div class="badge-header-row" style="margin-top: 10px;">
    <div class="avatar-selector-title">Unlocked Badges</div>
    <div class="badge-progress-pill" id="badgeCountPill">🏆 0/16 Unlocked</div>
   </div>
@@ -1196,10 +1349,6 @@ footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12
   <div class="avatar-grid" id="avatarGrid"></div>
 
   <div class="modal-body">
-   <div class="settings-item">
-    <span>Dark Mode</span>
-    <button class="btn smallbtn secondary" onclick="toggleTheme()" id="modalThemeBtn">Toggle</button>
-   </div>
    <div class="settings-item">
     <span>Reset Progress</span>
     <button class="btn smallbtn danger" id="resetDataBtn" onclick="resetData()">Reset</button>
@@ -1508,32 +1657,46 @@ async function toggleDailyStudyCheck() {
  await save();
 }
 
-/* =====================================================
-   THEME, PROFILE, AVATARS & 3D BADGES
-===================================================== */
-function applyTheme(theme) {
- if (theme === "dark") {
-  document.documentElement.setAttribute("data-theme", "dark");
- } else {
-  document.documentElement.removeAttribute("data-theme");
- }
+function yesterdayStr() {
+ const d = new Date();
+ d.setDate(d.getDate() - 1);
+ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
 
-function toggleTheme() {
+/* =====================================================
+   LIVE THEME SYSTEM & SWITCHER
+===================================================== */
+function setAppTheme(themeName) {
  playSound('click');
- const current = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
- const next = current === "dark" ? "light" : "dark";
- applyTheme(next);
- try { localStorage.setItem("padikya_theme", next); } catch (e) {}
+ document.documentElement.setAttribute("data-theme", themeName);
+ try { localStorage.setItem("padikya_theme", themeName); } catch (e) {}
+
+ // Update meta theme-color based on theme
+ const metaColor = document.querySelector('meta[name="theme-color"]');
+ if (metaColor) {
+  if (themeName === 'midnight-oled') metaColor.content = '#0d0e12';
+  else if (themeName === 'nordic-sage') metaColor.content = '#f4f1ea';
+  else if (themeName === 'tokyo-cyber') metaColor.content = '#09090b';
+  else metaColor.content = '#ff5722';
+ }
+
+ updateThemeSelectorUI(themeName);
+}
+
+function updateThemeSelectorUI(activeTheme) {
+ ['warm-studio', 'midnight-oled', 'nordic-sage', 'tokyo-cyber'].forEach(t => {
+  const card = document.getElementById(`theme-${t}`);
+  if (card) {
+   if (t === activeTheme) card.classList.add("active");
+   else card.classList.remove("active");
+  }
+ });
 }
 
 function initTheme() {
- let saved = null;
- try { saved = localStorage.getItem("padikya_theme"); } catch (e) {}
- if (!saved) {
-  saved = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
- }
- applyTheme(saved);
+ let saved = 'warm-studio';
+ try { saved = localStorage.getItem("padikya_theme") || 'warm-studio'; } catch (e) {}
+ setAppTheme(saved);
 }
 
 function renderUserProfile() {
@@ -1551,6 +1714,10 @@ function renderUserProfile() {
  if (modalAvatar) modalAvatar.innerHTML = currentPreset.svg;
  if (modalUserTag) modalUserTag.textContent = "@" + activeUsername;
  if (nameInput && document.activeElement !== nameInput) nameInput.value = data.displayName || '';
+
+ let currentTheme = 'warm-studio';
+ try { currentTheme = localStorage.getItem("padikya_theme") || 'warm-studio'; } catch (e) {}
+ updateThemeSelectorUI(currentTheme);
 
  renderAvatarPresets();
  renderBadgeCollection();
@@ -1670,7 +1837,6 @@ async function sendChatMessage() {
  renderChatMessages();
  await save();
 
- // Generate AI mentor response based on query and user context
  setTimeout(async () => {
   const reply = generateAiMentorResponse(text);
   data.chatMessages.push({ role: 'ai', text: reply });
